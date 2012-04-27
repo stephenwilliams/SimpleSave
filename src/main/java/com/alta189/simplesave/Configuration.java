@@ -24,12 +24,14 @@ public class Configuration {
 		return properties.get(property);
 	}
 
-	public void setProperty(String property, String value) {
+	public Configuration setProperty(String property, String value) {
 		properties.put(property, value);
+		return this;
 	}
 
-	public void removeProperty(String property) {
+	public Configuration removeProperty(String property) {
 		properties.remove(property);
+		return this;
 	}
 
 	public boolean containsProperty(String property) {
