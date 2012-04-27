@@ -55,9 +55,11 @@ public abstract class Database {
 		lock = false;
 	}
 
-	public abstract boolean isConnected();
+	public SelectQuery select(Class<?> tableClass) {
+		return new SelectQuery(this, tableClass);
+	}
 
-	public abstract SelectQuery select(Class<?> tableClass);
+	public abstract boolean isConnected();
 
 	public abstract QueryResult execute(Query query);
 
