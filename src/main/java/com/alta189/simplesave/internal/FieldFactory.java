@@ -1,14 +1,15 @@
 package com.alta189.simplesave.internal;
 
+import com.alta189.simplesave.exceptions.FieldRegistrationException;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FieldFactory {
 
-	public static List<FieldRegistration> getFields(Class<?> clazz) {
+	public static List<FieldRegistration> getFields(Class<?> clazz) throws FieldRegistrationException {
 		final List<FieldRegistration> fields = new ArrayList<FieldRegistration>();
 		for (Field field : clazz.getDeclaredFields()) {
 			FieldRegistration fieldRegistration = getField(field);
@@ -19,7 +20,7 @@ public class FieldFactory {
 		return fields;
 	}
 
-	public static FieldRegistration getField(Field field) {
+	public static FieldRegistration getField(Field field) throws FieldRegistrationException {
 		// Check if the field has the Field annotation
 		com.alta189.simplesave.Field fieldAnnotation = getFieldAnnotation(field);
 		if (fieldAnnotation == null) {
@@ -59,7 +60,39 @@ public class FieldFactory {
 	}
 
 	public static boolean validType(Class<?> type) {
-		return true;
+		// TODO Clean this up a bit
+		if (type.equals(int.class)) {
+			return true;
+		} else if (type.equals(Integer.class)) {
+			return true;
+		} else if (type.equals(long.class)) {
+			return true;
+		} else if (type.equals(Long.class)) {
+			return true;
+		} else if (type.equals(Double.class)) {
+			return true;
+		} else if (type.equals(double.class)) {
+			return true;
+		} else if (type.equals(String.class)) {
+			return true;
+		}  else if (type.equals(Boolean.class)) {
+			return true;
+		} else if (type.equals(boolean.class)) {
+			return true;
+		} else if (type.equals(short.class)) {
+			return true;
+		} else if (type.equals(Short.class)) {
+			return true;
+		} else if (type.equals(Float.class)) {
+			return true;
+		} else if (type.equals(float.class)) {
+			return true;
+		} else if (type.equals(byte.class)) {
+			return true;
+		} else if (type.equals(Byte.class)) {
+			return true;
+		}
+		return false;
 	}
 
 }
