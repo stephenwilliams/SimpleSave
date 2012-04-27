@@ -9,6 +9,17 @@
     <version>1.0.0</version>
 
     <dependencies>
+
+        <!-- Database Connectors -->
+        <!-- Note these are not shaded-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.19</version>
+            <type>jar</type>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Testing Dependencies -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
