@@ -1,6 +1,6 @@
-package com.alta189.simplesave.internal;
+package com.alta189.simplesave.exceptions;
 
-public class TableRegistrationException extends RuntimeException {
+public class TableRegistrationException extends Exception {
 
 	public TableRegistrationException(String message) {
 		super(message);

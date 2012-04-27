@@ -1,4 +1,4 @@
-package com.alta189.simplesave;
+package com.alta189.simplesave.exceptions;
 
 public class SerializeException extends RuntimeException {
 	public SerializeException(String message) {

@@ -1,6 +1,6 @@
-package com.alta189.simplesave.internal;
+package com.alta189.simplesave.exceptions;
 
-public class FieldRegistrationException extends RuntimeException {
+public class FieldRegistrationException extends Exception {
 
 	public FieldRegistrationException(String message) {
 		super(message);
