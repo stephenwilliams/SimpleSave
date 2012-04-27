@@ -1,6 +1,6 @@
 package com.alta189.simplesave.internal;
 
-import com.alta189.simplesave.SerializeException;
+import com.alta189.simplesave.exceptions.SerializeException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
