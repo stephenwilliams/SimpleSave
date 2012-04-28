@@ -9,6 +9,7 @@ public class TableRegistration {
 	private final String name;
 	private final Class<?> clazz;
 	private final Map<String, FieldRegistration> fields = new HashMap<String, FieldRegistration>();
+	private IdRegistration id;
 
 	public TableRegistration(String name, Class<?> clazz) {
 		this.name = name;
@@ -21,6 +22,14 @@ public class TableRegistration {
 
 	public Class<?> getTableClass() {
 		return clazz;
+	}
+
+	public IdRegistration getId() {
+		return id;
+	}
+
+	public void setId(IdRegistration id) {
+		this.id = id;
 	}
 
 	public Collection<FieldRegistration> getFields() {

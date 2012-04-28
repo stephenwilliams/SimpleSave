@@ -39,6 +39,10 @@ public class TableFactory {
 		// Create TableRegistration
 		TableRegistration tableRegistration = new TableRegistration(table.name(), clazz);
 
+		// Get Id
+		IdRegistration idRegistration = IdFactory.getId(clazz);
+		tableRegistration.setId(idRegistration);
+
 		// Register fields
 		try {
 			tableRegistration.addFields(FieldFactory.getFields(clazz));
