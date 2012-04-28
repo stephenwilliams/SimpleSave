@@ -60,36 +60,21 @@ public class FieldFactory {
 	}
 
 	public static boolean validType(Class<?> type) {
-		// TODO Clean this up a bit
-		if (type.equals(int.class)) {
+		if (type.equals(int.class) || type.equals(Integer.class)) {
 			return true;
-		} else if (type.equals(Integer.class)) {
+		} else if (type.equals(long.class) || type.equals(Long.class)) {
 			return true;
-		} else if (type.equals(long.class)) {
-			return true;
-		} else if (type.equals(Long.class)) {
-			return true;
-		} else if (type.equals(Double.class)) {
-			return true;
-		} else if (type.equals(double.class)) {
+		} else if (type.equals(double.class) || type.equals(Double.class)) {
 			return true;
 		} else if (type.equals(String.class)) {
 			return true;
-		}  else if (type.equals(Boolean.class)) {
+		}  else if (type.equals(boolean.class) || type.equals(Boolean.class)) {
 			return true;
-		} else if (type.equals(boolean.class)) {
+		} else if (type.equals(short.class) || type.equals(Short.class)) {
 			return true;
-		} else if (type.equals(short.class)) {
+		} else if (type.equals(float.class)|| type.equals(Float.class)) {
 			return true;
-		} else if (type.equals(Short.class)) {
-			return true;
-		} else if (type.equals(Float.class)) {
-			return true;
-		} else if (type.equals(float.class)) {
-			return true;
-		} else if (type.equals(byte.class)) {
-			return true;
-		} else if (type.equals(Byte.class)) {
+		} else if (type.equals(byte.class) || type.equals(Byte.class)) {
 			return true;
 		}
 		return false;
