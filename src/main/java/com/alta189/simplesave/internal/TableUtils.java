@@ -16,10 +16,73 @@ public class TableUtils {
 		}
 	}
 
+	public static Integer getValueAsInteger(FieldRegistration fieldRegistration, Object o) {
+		try {
+			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
+			return field.getInt(o);
+		} catch (Exception e) {
+			throw new IllegalArgumentException(e);
+		}
+	}
+
+	public static Long getValueAsLong(FieldRegistration fieldRegistration, Object o) {
+		try {
+			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
+			return field.getLong(o);
+		} catch (Exception e) {
+			throw new IllegalArgumentException(e);
+		}
+	}
+
+	public static Double getValueAsDouble(FieldRegistration fieldRegistration, Object o) {
+		try {
+			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
+			return field.getDouble(o);
+		} catch (Exception e) {
+			throw new IllegalArgumentException(e);
+		}
+	}
+
 	public static String getValueAsString(FieldRegistration fieldRegistration, Object o) {
 		try {
 			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
-			return field.get(o).toString();
+			return (String) field.get(o);
+		} catch (Exception e) {
+			throw new IllegalArgumentException(e);
+		}
+	}
+
+	public static Boolean getValueAsBoolean(FieldRegistration fieldRegistration, Object o) {
+		try {
+			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
+			return field.getBoolean(o);
+		} catch (Exception e) {
+			throw new IllegalArgumentException(e);
+		}
+	}
+
+	public static Short getValueAsShort(FieldRegistration fieldRegistration, Object o) {
+		try {
+			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
+			return field.getShort(o);
+		} catch (Exception e) {
+			throw new IllegalArgumentException(e);
+		}
+	}
+
+	public static Float getValueAsFloat(FieldRegistration fieldRegistration, Object o) {
+		try {
+			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
+			return field.getFloat(o);
+		} catch (Exception e) {
+			throw new IllegalArgumentException(e);
+		}
+	}
+
+	public static Byte getValueAsByte(FieldRegistration fieldRegistration, Object o) {
+		try {
+			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
+			return field.getByte(o);
 		} catch (Exception e) {
 			throw new IllegalArgumentException(e);
 		}
