@@ -2,6 +2,7 @@ package com.alta189.simplesave.internal;
 
 import com.alta189.simplesave.Id;
 import com.alta189.simplesave.exceptions.TableRegistrationException;
+import com.alta189.simplesave.internal.reflection.EmptyInjector;
 
 import java.lang.reflect.Field;
 
@@ -13,8 +14,18 @@ public class IdFactory {
 				continue;
 
 			Class<?> type = field.getType();
-			if (type.equals(int.class))
-				throw new TableRegistrationException("The id is not of type 'int'");
+			if (!type.equals(int.class))
+				throw new TableRegistrationException("The id is not of type 'int' its class is '" + type.getCanonicalName() + "'");
+
+			// Check if id defaults to 0
+			try {
+				Object o = new EmptyInjector().newInstance(clazz);
+				int id = ((Number)field.get(o)).intValue();
+				if (id != 0)
+					throw new TableRegistrationException("The id does not default to 0");
+			} catch (IllegalAccessException e) {
+				throw new TableRegistrationException(e);
+			}
 
 			return new IdRegistration(field.getName(), type);
 		}
