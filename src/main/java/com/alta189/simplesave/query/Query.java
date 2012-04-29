@@ -1,6 +1,6 @@
 package com.alta189.simplesave.query;
 
-public abstract class Query {
+public abstract class Query<T> {
 
 	private final QueryType type;
 	
@@ -12,6 +12,6 @@ public abstract class Query {
 		return type;
 	}
 
-	public abstract QueryResult execute();
+	public abstract QueryResult<T> execute();
 
 }

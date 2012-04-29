@@ -1,14 +1,14 @@
 package com.alta189.simplesave.query;
 
-public class WhereEntry {
+public class WhereEntry<T> {
 
 	private final Comparator comparator;
 	private final String field;
 	private final String comparison;
-	private final WhereQuery parent;
+	private final WhereQuery<T> parent;
 	private Operator operator;
 
-	public WhereEntry(Comparator comparator, String field, String comparison, WhereQuery parent) {
+	public WhereEntry(Comparator comparator, String field, String comparison, WhereQuery<T> parent) {
 		this.comparator = comparator;
 		this.field = field;
 		this.comparison = comparison;
@@ -27,12 +27,12 @@ public class WhereEntry {
 		return comparison;
 	}
 
-	public WhereQuery setOperator(Operator operator) {
+	public WhereQuery<T> setOperator(Operator operator) {
 		this.operator = operator;
 		return parent;
 	}
 
-	public QueryResult execute() {
+	public QueryResult<T> execute() {
 		return parent.execute();
 	}
 }

@@ -56,15 +56,15 @@ public abstract class Database {
 		lock = false;
 	}
 
-	public SelectQuery select(Class<?> tableClass) {
+	public <T> SelectQuery<T> select(Class<T> tableClass) {
 		if (getTableRegistration(tableClass) == null)
 			throw new UnknownTableException("Cannot select from an unregistered table!");
-		return new SelectQuery(this, tableClass);
+		return new SelectQuery<T>(this, tableClass);
 	}
 
 	public abstract boolean isConnected();
 
-	public abstract QueryResult execute(Query query);
+	public abstract <T> QueryResult<T> execute(Query<T> query);
 
 	public abstract void save(Class<?> tableClass, Object o);
 

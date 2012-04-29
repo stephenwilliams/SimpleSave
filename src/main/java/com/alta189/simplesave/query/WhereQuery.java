@@ -3,57 +3,58 @@ package com.alta189.simplesave.query;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WhereQuery extends Query {
+public class WhereQuery<T> extends Query<T> {
 
-	private final List<WhereEntry> entries = new ArrayList<WhereEntry>();
-	private final Query parent;
+	private final List<WhereEntry<T>> entries;
+	private final Query<T> parent;
 
-	public WhereQuery(Query parent) {
+	public WhereQuery(Query<T> parent) {
 		super(QueryType.WHERE);
 		this.parent = parent;
+		entries = new ArrayList<WhereEntry<T>>();
 	}
 
-	public WhereEntry equal(String field, String comparison) {
-		WhereEntry entry = new WhereEntry(Comparator.EQUAL, field, comparison, this);
+	public WhereEntry<T> equal(String field, String comparison) {
+		WhereEntry<T> entry = new WhereEntry<T>(Comparator.EQUAL, field, comparison, this);
 		entries.add(entry);
 		return entry;
 	}
 
-	public WhereEntry notEqual(String field, String comparison) {
-		WhereEntry entry = new WhereEntry(Comparator.NOT_EQUAL, field, comparison, this);
+	public WhereEntry<T> notEqual(String field, String comparison) {
+		WhereEntry<T> entry = new WhereEntry<T>(Comparator.NOT_EQUAL, field, comparison, this);
 		entries.add(entry);
 		return entry;
 	}
 
-	public WhereEntry greaterThan(String field, String comparison) {
-		WhereEntry entry = new WhereEntry(Comparator.GREATER_THAN, field, comparison, this);
+	public WhereEntry<T> greaterThan(String field, String comparison) {
+		WhereEntry<T> entry = new WhereEntry<T>(Comparator.GREATER_THAN, field, comparison, this);
 		entries.add(entry);
 		return entry;
 	}
 
-	public WhereEntry lessThan(String field, String comparison) {
-		WhereEntry entry = new WhereEntry(Comparator.LESS_THAN, field, comparison, this);
+	public WhereEntry<T> lessThan(String field, String comparison) {
+		WhereEntry<T> entry = new WhereEntry<T>(Comparator.LESS_THAN, field, comparison, this);
 		entries.add(entry);
 		return entry;
 	}
 
-	public WhereEntry greaterThanOrEqual(String field, String comparison) {
-		WhereEntry entry = new WhereEntry(Comparator.GREATER_THAN_OR_EQUAL, field, comparison, this);
+	public WhereEntry<T> greaterThanOrEqual(String field, String comparison) {
+		WhereEntry<T> entry = new WhereEntry<T>(Comparator.GREATER_THAN_OR_EQUAL, field, comparison, this);
 		entries.add(entry);
 		return entry;
 	}
 
-	public WhereEntry lessThanOrEqual(String field, String comparison) {
-		WhereEntry entry = new WhereEntry(Comparator.LESS_THAN_OR_EQUAL, field, comparison, this);
+	public WhereEntry<T> lessThanOrEqual(String field, String comparison) {
+		WhereEntry<T> entry = new WhereEntry<T>(Comparator.LESS_THAN_OR_EQUAL, field, comparison, this);
 		entries.add(entry);
 		return entry;
 	}
 	
-	public List<WhereEntry> getEntries() {
+	public List<WhereEntry<T>> getEntries() {
 		return entries;
 	}
 
-	public QueryResult execute() {
+	public QueryResult<T> execute() {
 		return parent.execute();
 	}
 }
