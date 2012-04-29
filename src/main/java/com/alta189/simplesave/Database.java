@@ -1,6 +1,7 @@
 package com.alta189.simplesave;
 
 import com.alta189.simplesave.exceptions.ConnectionException;
+import com.alta189.simplesave.exceptions.UnknownTableException;
 import com.alta189.simplesave.internal.TableFactory;
 import com.alta189.simplesave.internal.TableRegistration;
 import com.alta189.simplesave.exceptions.TableRegistrationException;
@@ -56,6 +57,8 @@ public abstract class Database {
 	}
 
 	public SelectQuery select(Class<?> tableClass) {
+		if (getTableRegistration(tableClass) == null)
+			throw new UnknownTableException("Cannot select from an unregistered table!");
 		return new SelectQuery(this, tableClass);
 	}
 
