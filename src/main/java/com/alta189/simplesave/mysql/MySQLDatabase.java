@@ -137,7 +137,9 @@ public class MySQLDatabase extends Database {
 					if (statement == null)
 						statement = conn.prepareStatement(queryBuilder.toString());
 					ResultSet set = statement.executeQuery();
-					return new QueryResult<T>(ResultSetUtils.buildResultList(table, (Class<T>) table.getTableClass(), set));
+					QueryResult<T> result = new QueryResult<T>(ResultSetUtils.buildResultList(table, (Class<T>) table.getTableClass(), set));
+					set.close();
+					return result;
 			}
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
