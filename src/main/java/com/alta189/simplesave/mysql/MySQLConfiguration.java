@@ -9,53 +9,53 @@ public class MySQLConfiguration extends Configuration {
 		super(Driver.MYSQL);
 
 		// Set defaults
-		setMySQLPort(MySQLConstants.DefaultPort);
-		setMySQLUser(MySQLConstants.DefaultUser);
-		setMySQLPassword(MySQLConstants.DefaultPassword);
+		setPort(MySQLConstants.DefaultPort);
+		setUser(MySQLConstants.DefaultUser);
+		setPassword(MySQLConstants.DefaultPassword);
 	}
 
-	public String getMySQLUser() {
-		return getProperty(MySQLConstants.MySQLUser);
+	public String getUser() {
+		return getProperty(MySQLConstants.User);
 	}
 
-	public MySQLConfiguration setMySQLUser(String user) {
-		setProperty(MySQLConstants.MySQLUser, user);
+	public MySQLConfiguration setUser(String user) {
+		setProperty(MySQLConstants.User, user);
 		return this;
 	}
 
-	public String getMySQLPassword() {
-		return getProperty(MySQLConstants.MySQLPassword);
+	public String getPassword() {
+		return getProperty(MySQLConstants.Password);
 	}
 
-	public MySQLConfiguration setMySQLPassword(String password) {
-		setProperty(MySQLConstants.MySQLPassword, password);
+	public MySQLConfiguration setPassword(String password) {
+		setProperty(MySQLConstants.Password, password);
 		return this;
 	}
 
-	public String getMySQLHost() {
-		return getProperty(MySQLConstants.MySQLHost);
+	public String getHost() {
+		return getProperty(MySQLConstants.Host);
 	}
 
-	public MySQLConfiguration setMySQLHost(String host) {
-		setProperty(MySQLConstants.MySQLHost, host);
+	public MySQLConfiguration setHost(String host) {
+		setProperty(MySQLConstants.Host, host);
 		return this;
 	}
 
-	public int getMySQLPort() {
-		return Integer.valueOf(getProperty(MySQLConstants.MySQLPort));
+	public int getPort() {
+		return Integer.valueOf(getProperty(MySQLConstants.Port));
 	}
 
-	public MySQLConfiguration setMySQLPort(int port) {
-		setProperty(MySQLConstants.MySQLPort, Integer.toString(port));
+	public MySQLConfiguration setPort(int port) {
+		setProperty(MySQLConstants.Port, Integer.toString(port));
 		return this;
 	}
 
-	public String getMySQLDatabase() {
-		return getProperty(MySQLConstants.MySQLDatabase);
+	public String getDatabase() {
+		return getProperty(MySQLConstants.Database);
 	}
 
-	public MySQLConfiguration setMySQLDatabase(String database) {
-		setProperty(MySQLConstants.MySQLDatabase, database);
+	public MySQLConfiguration setDatabase(String database) {
+		setProperty(MySQLConstants.Database, database);
 		return this;
 	}
 

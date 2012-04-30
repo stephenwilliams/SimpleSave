@@ -7,11 +7,14 @@ import com.alta189.simplesave.exceptions.NotConnectedException;
 import com.alta189.simplesave.exceptions.UnknownTableException;
 import com.alta189.simplesave.internal.FieldRegistration;
 import com.alta189.simplesave.internal.PreparedStatementUtils;
+import com.alta189.simplesave.internal.ResultSetUtils;
 import com.alta189.simplesave.internal.TableRegistration;
 import com.alta189.simplesave.internal.TableUtils;
 import com.alta189.simplesave.query.Query;
 import com.alta189.simplesave.query.QueryResult;
 import com.alta189.simplesave.query.SelectQuery;
+import com.alta189.simplesave.query.WhereEntry;
+import com.mysql.jdbc.util.ResultSetUtil;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -71,7 +74,74 @@ public class MySQLDatabase extends Database {
 	}
 
 	@Override
-	public QueryResult execute(Query query) {
+	public <T> QueryResult<T> execute(Query<T> query) {
+		try {
+			switch (query.getType()) {
+				case SELECT:
+					SelectQuery selectQuery = (SelectQuery) query;
+					TableRegistration table = getTableRegistration(selectQuery.getTableClass());
+					PreparedStatement statement = null;
+					StringBuilder queryBuilder = new StringBuilder();
+					queryBuilder.append("SELECT * from ")
+							.append(table.getName())
+							.append(" ");
+					if (!selectQuery.where().getEntries().isEmpty()) {
+						queryBuilder.append("WHERE ");
+						int count = 0;
+						for (Object o : selectQuery.where().getEntries()) {
+							count++;
+							if (!(o instanceof WhereEntry))
+								throw new InternalError("Something has gone very wrong!");
+
+							WhereEntry entry = (WhereEntry) o;
+							queryBuilder.append(entry.getField());
+							switch (entry.getComparator()) {
+								case EQUAL:
+									queryBuilder.append("=? ");
+									break;
+								case NOT_EQUAL:
+									queryBuilder.append("<>? ");
+									break;
+								case GREATER_THAN:
+									queryBuilder.append(">? ");
+									break;
+								case LESS_THAN:
+									queryBuilder.append("<? ");
+									break;
+								case GREATER_THAN_OR_EQUAL:
+									queryBuilder.append(">=? ");
+									break;
+								case LESS_THAN_OR_EQUAL:
+									queryBuilder.append("<=? ");
+									break;
+								case CONTAINS:
+									queryBuilder.append("LIKE{%?%} ");
+									break;
+							}
+							if (count != selectQuery.where().getEntries().size()) {
+								queryBuilder.append(entry.getComparator().name())
+										.append(" ");
+							}
+						}
+						statement = conn.prepareStatement(queryBuilder.toString());
+						count = 0;
+						for (Object o : selectQuery.where().getEntries()) {
+							count++;
+							if (!(o instanceof WhereEntry))
+								throw new InternalError("Something has gone very wrong!");
+
+							WhereEntry entry = (WhereEntry) o;
+							PreparedStatementUtils.setObject(statement, count, entry.getComparison().getValue());
+						}
+					}
+					if (statement == null)
+						statement = conn.prepareStatement(queryBuilder.toString());
+					ResultSet set = statement.executeQuery();
+					return new QueryResult<T>(ResultSetUtils.buildResultList(table, (Class<T>) table.getTableClass(), set));
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 		return null;
 	}
 

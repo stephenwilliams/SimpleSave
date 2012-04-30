@@ -9,21 +9,21 @@ public class DatabaseFactory {
 	public static Database createNewDatabase(Configuration configuration) {
 		switch (configuration.getDriver()) {
 			case MYSQL:
-				String mySQLUser = configuration.getProperty(MySQLConstants.MySQLUser);
+				String mySQLUser = configuration.getProperty(MySQLConstants.User);
 				if (mySQLUser == null || mySQLUser.isEmpty())
-					throw new IllegalArgumentException("MySQLUser is null or empty!");
-				String mySQLPass = configuration.getProperty(MySQLConstants.MySQLPassword);
+					throw new IllegalArgumentException("User is null or empty!");
+				String mySQLPass = configuration.getProperty(MySQLConstants.Password);
 				if (mySQLPass == null) // Password can be empty
-					throw new IllegalArgumentException("MySQLUser is null!");
-				String mySQLHost = configuration.getProperty(MySQLConstants.MySQLHost);
+					throw new IllegalArgumentException("Password is null!");
+				String mySQLHost = configuration.getProperty(MySQLConstants.Host);
 				if (mySQLHost == null || mySQLHost.isEmpty())
-					throw new IllegalArgumentException("MySQLUser is null or empty!");
-				String mySQLPort = configuration.getProperty(MySQLConstants.MySQLPort);
+					throw new IllegalArgumentException("Host is null or empty!");
+				String mySQLPort = configuration.getProperty(MySQLConstants.Port);
 				if (mySQLPort == null || mySQLPort.isEmpty())
-					throw new IllegalArgumentException("MySQLUser is null or empty!");
-				String mySQLDatabase = configuration.getProperty(MySQLConstants.MySQLDatabase);
+					throw new IllegalArgumentException("Port is null or empty!");
+				String mySQLDatabase = configuration.getProperty(MySQLConstants.Database);
 				if (mySQLDatabase ==  null || mySQLDatabase.isEmpty())
-					throw new IllegalArgumentException("MySQLUser is null or empty!");
+					throw new IllegalArgumentException("Database is null or empty!");
 
 				StringBuilder mySQLConnUrl = new StringBuilder();
 				mySQLConnUrl.append("jdbc:mysql://");
