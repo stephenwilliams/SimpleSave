@@ -32,6 +32,14 @@ public class WhereEntry<T> {
 		return parent;
 	}
 
+	public WhereQuery<T> and() {
+		return setOperator(Operator.AND);
+	}
+
+	public WhereQuery<T> or() {
+		return setOperator(Operator.OR);
+	}
+
 	public QueryResult<T> execute() {
 		return parent.execute();
 	}
