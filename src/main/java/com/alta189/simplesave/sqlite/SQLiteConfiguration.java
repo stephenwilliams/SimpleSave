@@ -7,7 +7,7 @@ public class SQLiteConfiguration extends Configuration {
 	
 	public SQLiteConfiguration(String path) {
 		super(Driver.SQLITE);
-		properties.put("path", path);
+		properties.put(SQLiteConstants.Path, path);
 	}
 	
 	public SQLiteConfiguration() {
@@ -15,10 +15,10 @@ public class SQLiteConfiguration extends Configuration {
 	}
 	
 	public String getPath() {
-		return properties.get("path");
+		return properties.get(SQLiteConstants.Path);
 	}
 	
 	public void setPath(String path) {
-		properties.put("path", path);
+		properties.put(SQLiteConstants.Path, path);
 	}
 }

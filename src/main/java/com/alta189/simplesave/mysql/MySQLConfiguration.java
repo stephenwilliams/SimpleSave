@@ -7,9 +7,9 @@ public class MySQLConfiguration extends Configuration {
 	
 	public MySQLConfiguration(String username, int port, String password) {
 		super(Driver.MYSQL);
-		properties.put("username", username);
-		properties.put("password", password);
-		properties.put("port", Integer.toString(port));
+		properties.put(MySQLConstants.User, username);
+		properties.put(MySQLConstants.Password, password);
+		properties.put(MySQLConstants.Port, Integer.toString(port));
 	}
 	
 	public MySQLConfiguration(String username, int port) {
@@ -21,34 +21,34 @@ public class MySQLConfiguration extends Configuration {
 	}
 
 	public String getPassword() {
-		return properties.get("password");
+		return properties.get(MySQLConstants.Password);
 	}
 
 	public void setPassword(String password) {
-		properties.put("password", password);
+		properties.put(MySQLConstants.Password, password);
 	}
 
 	public String getHost() {
-		return properties.get("host");
+		return properties.get(MySQLConstants.Host);
 	}
 
 	public void setHost(String host) {
-		properties.put("host", host);
+		properties.put(MySQLConstants.Host, host);
 	}
 
 	public int getPort() {
-		return Integer.valueOf(properties.get("port"));
+		return Integer.valueOf(properties.get(MySQLConstants.Port));
 	}
 
 	public void setPort(int port) {
-		setProperty("port", Integer.toString(port));
+		setProperty(MySQLConstants.Port, Integer.toString(port));
 	}
 
 	public String getDatabase() {
-		return properties.get("database");
+		return properties.get(MySQLConstants.Database);
 	}
 
 	public void setDatabase(String database) {
-		properties.put("database", database);
+		properties.put(MySQLConstants.Database, database);
 	}
 }
