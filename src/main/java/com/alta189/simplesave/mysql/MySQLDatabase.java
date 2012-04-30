@@ -9,6 +9,7 @@ import com.alta189.simplesave.internal.PreparedStatementUtils;
 import com.alta189.simplesave.internal.ResultSetUtils;
 import com.alta189.simplesave.internal.TableRegistration;
 import com.alta189.simplesave.internal.TableUtils;
+import com.alta189.simplesave.query.Comparator;
 import com.alta189.simplesave.query.Query;
 import com.alta189.simplesave.query.QueryResult;
 import com.alta189.simplesave.query.SelectQuery;
@@ -110,11 +111,11 @@ public class MySQLDatabase extends Database {
 									queryBuilder.append("<=? ");
 									break;
 								case CONTAINS:
-									queryBuilder.append("LIKE{%?%} ");
+									queryBuilder.append(" LIKE ? ");
 									break;
 							}
 							if (count != selectQuery.where().getEntries().size()) {
-								queryBuilder.append(entry.getComparator().name())
+								queryBuilder.append(entry.getOperator().name())
 										.append(" ");
 							}
 						}
@@ -126,7 +127,11 @@ public class MySQLDatabase extends Database {
 								throw new InternalError("Something has gone very wrong!");
 
 							WhereEntry entry = (WhereEntry) o;
-							PreparedStatementUtils.setObject(statement, count, entry.getComparison().getValue());
+							if (entry.getComparator() == Comparator.CONTAINS) {
+								statement.setString(count, "%" + entry.getComparison().getValue().toString() + "%");
+							} else {
+								PreparedStatementUtils.setObject(statement, count, entry.getComparison().getValue());
+							}
 						}
 					}
 					if (statement == null)
@@ -226,11 +231,14 @@ public class MySQLDatabase extends Database {
 				}
 			}
 
-			System.out.println(statement.toString());
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	@Override
+	public void remove(Class<?> tableClass, Object o) {
 	}
 
 	private void createTables() {
@@ -260,7 +268,6 @@ public class MySQLDatabase extends Database {
 				}
 			}
 			query.append(") ");
-			System.out.println("query = " + query.toString());
 			try {
 				PreparedStatement statement = conn.prepareStatement(query.toString());
 				statement.executeUpdate();

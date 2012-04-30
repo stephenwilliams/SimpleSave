@@ -32,6 +32,10 @@ public class WhereEntry<T> {
 		return parent;
 	}
 
+	public Operator getOperator() {
+		return operator;
+	}
+
 	public WhereQuery<T> and() {
 		return setOperator(Operator.AND);
 	}
