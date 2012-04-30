@@ -4,11 +4,11 @@ public class WhereEntry<T> {
 
 	private final Comparator comparator;
 	private final String field;
-	private final String comparison;
+	private final Comparison comparison;
 	private final WhereQuery<T> parent;
 	private Operator operator;
 
-	public WhereEntry(Comparator comparator, String field, String comparison, WhereQuery<T> parent) {
+	public WhereEntry(Comparator comparator, String field, Comparison comparison, WhereQuery<T> parent) {
 		this.comparator = comparator;
 		this.field = field;
 		this.comparison = comparison;
@@ -23,7 +23,7 @@ public class WhereEntry<T> {
 		return field;
 	}
 
-	public String getComparison() {
+	public Comparison getComparison() {
 		return comparison;
 	}
 
