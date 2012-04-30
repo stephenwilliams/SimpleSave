@@ -2,7 +2,8 @@ package com.alta189.simplesave;
 
 public enum Driver {
 
-	MYSQL;
+	MYSQL,
+	SQLITE;
 	
 	public static Driver getDriver(String value) {
 		Driver result = null;
@@ -10,7 +11,7 @@ public enum Driver {
 			result = Driver.valueOf(value.toUpperCase());
 		} catch (Exception ignored) {
 		}
+		
 		return result;
-	}
-	
+	}	
 }

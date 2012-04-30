@@ -1,7 +1,6 @@
 package com.alta189.simplesave.mysql;
 
 import com.alta189.simplesave.Database;
-import com.alta189.simplesave.Table;
 import com.alta189.simplesave.exceptions.ConnectionException;
 import com.alta189.simplesave.exceptions.NotConnectedException;
 import com.alta189.simplesave.exceptions.UnknownTableException;
@@ -14,17 +13,8 @@ import com.alta189.simplesave.query.Query;
 import com.alta189.simplesave.query.QueryResult;
 import com.alta189.simplesave.query.SelectQuery;
 import com.alta189.simplesave.query.WhereEntry;
-import com.mysql.jdbc.util.ResultSetUtil;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.*;
 
 public class MySQLDatabase extends Database {
 
@@ -47,7 +37,7 @@ public class MySQLDatabase extends Database {
 				conn = DriverManager.getConnection(connUrl, user, pass);
 				createTables();
 			} catch (SQLException e) {
-				e.printStackTrace();
+				throw new ConnectionException(e);
 			}
 		}
 	}
@@ -58,7 +48,7 @@ public class MySQLDatabase extends Database {
 			try {
 				conn.close();
 			} catch (SQLException e) {
-				e.printStackTrace();
+				throw new ConnectionException(e);
 			}
 		}
 		super.close();

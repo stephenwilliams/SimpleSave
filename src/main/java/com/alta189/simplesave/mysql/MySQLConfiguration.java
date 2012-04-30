@@ -4,59 +4,51 @@ import com.alta189.simplesave.Configuration;
 import com.alta189.simplesave.Driver;
 
 public class MySQLConfiguration extends Configuration {
-
-	public MySQLConfiguration() {
+	
+	public MySQLConfiguration(String username, int port, String password) {
 		super(Driver.MYSQL);
-
-		// Set defaults
-		setPort(MySQLConstants.DefaultPort);
-		setUser(MySQLConstants.DefaultUser);
-		setPassword(MySQLConstants.DefaultPassword);
+		properties.put("username", username);
+		properties.put("password", password);
+		properties.put("port", Integer.toString(port));
 	}
-
-	public String getUser() {
-		return getProperty(MySQLConstants.User);
+	
+	public MySQLConfiguration(String username, int port) {
+		this(username, port, "");
 	}
-
-	public MySQLConfiguration setUser(String user) {
-		setProperty(MySQLConstants.User, user);
-		return this;
+	
+	public MySQLConfiguration(String username) {
+		this(username, 3306);
 	}
 
 	public String getPassword() {
-		return getProperty(MySQLConstants.Password);
+		return properties.get("password");
 	}
 
-	public MySQLConfiguration setPassword(String password) {
-		setProperty(MySQLConstants.Password, password);
-		return this;
+	public void setPassword(String password) {
+		properties.put("password", password);
 	}
 
 	public String getHost() {
-		return getProperty(MySQLConstants.Host);
+		return properties.get("host");
 	}
 
-	public MySQLConfiguration setHost(String host) {
-		setProperty(MySQLConstants.Host, host);
-		return this;
+	public void setHost(String host) {
+		properties.put("host", host);
 	}
 
 	public int getPort() {
-		return Integer.valueOf(getProperty(MySQLConstants.Port));
+		return Integer.valueOf(properties.get("port"));
 	}
 
-	public MySQLConfiguration setPort(int port) {
-		setProperty(MySQLConstants.Port, Integer.toString(port));
-		return this;
+	public void setPort(int port) {
+		setProperty("port", Integer.toString(port));
 	}
 
 	public String getDatabase() {
-		return getProperty(MySQLConstants.Database);
+		return properties.get("database");
 	}
 
-	public MySQLConfiguration setDatabase(String database) {
-		setProperty(MySQLConstants.Database, database);
-		return this;
+	public void setDatabase(String database) {
+		properties.put("database", database);
 	}
-
 }

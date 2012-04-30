@@ -32,11 +32,15 @@ public abstract class Database {
 	}
 
 	public void registerTable(Class<?> tableClass) throws TableRegistrationException {
-        if (lock)
-	        throw new TableRegistrationException("The database is connected. You cannot register a new table");
+		if (lock) {
+			throw new TableRegistrationException("The database is connected. You cannot register a new table");
+		}
+		
 		TableRegistration table = TableFactory.buildTable(tableClass);
-		if (table == null)
+		if (table == null) {
 			throw new TableRegistrationException("The TableFactory returned a null table");
+		}
+		
 		tables.put(tableClass, table);
    	}
 
@@ -57,8 +61,10 @@ public abstract class Database {
 	}
 
 	public <T> SelectQuery<T> select(Class<T> tableClass) {
-		if (getTableRegistration(tableClass) == null)
+		if (getTableRegistration(tableClass) == null) {
 			throw new UnknownTableException("Cannot select from an unregistered table!");
+		}
+		
 		return new SelectQuery<T>(this, tableClass);
 	}
 
@@ -67,5 +73,4 @@ public abstract class Database {
 	public abstract <T> QueryResult<T> execute(Query<T> query);
 
 	public abstract void save(Class<?> tableClass, Object o);
-
 }

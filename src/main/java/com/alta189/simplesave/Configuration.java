@@ -5,13 +5,18 @@ import java.util.Map;
 
 public class Configuration {
 
-	private Map<String, String> properties = new HashMap<String, String>();
-	private final Driver driver;
+	protected final Map<String, String> properties;
+	protected final Driver driver;
 
-	public Configuration(Driver driver) {
+	public Configuration(Map<String, String> properties, Driver driver) {
+		this.properties = properties;
 		this.driver = driver;
 	}
-
+	
+	public Configuration(Driver driver) {
+		this(new HashMap<String, String>(), driver);
+	}
+	
 	public Driver getDriver() {
 		return driver;
 	}
@@ -37,5 +42,4 @@ public class Configuration {
 	public boolean containsProperty(String property) {
 		return properties.containsKey(property);
 	}
-
 }
