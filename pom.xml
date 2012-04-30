@@ -7,9 +7,22 @@
     <groupId>com.alta189</groupId>
     <artifactId>simplesave</artifactId>
     <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <developers>
+        <developer>
+            <id>alta189</id>
+            <name>Stephen Williams</name>
+            <email>me@alta189.com</email>
+        </developer>
+        <developer>
+            <id>W1ndwaker</id>
+            <name>Walker Crouse</name>
+            <email>wjcrouse913@aim.com</email>
+        </developer>
+    </developers>
 
     <dependencies>
-
         <!-- Database Connectors -->
         <!-- Note these are not shaded-->
         <dependency>
