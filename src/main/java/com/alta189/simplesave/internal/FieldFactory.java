@@ -4,6 +4,7 @@ import com.alta189.simplesave.exceptions.FieldRegistrationException;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,9 +24,12 @@ public class FieldFactory {
 	public static FieldRegistration getField(Field field) throws FieldRegistrationException {
 		// Check if the field has the Field annotation
 		com.alta189.simplesave.Field fieldAnnotation = getFieldAnnotation(field);
-		if (fieldAnnotation == null) {
+		if (fieldAnnotation == null)
 			return null;
-		}
+
+
+		if (Modifier.isStatic(field.getModifiers()))
+			throw new FieldRegistrationException("Field cannot be static!");
 
 		Class<?> type = field.getType();
 

@@ -5,6 +5,7 @@ import com.alta189.simplesave.exceptions.TableRegistrationException;
 import com.alta189.simplesave.internal.reflection.EmptyInjector;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 public class IdFactory {
 
@@ -12,6 +13,9 @@ public class IdFactory {
 		for (Field field : clazz.getDeclaredFields()) {
 			if (!field.isAnnotationPresent(Id.class))
 				continue;
+
+			if (Modifier.isStatic(field.getModifiers()))
+				throw new TableRegistrationException("The Id cannot be static!");
 
 			Class<?> type = field.getType();
 			if (!type.equals(int.class))
