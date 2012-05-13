@@ -14,14 +14,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.simplesave.internal;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class PreparedStatementUtils {
-
 	public static void setObject(PreparedStatement statement, int index, Object o) throws SQLException {
 		if (o == null) {
 			statement.setObject(index, null);
@@ -36,15 +34,14 @@ public class PreparedStatementUtils {
 			statement.setDouble(index, ((Number) o).doubleValue());
 		} else if (clazz.equals(String.class)) {
 			statement.setString(index, (String) o);
-		}  else if (clazz.equals(boolean.class) || clazz.equals(Boolean.class)) {
+		} else if (clazz.equals(boolean.class) || clazz.equals(Boolean.class)) {
 			statement.setInt(index, ((Boolean) o) ? 1 : 0);
 		} else if (clazz.equals(short.class) || clazz.equals(Short.class)) {
 			statement.setShort(index, ((Number) o).shortValue());
-		} else if (clazz.equals(float.class)|| clazz.equals(Float.class)) {
+		} else if (clazz.equals(float.class) || clazz.equals(Float.class)) {
 			statement.setFloat(index, ((Number) o).floatValue());
 		} else if (clazz.equals(byte.class) || clazz.equals(Byte.class)) {
 			statement.setByte(index, ((Number) o).byteValue());
 		}
 	}
-
 }

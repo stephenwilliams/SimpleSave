@@ -14,15 +14,13 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.simplesave.internal;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Collection;
 
 public class TableRegistration {
-
 	private final String name;
 	private final Class<?> clazz;
 	private final Map<String, FieldRegistration> fields = new HashMap<String, FieldRegistration>();

@@ -14,17 +14,14 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.simplesave.internal;
 
 import com.alta189.simplesave.exceptions.SerializeException;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 public class SerializedClassBuilder {
-
 	public static boolean validClass(Class<?> clazz) {
 		try {
 			Method serialize = clazz.getDeclaredMethod("serialize");
@@ -91,5 +88,4 @@ public class SerializedClassBuilder {
 			throw new SerializeException("Could not serialize Class '" + clazz.getCanonicalName() + "'", e.getCause());
 		}
 	}
-
 }

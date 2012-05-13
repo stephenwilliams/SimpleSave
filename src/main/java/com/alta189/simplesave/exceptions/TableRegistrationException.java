@@ -14,11 +14,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.simplesave.exceptions;
 
 public class TableRegistrationException extends Exception {
-
 	public TableRegistrationException(String message) {
 		super(message);
 	}
@@ -30,5 +28,4 @@ public class TableRegistrationException extends Exception {
 	public TableRegistrationException(Throwable cause) {
 		super(cause);
 	}
-
 }

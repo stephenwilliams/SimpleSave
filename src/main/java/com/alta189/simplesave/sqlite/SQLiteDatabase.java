@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.simplesave.sqlite;
 
 import com.alta189.simplesave.Database;
@@ -28,11 +27,11 @@ import java.sql.SQLException;
 public class SQLiteDatabase extends Database {
 	private final String uri;
 	private Connection connection;
-	
+
 	public SQLiteDatabase(String uri) {
-		this.uri = uri;	
+		this.uri = uri;
 	}
-	
+
 	@Override
 	public void connect() throws ConnectionException {
 		if (!isConnected()) {
@@ -44,7 +43,7 @@ public class SQLiteDatabase extends Database {
 			}
 		}
 	}
-	
+
 	@Override
 	public void close() throws ConnectionException {
 		if (isConnected()) {
@@ -54,7 +53,7 @@ public class SQLiteDatabase extends Database {
 				throw new ConnectionException(e);
 			}
 		}
-		
+
 		super.close();
 	}
 

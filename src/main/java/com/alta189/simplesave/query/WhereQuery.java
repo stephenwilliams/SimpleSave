@@ -14,14 +14,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.simplesave.query;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class WhereQuery<T> extends Query<T> {
-
 	private final List<WhereEntry<T>> entries;
 	private final Query<T> parent;
 
@@ -72,7 +70,7 @@ public class WhereQuery<T> extends Query<T> {
 		entries.add(entry);
 		return entry;
 	}
-	
+
 	public List<WhereEntry<T>> getEntries() {
 		return entries;
 	}

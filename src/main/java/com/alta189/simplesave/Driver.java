@@ -14,21 +14,20 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.simplesave;
 
 public enum Driver {
 
 	MYSQL,
 	SQLITE;
-	
+
 	public static Driver getDriver(String value) {
 		Driver result = null;
 		try {
 			result = Driver.valueOf(value.toUpperCase());
 		} catch (Exception ignored) {
 		}
-		
+
 		return result;
-	}	
+	}
 }

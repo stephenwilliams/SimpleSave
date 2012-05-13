@@ -14,19 +14,17 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.simplesave.internal;
 
 import java.lang.reflect.Field;
 
 public class TableUtils {
-
 	public static int getIdValue(TableRegistration table, Object o) {
 		IdRegistration idRegistration = table.getId();
 		try {
 			Field field = o.getClass().getDeclaredField(idRegistration.getName());
 			field.setAccessible(true);
-			return ((Number)field.get(o)).intValue();
+			return ((Number) field.get(o)).intValue();
 		} catch (NoSuchFieldException e) {
 			throw new IllegalArgumentException(e);
 		} catch (IllegalAccessException e) {
@@ -128,5 +126,4 @@ public class TableUtils {
 	public static Object deserializeField(FieldRegistration fieldRegistration, String data) {
 		return SerializedClassBuilder.deserialize(fieldRegistration.getClass(), data);
 	}
-
 }

@@ -14,13 +14,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.simplesave.query;
 
 import java.util.List;
 
 public class QueryResult<T> {
-
 	private final List<T> results;
 
 	public QueryResult(List<T> results) {
@@ -34,6 +32,4 @@ public class QueryResult<T> {
 	public T findOne() {
 		return (results != null && results.size() >= 1) ? results.get(0) : null;
 	}
-
-
 }

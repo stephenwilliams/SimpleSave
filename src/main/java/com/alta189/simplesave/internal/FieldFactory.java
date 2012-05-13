@@ -14,11 +14,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.simplesave.internal;
 
 import com.alta189.simplesave.exceptions.FieldRegistrationException;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -26,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FieldFactory {
-
 	public static List<FieldRegistration> getFields(Class<?> clazz) throws FieldRegistrationException {
 		final List<FieldRegistration> fields = new ArrayList<FieldRegistration>();
 		for (Field field : clazz.getDeclaredFields()) {
@@ -41,12 +38,13 @@ public class FieldFactory {
 	public static FieldRegistration getField(Field field) throws FieldRegistrationException {
 		// Check if the field has the Field annotation
 		com.alta189.simplesave.Field fieldAnnotation = getFieldAnnotation(field);
-		if (fieldAnnotation == null)
+		if (fieldAnnotation == null) {
 			return null;
+		}
 
-
-		if (Modifier.isStatic(field.getModifiers()))
+		if (Modifier.isStatic(field.getModifiers())) {
 			throw new FieldRegistrationException("Field cannot be static!");
+		}
 
 		Class<?> type = field.getType();
 
@@ -89,16 +87,15 @@ public class FieldFactory {
 			return true;
 		} else if (type.equals(String.class)) {
 			return true;
-		}  else if (type.equals(boolean.class) || type.equals(Boolean.class)) {
+		} else if (type.equals(boolean.class) || type.equals(Boolean.class)) {
 			return true;
 		} else if (type.equals(short.class) || type.equals(Short.class)) {
 			return true;
-		} else if (type.equals(float.class)|| type.equals(Float.class)) {
+		} else if (type.equals(float.class) || type.equals(Float.class)) {
 			return true;
 		} else if (type.equals(byte.class) || type.equals(Byte.class)) {
 			return true;
 		}
 		return false;
 	}
-
 }

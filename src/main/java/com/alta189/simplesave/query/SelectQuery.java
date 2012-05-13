@@ -14,13 +14,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.simplesave.query;
 
 import com.alta189.simplesave.Database;
 
 public class SelectQuery<T> extends Query<T> {
-
 	private final Database db;
 	private final Class<T> tableClass;
 	private final WhereQuery<T> where = new WhereQuery<T>(this);
@@ -30,7 +28,7 @@ public class SelectQuery<T> extends Query<T> {
 		this.db = db;
 		this.tableClass = tableClass;
 	}
-	
+
 	public WhereQuery<T> where() {
 		return where;
 	}
@@ -43,5 +41,4 @@ public class SelectQuery<T> extends Query<T> {
 	public QueryResult<T> execute() {
 		return db.execute(this);
 	}
-
 }

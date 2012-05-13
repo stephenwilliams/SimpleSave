@@ -14,11 +14,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.simplesave.internal;
 
 import com.alta189.simplesave.internal.reflection.EmptyInjector;
-
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ResultSetUtils {
-
 	private static final EmptyInjector injector = new EmptyInjector();
 
 	public static <E> List<E> buildResultList(TableRegistration table, Class<E> clazz, ResultSet set) {
@@ -68,7 +65,7 @@ public class ResultSetUtils {
 					field.setDouble(object, set.getDouble(fieldRegistration.getName()));
 				} else if (fieldRegistration.getType().equals(String.class)) {
 					field.set(object, set.getString(fieldRegistration.getName()));
-				}  else if (fieldRegistration.getType().equals(boolean.class) || fieldRegistration.getType().equals(Boolean.class)) {
+				} else if (fieldRegistration.getType().equals(boolean.class) || fieldRegistration.getType().equals(Boolean.class)) {
 					int i = set.getInt(fieldRegistration.getName());
 					if (i == 1) {
 						field.setBoolean(object, true);
@@ -77,7 +74,7 @@ public class ResultSetUtils {
 					}
 				} else if (fieldRegistration.getType().equals(short.class) || fieldRegistration.getType().equals(Short.class)) {
 					field.setShort(object, set.getShort(fieldRegistration.getName()));
-				} else if (fieldRegistration.getType().equals(float.class)|| fieldRegistration.getType().equals(Float.class)) {
+				} else if (fieldRegistration.getType().equals(float.class) || fieldRegistration.getType().equals(Float.class)) {
 					field.setFloat(object, set.getFloat(fieldRegistration.getName()));
 				} else if (fieldRegistration.getType().equals(byte.class) || fieldRegistration.getType().equals(Byte.class)) {
 					field.setByte(object, set.getByte(fieldRegistration.getName()));
@@ -88,8 +85,7 @@ public class ResultSetUtils {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		} catch (IllegalAccessException e) {
-		    throw new RuntimeException(e);
+			throw new RuntimeException(e);
 		}
 	}
-
 }

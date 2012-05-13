@@ -14,14 +14,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.simplesave;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Configuration {
-
 	protected final Map<String, String> properties;
 	protected final Driver driver;
 
@@ -29,11 +27,11 @@ public class Configuration {
 		this.properties = properties;
 		this.driver = driver;
 	}
-	
+
 	public Configuration(Driver driver) {
 		this(new HashMap<String, String>(), driver);
 	}
-	
+
 	public Driver getDriver() {
 		return driver;
 	}

@@ -14,11 +14,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.simplesave.internal;
 
 public class FieldRegistration {
-
 	private final String name;
 	private final Class<?> type;
 	private final boolean serializable;
@@ -44,5 +42,4 @@ public class FieldRegistration {
 	public boolean isSerializable() {
 		return serializable;
 	}
-
 }

@@ -14,11 +14,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.simplesave.query;
 
 public class Comparison<E> {
-
 	private E value;
 
 	public Comparison(E value) {
@@ -32,5 +30,4 @@ public class Comparison<E> {
 	public E getValue() {
 		return value;
 	}
-
 }

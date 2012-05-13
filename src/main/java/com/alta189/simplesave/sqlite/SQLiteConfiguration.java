@@ -14,14 +14,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.simplesave.sqlite;
 
 import com.alta189.simplesave.Configuration;
 import com.alta189.simplesave.Driver;
 
 public class SQLiteConfiguration extends Configuration {
-
 	public SQLiteConfiguration() {
 		super(Driver.SQLITE);
 	}
@@ -30,11 +28,11 @@ public class SQLiteConfiguration extends Configuration {
 		super(Driver.SQLITE);
 		properties.put(SQLiteConstants.Path, path);
 	}
-	
+
 	public String getPath() {
 		return properties.get(SQLiteConstants.Path);
 	}
-	
+
 	public void setPath(String path) {
 		properties.put(SQLiteConstants.Path, path);
 	}

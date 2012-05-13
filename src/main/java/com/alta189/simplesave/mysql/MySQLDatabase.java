@@ -14,12 +14,10 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.simplesave.mysql;
 
 import com.alta189.simplesave.Database;
 import com.alta189.simplesave.exceptions.ConnectionException;
-import com.alta189.simplesave.exceptions.NotConnectedException;
 import com.alta189.simplesave.exceptions.UnknownTableException;
 import com.alta189.simplesave.internal.FieldRegistration;
 import com.alta189.simplesave.internal.PreparedStatementUtils;
@@ -31,7 +29,6 @@ import com.alta189.simplesave.query.Query;
 import com.alta189.simplesave.query.QueryResult;
 import com.alta189.simplesave.query.SelectQuery;
 import com.alta189.simplesave.query.WhereEntry;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -40,7 +37,6 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 public class MySQLDatabase extends Database {
-
 	private final String connUrl;
 	private final String user;
 	private final String pass;
@@ -110,8 +106,9 @@ public class MySQLDatabase extends Database {
 						int count = 0;
 						for (Object o : selectQuery.where().getEntries()) {
 							count++;
-							if (!(o instanceof WhereEntry))
+							if (!(o instanceof WhereEntry)) {
 								throw new InternalError("Something has gone very wrong!");
+							}
 
 							WhereEntry entry = (WhereEntry) o;
 							queryBuilder.append(entry.getField());
@@ -147,8 +144,9 @@ public class MySQLDatabase extends Database {
 						count = 0;
 						for (Object o : selectQuery.where().getEntries()) {
 							count++;
-							if (!(o instanceof WhereEntry))
+							if (!(o instanceof WhereEntry)) {
 								throw new InternalError("Something has gone very wrong!");
+							}
 
 							WhereEntry entry = (WhereEntry) o;
 							if (entry.getComparator() == Comparator.CONTAINS) {
@@ -158,8 +156,9 @@ public class MySQLDatabase extends Database {
 							}
 						}
 					}
-					if (statement == null)
+					if (statement == null) {
 						statement = conn.prepareStatement(queryBuilder.toString());
+					}
 					ResultSet set = statement.executeQuery();
 					QueryResult<T> result = new QueryResult<T>(ResultSetUtils.buildResultList(table, (Class<T>) table.getTableClass(), set));
 					set.close();
@@ -180,13 +179,15 @@ public class MySQLDatabase extends Database {
 				throw new RuntimeException(e);
 			}
 		}
-		if (!tableClass.isAssignableFrom(o.getClass()))
+		if (!tableClass.isAssignableFrom(o.getClass())) {
 			throw new IllegalArgumentException("The provided table class and save objects classes were not compatible.");
+		}
 
 		TableRegistration table = getTableRegistration(tableClass);
 
-		if (table == null)
+		if (table == null) {
 			throw new UnknownTableException("The table class '" + tableClass.getCanonicalName() + "' is not registered!");
+		}
 
 		StringBuilder query = new StringBuilder();
 		int id = TableUtils.getIdValue(table, o);
@@ -216,7 +217,7 @@ public class MySQLDatabase extends Database {
 					.append(" SET ");
 			int count = 0;
 			for (FieldRegistration fieldRegistration : table.getFields()) {
-				count ++;
+				count++;
 				query.append(fieldRegistration.getName())
 						.append("=?");
 				if (count != table.getFields().size()) {
@@ -245,8 +246,8 @@ public class MySQLDatabase extends Database {
 						PreparedStatementUtils.setObject(statement, i, TableUtils.getValueAsDouble(fieldRegistration, o));
 					} else if (fieldRegistration.getType().equals(String.class)) {
 						PreparedStatementUtils.setObject(statement, i, TableUtils.getValueAsString(fieldRegistration, o));
-					}  else if (fieldRegistration.getType().equals(boolean.class) || fieldRegistration.getType().equals(Boolean.class)) {
-						boolean value =  TableUtils.getValueAsBoolean(fieldRegistration, o);
+					} else if (fieldRegistration.getType().equals(boolean.class) || fieldRegistration.getType().equals(Boolean.class)) {
+						boolean value = TableUtils.getValueAsBoolean(fieldRegistration, o);
 						if (value) {
 							PreparedStatementUtils.setObject(statement, i, 1);
 						} else {
@@ -254,7 +255,7 @@ public class MySQLDatabase extends Database {
 						}
 					} else if (fieldRegistration.getType().equals(short.class) || fieldRegistration.getType().equals(Short.class)) {
 						PreparedStatementUtils.setObject(statement, i, TableUtils.getValueAsShort(fieldRegistration, o));
-					} else if (fieldRegistration.getType().equals(float.class)|| fieldRegistration.getType().equals(Float.class)) {
+					} else if (fieldRegistration.getType().equals(float.class) || fieldRegistration.getType().equals(Float.class)) {
 						PreparedStatementUtils.setObject(statement, i, TableUtils.getValueAsFloat(fieldRegistration, o));
 					} else if (fieldRegistration.getType().equals(byte.class) || fieldRegistration.getType().equals(Byte.class)) {
 						PreparedStatementUtils.setObject(statement, i, TableUtils.getValueAsByte(fieldRegistration, o));

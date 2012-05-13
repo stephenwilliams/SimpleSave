@@ -14,11 +14,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.simplesave.exceptions;
 
 public class UnknownDriverException extends RuntimeException {
-
 	public UnknownDriverException(String message) {
 		super(message);
 	}
@@ -30,5 +28,4 @@ public class UnknownDriverException extends RuntimeException {
 	public UnknownDriverException(Throwable cause) {
 		super(cause);
 	}
-
 }

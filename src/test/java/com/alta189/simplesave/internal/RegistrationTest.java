@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.simplesave.internal;
 
 import com.alta189.simplesave.exceptions.TableRegistrationException;
@@ -24,7 +23,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertNotNull;
 
 public class RegistrationTest {
-
 	@Test
 	public void testRegistration() {
 		TableRegistration test = null;
@@ -35,5 +33,4 @@ public class RegistrationTest {
 		}
 		assertNotNull("Registration failed", test);
 	}
-
 }

@@ -14,11 +14,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.simplesave.internal;
 
 public class IdRegistration extends FieldRegistration {
-
 	public IdRegistration(String name, Class<?> type) {
 		super(name, type);
 	}

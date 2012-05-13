@@ -14,14 +14,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.simplesave.mysql;
 
 import com.alta189.simplesave.Configuration;
 import com.alta189.simplesave.Driver;
 
 public class MySQLConfiguration extends Configuration {
-	
 	public MySQLConfiguration() {
 		super(Driver.MYSQL);
 
@@ -34,7 +32,7 @@ public class MySQLConfiguration extends Configuration {
 	public String getUser() {
 		return getProperty(MySQLConstants.User);
 	}
-	
+
 	public MySQLConfiguration setUser(String user) {
 		setProperty(MySQLConstants.User, user);
 		return this;
@@ -75,5 +73,4 @@ public class MySQLConfiguration extends Configuration {
 		setProperty(MySQLConstants.Database, database);
 		return this;
 	}
-
 }

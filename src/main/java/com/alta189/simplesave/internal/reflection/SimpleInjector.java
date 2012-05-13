@@ -14,14 +14,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.simplesave.internal.reflection;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 public class SimpleInjector implements Injector {
-
 	private Object[] args;
 	private Class<?>[] argClasses;
 
@@ -47,5 +45,4 @@ public class SimpleInjector implements Injector {
 			throw new InjectorException("Could not create a new instance of class '" + clazz.getCanonicalName() + "'", e.getCause());
 		}
 	}
-
 }
