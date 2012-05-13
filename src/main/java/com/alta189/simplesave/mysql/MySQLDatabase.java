@@ -80,7 +80,7 @@ public class MySQLDatabase extends Database {
 	@Override
 	public boolean isConnected() {
 		try {
-			return conn != null && !conn.isClosed();
+			return conn != null && !conn.isClosed() && conn.isValid(5000);
 		} catch (SQLException e) {
 			return false;
 		}
