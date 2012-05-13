@@ -32,7 +32,7 @@ public class QueryResult<T> {
 	}
 
 	public T findOne() {
-		return results.get(0);
+		return (results != null && results.size() >= 1) ? results.get(0) : null;
 	}
 
 
