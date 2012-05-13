@@ -23,6 +23,10 @@ import java.sql.SQLException;
 public class PreparedStatementUtils {
 
 	public static void setObject(PreparedStatement statement, int index, Object o) throws SQLException {
+		if (o == null) {
+			statement.setObject(index, null);
+			return;
+		}
 		Class clazz = o.getClass();
 		if (clazz.equals(int.class) || clazz.equals(Integer.class)) {
 			statement.setInt(index, ((Number) o).intValue());
