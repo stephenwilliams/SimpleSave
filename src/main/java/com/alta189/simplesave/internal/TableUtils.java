@@ -25,6 +25,7 @@ public class TableUtils {
 		IdRegistration idRegistration = table.getId();
 		try {
 			Field field = o.getClass().getDeclaredField(idRegistration.getName());
+			field.setAccessible(true);
 			return ((Number)field.get(o)).intValue();
 		} catch (NoSuchFieldException e) {
 			throw new IllegalArgumentException(e);
@@ -36,6 +37,7 @@ public class TableUtils {
 	public static Integer getValueAsInteger(FieldRegistration fieldRegistration, Object o) {
 		try {
 			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
+			field.setAccessible(true);
 			return field.getInt(o);
 		} catch (Exception e) {
 			throw new IllegalArgumentException(e);
@@ -45,6 +47,7 @@ public class TableUtils {
 	public static Long getValueAsLong(FieldRegistration fieldRegistration, Object o) {
 		try {
 			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
+			field.setAccessible(true);
 			return field.getLong(o);
 		} catch (Exception e) {
 			throw new IllegalArgumentException(e);
@@ -54,6 +57,7 @@ public class TableUtils {
 	public static Double getValueAsDouble(FieldRegistration fieldRegistration, Object o) {
 		try {
 			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
+			field.setAccessible(true);
 			return field.getDouble(o);
 		} catch (Exception e) {
 			throw new IllegalArgumentException(e);
@@ -63,6 +67,7 @@ public class TableUtils {
 	public static String getValueAsString(FieldRegistration fieldRegistration, Object o) {
 		try {
 			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
+			field.setAccessible(true);
 			return (String) field.get(o);
 		} catch (Exception e) {
 			throw new IllegalArgumentException(e);
@@ -72,6 +77,7 @@ public class TableUtils {
 	public static Boolean getValueAsBoolean(FieldRegistration fieldRegistration, Object o) {
 		try {
 			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
+			field.setAccessible(true);
 			return field.getBoolean(o);
 		} catch (Exception e) {
 			throw new IllegalArgumentException(e);
@@ -81,6 +87,7 @@ public class TableUtils {
 	public static Short getValueAsShort(FieldRegistration fieldRegistration, Object o) {
 		try {
 			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
+			field.setAccessible(true);
 			return field.getShort(o);
 		} catch (Exception e) {
 			throw new IllegalArgumentException(e);
@@ -90,6 +97,7 @@ public class TableUtils {
 	public static Float getValueAsFloat(FieldRegistration fieldRegistration, Object o) {
 		try {
 			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
+			field.setAccessible(true);
 			return field.getFloat(o);
 		} catch (Exception e) {
 			throw new IllegalArgumentException(e);
@@ -99,6 +107,7 @@ public class TableUtils {
 	public static Byte getValueAsByte(FieldRegistration fieldRegistration, Object o) {
 		try {
 			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
+			field.setAccessible(true);
 			return field.getByte(o);
 		} catch (Exception e) {
 			throw new IllegalArgumentException(e);
@@ -108,6 +117,7 @@ public class TableUtils {
 	public static String serializeField(FieldRegistration fieldRegistration, Object tableObject) {
 		try {
 			Field field = tableObject.getClass().getDeclaredField(fieldRegistration.getName());
+			field.setAccessible(true);
 			Object o = field.get(tableObject);
 			return SerializedClassBuilder.serialize(fieldRegistration.getClass(), o);
 		} catch (Exception e) {

@@ -65,6 +65,7 @@ public class SerializedClassBuilder {
 	public static Object deserialize(Class<?> clazz, String data) {
 		try {
 			Method deserialize = clazz.getDeclaredMethod("deserialize", String.class);
+			deserialize.setAccessible(true);
 			return deserialize.invoke(null, data);
 		} catch (NoSuchMethodException e) {
 			throw new SerializeException("Could not deserialize data", e.getCause());
@@ -78,6 +79,7 @@ public class SerializedClassBuilder {
 	public static String serialize(Class<?> clazz, Object object) {
 		try {
 			Method serialize = clazz.getDeclaredMethod("serialize");
+			serialize.setAccessible(true);
 			return (String) serialize.invoke(object);
 		} catch (NoSuchMethodException e) {
 			throw new SerializeException("Could not serialize Class '" + clazz.getCanonicalName() + "'", e.getCause());

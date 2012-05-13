@@ -41,6 +41,7 @@ public class IdFactory {
 			// Check if id defaults to 0
 			try {
 				Object o = new EmptyInjector().newInstance(clazz);
+				field.setAccessible(true);
 				int id = ((Number)field.get(o)).intValue();
 				if (id != 0)
 					throw new TableRegistrationException("The id does not default to 0");
