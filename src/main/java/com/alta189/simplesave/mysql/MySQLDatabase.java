@@ -88,6 +88,13 @@ public class MySQLDatabase extends Database {
 
 	@Override
 	public <T> QueryResult<T> execute(Query<T> query) {
+		if (!isConnected()) {
+			try {
+				connect();
+			} catch (ConnectionException e) {
+				throw new RuntimeException(e);
+			}
+		}
 		try {
 			switch (query.getType()) {
 				case SELECT:
@@ -166,8 +173,13 @@ public class MySQLDatabase extends Database {
 
 	@Override
 	public void save(Class<?> tableClass, Object o) {
-		if (!isConnected())
-			throw new NotConnectedException("Cannot save when not connected!");
+		if (!isConnected()) {
+			try {
+				connect();
+			} catch (ConnectionException e) {
+				throw new RuntimeException(e);
+			}
+		}
 		if (!tableClass.isAssignableFrom(o.getClass()))
 			throw new IllegalArgumentException("The provided table class and save objects classes were not compatible.");
 
@@ -258,6 +270,13 @@ public class MySQLDatabase extends Database {
 
 	@Override
 	public void remove(Class<?> tableClass, Object o) {
+		if (!isConnected()) {
+			try {
+				connect();
+			} catch (ConnectionException e) {
+				throw new RuntimeException(e);
+			}
+		}
 	}
 
 	private void createTables() {
