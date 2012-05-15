@@ -58,6 +58,7 @@ public class DatabaseFactory {
 				mySQLConnUrl.append(mySQLPort);
 				mySQLConnUrl.append("/");
 				mySQLConnUrl.append(mySQLDatabase);
+				mySQLConnUrl.append("?useUnicode=true&characterEncoding=utf8");
 				return new MySQLDatabase(mySQLConnUrl.toString(), mySQLUser, mySQLPass);
 
 			case SQLITE:
