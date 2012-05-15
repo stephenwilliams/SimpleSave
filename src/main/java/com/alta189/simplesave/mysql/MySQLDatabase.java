@@ -52,6 +52,13 @@ public class MySQLDatabase extends Database {
 	public void connect() throws ConnectionException {
 		if (!isConnected()) {
 			super.connect();
+
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+			} catch (ClassNotFoundException e) {
+				throw new ConnectionException("Could not find the MySQL JDBC Driver!", e);
+			}
+
 			try {
 				conn = DriverManager.getConnection(connUrl, user, pass);
 				createTables();
