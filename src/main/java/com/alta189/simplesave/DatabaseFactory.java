@@ -17,6 +17,8 @@
 package com.alta189.simplesave;
 
 import com.alta189.simplesave.exceptions.UnknownDriverException;
+import com.alta189.simplesave.h2.H2Configuration;
+import com.alta189.simplesave.h2.H2Database;
 import com.alta189.simplesave.mysql.MySQLConstants;
 import com.alta189.simplesave.mysql.MySQLDatabase;
 import com.alta189.simplesave.sqlite.SQLiteConstants;
@@ -69,7 +71,14 @@ public class DatabaseFactory {
 
 				String uri = "jdbc:sqlite:" + path;
 				return new SQLiteDatabase(uri);
-
+				
+			case H2:
+				String h2db = config.getProperty(H2Configuration.H2_DATABASE);
+				if (h2db == null || h2db.isEmpty())
+					throw new IllegalArgumentException("Database is null or empty!");
+				String h2url = "jdbc:h2:file:" + h2db + ";MODE=MYSQL;IGNORECASE=TRUE;AUTO_SERVER=TRUE";
+				return new H2Database(h2url);
+				
 			default:
 				throw new UnknownDriverException("The driver '" + config.getDriver() + "' is unknown");
 		}
