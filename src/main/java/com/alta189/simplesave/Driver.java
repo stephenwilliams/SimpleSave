@@ -19,7 +19,8 @@ package com.alta189.simplesave;
 public enum Driver {
 
 	MYSQL,
-	SQLITE;
+	SQLITE,
+	H2;
 
 	public static Driver getDriver(String value) {
 		Driver result = null;
