@@ -25,7 +25,7 @@ public class H2Util {
 		} else if (clazz.equals(double.class) || clazz.equals(Double.class)) {
 			return "DOUBLE";
 		} else if (clazz.equals(String.class)) {
-			return "VARCHAR(255)";
+			return "TEXT";
 		} else if (clazz.equals(boolean.class) || clazz.equals(Boolean.class)) {
 			return "TINYINT";
 		} else if (clazz.equals(short.class) || clazz.equals(Short.class)) {
