@@ -12,9 +12,10 @@ import com.alta189.simplesave.DatabaseFactory;
 import com.alta189.simplesave.Field;
 import com.alta189.simplesave.Id;
 import com.alta189.simplesave.Table;
+import com.alta189.simplesave.exceptions.ConnectionException;
 import com.alta189.simplesave.exceptions.TableRegistrationException;
 
-public class H2TableRegistrationTest {
+public class H2DatabaseTest {
 
 	@Test
 	public void test() {
@@ -35,12 +36,25 @@ public class H2TableRegistrationTest {
 			e.printStackTrace();
 			fail("Exception occured too early! " + e.toString());
 		}
+		boolean caught = false;
 		try {
 			db.registerTable(TestClass2.class);
 		} catch (TableRegistrationException e) {
-			return;
+			caught = true;
 		}
-		fail("Checks failed!");
+		if (!caught)
+			fail("Failed to catch exception with registering duplicate class!");
+		try {
+			db.connect();
+		} catch (ConnectionException e) {
+			fail("Failed to connect to database! " + e.toString());
+		}
+		try {
+			db.close();
+		} catch (ConnectionException e) {
+			fail("Failed to close database! " + e.toString());
+		}
+		tmpfile.delete();
 	}
 	
 	@Table(name = "test")
