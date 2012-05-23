@@ -29,12 +29,14 @@ import com.alta189.simplesave.query.Query;
 import com.alta189.simplesave.query.QueryResult;
 import com.alta189.simplesave.query.SelectQuery;
 import com.alta189.simplesave.query.WhereEntry;
+import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class MySQLDatabase extends Database {
 	private final String connUrl;
@@ -238,7 +240,12 @@ public class MySQLDatabase extends Database {
 		}
 
 		try {
-			PreparedStatement statement = conn.prepareStatement(query.toString());
+			PreparedStatement statement; 
+			if (id == 0) {
+				statement = conn.prepareStatement(query.toString(), Statement.RETURN_GENERATED_KEYS);
+			} else {
+				statement = conn.prepareStatement(query.toString());
+			}
 			int i = 0;
 			for (FieldRegistration fieldRegistration : table.getFields()) {
 				i++;
@@ -271,6 +278,20 @@ public class MySQLDatabase extends Database {
 			}
 
 			statement.executeUpdate();
+			if (id == 0) {
+				ResultSet resultSet = statement.getGeneratedKeys();
+				if (resultSet != null && resultSet.next()) {
+					try {
+						Field field = tableClass.getDeclaredField(table.getId().getName());
+						field.setAccessible(true);
+						field.setInt(o, resultSet.getInt(1));
+					} catch (NoSuchFieldException e) {
+						e.printStackTrace();
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
+					}
+				}
+			}
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
