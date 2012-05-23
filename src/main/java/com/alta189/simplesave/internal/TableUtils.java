@@ -19,6 +19,7 @@ package com.alta189.simplesave.internal;
 import java.lang.reflect.Field;
 
 public class TableUtils {
+
 	public static int getIdValue(TableRegistration table, Object o) {
 		IdRegistration idRegistration = table.getId();
 		try {
@@ -36,7 +37,7 @@ public class TableUtils {
 		try {
 			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
 			field.setAccessible(true);
-			return field.getInt(o);
+			return (Integer) field.get(o);
 		} catch (Exception e) {
 			throw new IllegalArgumentException(e);
 		}
@@ -46,7 +47,7 @@ public class TableUtils {
 		try {
 			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
 			field.setAccessible(true);
-			return field.getLong(o);
+			return (Long) field.get(o);
 		} catch (Exception e) {
 			throw new IllegalArgumentException(e);
 		}
@@ -56,7 +57,7 @@ public class TableUtils {
 		try {
 			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
 			field.setAccessible(true);
-			return field.getDouble(o);
+			return (Double) field.get(o);
 		} catch (Exception e) {
 			throw new IllegalArgumentException(e);
 		}
@@ -76,7 +77,7 @@ public class TableUtils {
 		try {
 			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
 			field.setAccessible(true);
-			return field.getBoolean(o);
+			return (Boolean) field.get(o);
 		} catch (Exception e) {
 			throw new IllegalArgumentException(e);
 		}
@@ -86,7 +87,7 @@ public class TableUtils {
 		try {
 			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
 			field.setAccessible(true);
-			return field.getShort(o);
+			return (Short) field.get(o);
 		} catch (Exception e) {
 			throw new IllegalArgumentException(e);
 		}
@@ -96,7 +97,7 @@ public class TableUtils {
 		try {
 			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
 			field.setAccessible(true);
-			return field.getFloat(o);
+			return (Float) field.get(o);
 		} catch (Exception e) {
 			throw new IllegalArgumentException(e);
 		}
@@ -106,7 +107,7 @@ public class TableUtils {
 		try {
 			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
 			field.setAccessible(true);
-			return field.getByte(o);
+			return (Byte) field.get(o);
 		} catch (Exception e) {
 			throw new IllegalArgumentException(e);
 		}

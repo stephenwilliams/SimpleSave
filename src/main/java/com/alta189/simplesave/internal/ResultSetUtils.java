@@ -57,27 +57,45 @@ public class ResultSetUtils {
 				String result = set.getString(fieldRegistration.getName());
 				field.set(object, TableUtils.deserializeField(fieldRegistration, result));
 			} else {
-				if (fieldRegistration.getType().equals(int.class) || fieldRegistration.getType().equals(Integer.class)) {
+				if (fieldRegistration.getType().equals(int.class)) {
 					field.setInt(object, set.getInt(fieldRegistration.getName()));
-				} else if (fieldRegistration.getType().equals(long.class) || fieldRegistration.getType().equals(Long.class)) {
+				} else if (fieldRegistration.getType().equals(Integer.class)) {
+					field.set(object, set.getObject(fieldRegistration.getName()));
+				} else if (fieldRegistration.getType().equals(long.class)) {
 					field.setLong(object, set.getLong(fieldRegistration.getName()));
-				} else if (fieldRegistration.getType().equals(double.class) || fieldRegistration.getType().equals(Double.class)) {
+				} else if (fieldRegistration.getType().equals(Long.class)) {
+					field.set(object, set.getObject(fieldRegistration.getName()));
+				} else if (fieldRegistration.getType().equals(double.class)) {
 					field.setDouble(object, set.getDouble(fieldRegistration.getName()));
+				} else if (fieldRegistration.getType().equals(Double.class)) {
+					field.set(object, set.getObject(fieldRegistration.getName()));
 				} else if (fieldRegistration.getType().equals(String.class)) {
 					field.set(object, set.getString(fieldRegistration.getName()));
-				} else if (fieldRegistration.getType().equals(boolean.class) || fieldRegistration.getType().equals(Boolean.class)) {
+				} else if (fieldRegistration.getType().equals(boolean.class)) {
 					int i = set.getInt(fieldRegistration.getName());
 					if (i == 1) {
 						field.setBoolean(object, true);
 					} else {
 						field.setBoolean(object, false);
 					}
-				} else if (fieldRegistration.getType().equals(short.class) || fieldRegistration.getType().equals(Short.class)) {
+				} else if (fieldRegistration.getType().equals(Boolean.class)) {int i = set.getInt(fieldRegistration.getName());
+					if (i == 1) {
+						field.set(object, Boolean.TRUE);
+					} else {
+						field.set(object, Boolean.FALSE);
+					}
+				} else if (fieldRegistration.getType().equals(short.class)) {
 					field.setShort(object, set.getShort(fieldRegistration.getName()));
-				} else if (fieldRegistration.getType().equals(float.class) || fieldRegistration.getType().equals(Float.class)) {
+				} else if (fieldRegistration.getType().equals(Short.class)) {
+					field.set(object, set.getObject(fieldRegistration.getName()));
+				} else if (fieldRegistration.getType().equals(float.class)) {
 					field.setFloat(object, set.getFloat(fieldRegistration.getName()));
-				} else if (fieldRegistration.getType().equals(byte.class) || fieldRegistration.getType().equals(Byte.class)) {
+				} else if (fieldRegistration.getType().equals(Float.class)) {
+					field.set(object, set.getObject(fieldRegistration.getName()));
+				} else if (fieldRegistration.getType().equals(byte.class)) {
 					field.setByte(object, set.getByte(fieldRegistration.getName()));
+				} else if (fieldRegistration.getType().equals(Byte.class)) {
+					field.set(object, set.getObject(fieldRegistration.getName()));
 				}
 			}
 		} catch (NoSuchFieldException e) {
