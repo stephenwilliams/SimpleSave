@@ -49,6 +49,16 @@ public class H2DatabaseTest {
 		} catch (ConnectionException e) {
 			fail("Failed to connect to database! " + e.toString());
 		}
+		TestClass one = new TestClass();
+		one.setName("Hello World");
+		one.setId(1);
+		db.save(TestClass.class, one);
+		TestClass two = new TestClass();
+		two.setName("Cruel World");
+		two.setId(2);
+		db.save(TestClass.class, two);
+		db.getTableRegistration(TestClass.class);
+		assert(db.select(TestClass.class).execute().find().size()==2);
 		try {
 			db.close();
 		} catch (ConnectionException e) {
@@ -64,6 +74,22 @@ public class H2DatabaseTest {
 		
 		@Field
 		private String name;
+
+		protected int getId() {
+			return id;
+		}
+
+		protected void setId(int id) {
+			this.id = id;
+		}
+
+		protected String getName() {
+			return name;
+		}
+
+		protected void setName(String name) {
+			this.name = name;
+		}
 		
 	}
 	
