@@ -78,8 +78,8 @@ public class H2Database extends Database {
 			} catch (SQLException e) {
 				throw new ConnectionException(e);
 			}
+			super.close();
 		}
-		super.close();
 	}
 
 	@Override
