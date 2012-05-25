@@ -17,6 +17,7 @@
 package com.alta189.simplesave.internal;
 
 import com.alta189.simplesave.exceptions.FieldRegistrationException;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;

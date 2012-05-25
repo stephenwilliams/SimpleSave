@@ -29,6 +29,7 @@ import com.alta189.simplesave.query.Query;
 import com.alta189.simplesave.query.QueryResult;
 import com.alta189.simplesave.query.SelectQuery;
 import com.alta189.simplesave.query.WhereEntry;
+
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -240,7 +241,7 @@ public class MySQLDatabase extends Database {
 		}
 
 		try {
-			PreparedStatement statement; 
+			PreparedStatement statement;
 			if (id == 0) {
 				statement = conn.prepareStatement(query.toString(), Statement.RETURN_GENERATED_KEYS);
 			} else {

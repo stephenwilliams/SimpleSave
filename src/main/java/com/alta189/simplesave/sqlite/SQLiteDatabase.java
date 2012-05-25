@@ -20,6 +20,7 @@ import com.alta189.simplesave.Database;
 import com.alta189.simplesave.exceptions.ConnectionException;
 import com.alta189.simplesave.query.Query;
 import com.alta189.simplesave.query.QueryResult;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;

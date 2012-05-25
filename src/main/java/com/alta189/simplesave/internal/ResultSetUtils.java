@@ -17,6 +17,7 @@
 package com.alta189.simplesave.internal;
 
 import com.alta189.simplesave.internal.reflection.EmptyInjector;
+
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -78,7 +79,8 @@ public class ResultSetUtils {
 					} else {
 						field.setBoolean(object, false);
 					}
-				} else if (fieldRegistration.getType().equals(Boolean.class)) {int i = set.getInt(fieldRegistration.getName());
+				} else if (fieldRegistration.getType().equals(Boolean.class)) {
+					int i = set.getInt(fieldRegistration.getName());
 					if (i == 1) {
 						field.set(object, Boolean.TRUE);
 					} else {

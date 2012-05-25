@@ -19,6 +19,7 @@ package com.alta189.simplesave.internal;
 import com.alta189.simplesave.Id;
 import com.alta189.simplesave.exceptions.TableRegistrationException;
 import com.alta189.simplesave.internal.reflection.EmptyInjector;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 

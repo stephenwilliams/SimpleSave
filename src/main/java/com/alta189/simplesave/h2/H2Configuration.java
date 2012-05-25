@@ -20,13 +20,13 @@ import com.alta189.simplesave.Configuration;
 import com.alta189.simplesave.Driver;
 
 public class H2Configuration extends Configuration {
-	
+
 	public static final String H2_DATABASE = "h2.database";
 
-	public H2Configuration(){
+	public H2Configuration() {
 		super(Driver.H2);
 	}
-	
+
 	public String getDatabase() {
 		return getProperty(H2_DATABASE);
 	}
@@ -35,5 +35,4 @@ public class H2Configuration extends Configuration {
 		setProperty(H2_DATABASE, database);
 		return this;
 	}
-
 }

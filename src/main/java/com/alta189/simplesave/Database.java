@@ -24,6 +24,7 @@ import com.alta189.simplesave.internal.TableRegistration;
 import com.alta189.simplesave.query.Query;
 import com.alta189.simplesave.query.QueryResult;
 import com.alta189.simplesave.query.SelectQuery;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;

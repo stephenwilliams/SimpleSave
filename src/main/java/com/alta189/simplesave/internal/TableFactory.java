@@ -21,6 +21,7 @@ import com.alta189.simplesave.exceptions.FieldRegistrationException;
 import com.alta189.simplesave.exceptions.TableRegistrationException;
 import com.alta189.simplesave.internal.reflection.EmptyInjector;
 import com.alta189.simplesave.internal.reflection.Injector;
+
 import java.util.regex.Pattern;
 
 public class TableFactory {
