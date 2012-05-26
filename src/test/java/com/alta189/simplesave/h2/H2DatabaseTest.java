@@ -51,14 +51,13 @@ public class H2DatabaseTest {
 		}
 		TestClass one = new TestClass();
 		one.setName("Hello World");
-		one.setId(1);
 		db.save(TestClass.class, one);
 		TestClass two = new TestClass();
 		two.setName("Cruel World");
-		two.setId(2);
 		db.save(TestClass.class, two);
-		db.getTableRegistration(TestClass.class);
-		assert(db.select(TestClass.class).execute().find().size()==2);
+		assertEquals(db.getTableRegistration(TestClass.class).getTableClass(),TestClass.class);
+		assertEquals(db.select(TestClass.class).execute().find().size(),2);
+		assertEquals(db.select(TestClass.class).where().equal("name", "Hello World").execute().findOne().name,"Hello World");
 		try {
 			db.close();
 		} catch (ConnectionException e) {
