@@ -3,6 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+    <name>SimpleSave</name>
 	<groupId>com.alta189</groupId>
 	<artifactId>simplesave</artifactId>
 	<version>1.0.0</version>
@@ -19,6 +20,11 @@
 			<name>Walker Crouse</name>
 			<email>wjcrouse913@aim.com</email>
 		</developer>
+        <developer>
+            <id>robxu9</id>
+            <name>Robert Xu</name>
+            <email>robxu9@gmail.com</email>
+        </developer>
 	</developers>
 
 	<dependencies>
