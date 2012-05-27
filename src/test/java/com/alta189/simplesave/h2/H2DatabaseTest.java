@@ -1,19 +1,19 @@
 package com.alta189.simplesave.h2;
 
-import static org.junit.Assert.*;
-
-import java.io.File;
-import java.io.IOException;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.alta189.simplesave.DatabaseFactory;
 import com.alta189.simplesave.Field;
 import com.alta189.simplesave.Id;
 import com.alta189.simplesave.Table;
 import com.alta189.simplesave.exceptions.ConnectionException;
 import com.alta189.simplesave.exceptions.TableRegistrationException;
+import org.junit.Test;
+
+import java.io.File;
+import java.io.IOException;
+
+import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 public class H2DatabaseTest {
 
@@ -55,9 +55,9 @@ public class H2DatabaseTest {
 		TestClass two = new TestClass();
 		two.setName("Cruel World");
 		db.save(TestClass.class, two);
-		assertEquals(db.getTableRegistration(TestClass.class).getTableClass(),TestClass.class);
-		assertEquals(db.select(TestClass.class).execute().find().size(),2);
-		assertEquals(db.select(TestClass.class).where().equal("name", "Hello World").execute().findOne().name,"Hello World");
+		assertEquals(db.getTableRegistration(TestClass.class).getTableClass(), TestClass.class);
+		assertEquals(db.select(TestClass.class).execute().find().size(), 2);
+		assertEquals(db.select(TestClass.class).where().equal("name", "Hello World").execute().findOne().name, "Hello World");
 		try {
 			db.close();
 		} catch (ConnectionException e) {
@@ -65,12 +65,12 @@ public class H2DatabaseTest {
 		}
 		tmpfile.delete();
 	}
-	
+
 	@Table(name = "test")
 	public static class TestClass {
 		@Id
 		private int id;
-		
+
 		@Field
 		private String name;
 
@@ -89,17 +89,14 @@ public class H2DatabaseTest {
 		protected void setName(String name) {
 			this.name = name;
 		}
-		
 	}
-	
+
 	@Table(name = "tEsT")
 	public static class TestClass2 {
 		@Id
 		private int id;
-		
+
 		@Field
 		private String name;
-		
 	}
-
 }
