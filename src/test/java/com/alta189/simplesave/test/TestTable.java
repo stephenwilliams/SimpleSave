@@ -20,7 +20,7 @@ import com.alta189.simplesave.Field;
 import com.alta189.simplesave.Id;
 import com.alta189.simplesave.Table;
 
-@Table(name = "Test")
+@Table("Test")
 public class TestTable {
 	@Id
 	private int id;

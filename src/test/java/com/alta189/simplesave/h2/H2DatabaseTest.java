@@ -66,7 +66,7 @@ public class H2DatabaseTest {
 		tmpfile.delete();
 	}
 
-	@Table(name = "test")
+	@Table("test")
 	public static class TestClass {
 		@Id
 		private int id;
@@ -91,7 +91,7 @@ public class H2DatabaseTest {
 		}
 	}
 
-	@Table(name = "tEsT")
+	@Table("tEsT")
 	public static class TestClass2 {
 		@Id
 		private int id;

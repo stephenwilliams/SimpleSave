@@ -33,13 +33,13 @@ public class TableFactory {
 
 		// Get the annotation and make sure that 'name' is defined
 		Table table = clazz.getAnnotation(Table.class);
-		if (table.name() == null || table.name().isEmpty()) {
+		if (table.value() == null || table.value().isEmpty()) {
 			throw new TableRegistrationException("Class '" + clazz.getCanonicalName() + "' is missing a table name");
 		}
 
 		// Check that 'name' is only made up of allowed characters (Alphanumeric and '_')
 		Pattern pattern = Pattern.compile("^[a-zA-Z0-9_]*$");
-		if (!pattern.matcher(table.name()).find()) {
+		if (!pattern.matcher(table.value()).find()) {
 			throw new TableRegistrationException("Class '" + clazz.getCanonicalName() + "' table name has illegal characters in it. The name is limited to alphanumeric characters and '_'");
 		}
 
@@ -52,7 +52,7 @@ public class TableFactory {
 		}
 
 		// Create TableRegistration
-		TableRegistration tableRegistration = new TableRegistration(table.name(), clazz);
+		TableRegistration tableRegistration = new TableRegistration(table.value(), clazz);
 
 		// Get Id
 		IdRegistration idRegistration = IdFactory.getId(clazz);
