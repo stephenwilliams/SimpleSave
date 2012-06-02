@@ -16,25 +16,35 @@
  */
 package com.alta189.simplesave.sqlite;
 
-import com.alta189.simplesave.Configuration;
-import com.alta189.simplesave.Driver;
+import com.alta189.simplesave.DatabaseFactory;
+import com.alta189.simplesave.Field;
+import com.alta189.simplesave.Id;
+import com.alta189.simplesave.Table;
+import com.alta189.simplesave.exceptions.ConnectionException;
 
-public class SQLiteConfiguration extends Configuration {
-	public SQLiteConfiguration() {
-		super(Driver.SQLITE);
-		setPath(SQLiteConstants.DefaultPath);
+import org.junit.Test;
+import static org.junit.Assert.fail;
+
+public class SQLiteDatabaseTest {
+	
+	@Test
+	public void test() {
+		SQLiteConfiguration config = new SQLiteConfiguration();
+		config.setPath("test.db");
+		SQLiteDatabase db = (SQLiteDatabase) DatabaseFactory.createNewDatabase(config);
+		try {
+			db.connect();
+		} catch (ConnectionException e) {
+			fail(e.getMessage());
+		}
 	}
-
-	public SQLiteConfiguration(String path) {
-		super(Driver.SQLITE);
-		properties.put(SQLiteConstants.Path, path);
-	}
-
-	public String getPath() {
-		return properties.get(SQLiteConstants.Path);
-	}
-
-	public void setPath(String path) {
-		properties.put(SQLiteConstants.Path, path);
+	
+	@Table("test")
+	private class TestTable {
+		@Id
+		private int id;
+		
+		@Field
+		private String name;
 	}
 }
