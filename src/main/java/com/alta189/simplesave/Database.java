@@ -89,5 +89,14 @@ public abstract class Database {
 
 	public abstract void save(Class<?> tableClass, Object o);
 
+	public void save(Object o) {
+		save(o.getClass(), o);
+	}
+
 	public abstract void remove(Class<?> tableClass, Object o);
+
+	public void remove(Object o) {
+		remove(o.getClass(), o);
+	}
+
 }
