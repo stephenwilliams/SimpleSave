@@ -54,7 +54,7 @@ public class SerializedClassBuilder {
 				return false;
 			}
 		} catch (NoSuchMethodException e) {
-			System.out.println("Class '" + clazz.getCanonicalName() + "' is not deserializable because the method 'deserialize' is does not have either the serialize and/or deserialize method(s)");
+			System.out.println("Class '" + clazz.getCanonicalName() + "' does not have either the serialize and/or deserialize method(s)");
 			return false;
 		}
 		return true;
