@@ -25,7 +25,7 @@ public class PreparedStatementUtils {
 			statement.setObject(index, null);
 			return;
 		}
-		Class clazz = o.getClass();
+		Class<?> clazz = o.getClass();
 		if (clazz.equals(int.class) || clazz.equals(Integer.class)) {
 			statement.setInt(index, ((Number) o).intValue());
 		} else if (clazz.equals(long.class) || clazz.equals(Long.class)) {
@@ -42,6 +42,8 @@ public class PreparedStatementUtils {
 			statement.setFloat(index, ((Number) o).floatValue());
 		} else if (clazz.equals(byte.class) || clazz.equals(Byte.class)) {
 			statement.setByte(index, ((Number) o).byteValue());
+		} else {
+			statement.setObject(index, o, java.sql.Types.BLOB);
 		}
 	}
 }

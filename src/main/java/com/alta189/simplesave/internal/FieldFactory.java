@@ -97,6 +97,13 @@ public class FieldFactory {
 		} else if (type.equals(byte.class) || type.equals(Byte.class)) {
 			return true;
 		}
+		Class<?> checkclazz = type;
+		while (checkclazz!=null){
+			for (Class<?> i : checkclazz.getInterfaces())
+				if (i.getName().equals("java.io.Serializable"))
+					return true;
+			checkclazz = checkclazz.getSuperclass();
+		}
 		return false;
 	}
 }

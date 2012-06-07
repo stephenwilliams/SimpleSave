@@ -173,6 +173,8 @@ public class H2Database extends Database {
 					QueryResult<T> result = new QueryResult<T>(ResultSetUtils.buildResultList(table, (Class<T>) table.getTableClass(), set));
 					set.close();
 					return result;
+			default:
+				break;
 			}
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -272,6 +274,8 @@ public class H2Database extends Database {
 						PreparedStatementUtils.setObject(statement, i, TableUtils.getValueAsFloat(fieldRegistration, o));
 					} else if (fieldRegistration.getType().equals(byte.class) || fieldRegistration.getType().equals(Byte.class)) {
 						PreparedStatementUtils.setObject(statement, i, TableUtils.getValueAsByte(fieldRegistration, o));
+					} else {
+						PreparedStatementUtils.setObject(statement, i, TableUtils.getValueAsBlob(fieldRegistration, o));
 					}
 				}
 			}

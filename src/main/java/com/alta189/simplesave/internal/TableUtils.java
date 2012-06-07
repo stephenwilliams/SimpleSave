@@ -117,6 +117,16 @@ public class TableUtils {
 			throw new IllegalArgumentException(e);
 		}
 	}
+	
+	public static Object getValueAsBlob(FieldRegistration fieldRegistration, Object o){
+		try {
+			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
+			field.setAccessible(true);
+			return (Object)field.get(o);
+		} catch (Exception e) {
+			throw new IllegalArgumentException(e);
+		}
+	}
 
 	public static String serializeField(FieldRegistration fieldRegistration, Object tableObject) {
 		try {

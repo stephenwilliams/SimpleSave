@@ -18,7 +18,10 @@ package com.alta189.simplesave.internal;
 
 import com.alta189.simplesave.internal.reflection.EmptyInjector;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.lang.reflect.Field;
+import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -98,6 +101,18 @@ public class ResultSetUtils {
 					field.setByte(object, set.getByte(fieldRegistration.getName()));
 				} else if (fieldRegistration.getType().equals(Byte.class)) {
 					field.set(object, set.getObject(fieldRegistration.getName()));
+				} else {
+					Blob b = set.getBlob(fieldRegistration.getName());
+					ObjectInputStream is = new ObjectInputStream(b.getBinaryStream());
+					Object o = null;
+					try {
+						o = is.readObject();
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+					} finally {
+						is.close();
+					}
+					field.set(object, o);
 				}
 			}
 		} catch (NoSuchFieldException e) {
@@ -105,6 +120,8 @@ public class ResultSetUtils {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}

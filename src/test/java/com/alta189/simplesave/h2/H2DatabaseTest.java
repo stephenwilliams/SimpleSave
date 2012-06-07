@@ -69,16 +69,16 @@ public class H2DatabaseTest {
 	@Table("test")
 	public static class TestClass {
 		@Id
-		private int id;
+		private long id;
 
 		@Field
 		private String name;
 
-		protected int getId() {
+		protected long getId() {
 			return id;
 		}
 
-		protected void setId(int id) {
+		protected void setId(long id) {
 			this.id = id;
 		}
 
@@ -94,7 +94,7 @@ public class H2DatabaseTest {
 	@Table("tEsT")
 	public static class TestClass2 {
 		@Id
-		private int id;
+		private long id;
 
 		@Field
 		private String name;

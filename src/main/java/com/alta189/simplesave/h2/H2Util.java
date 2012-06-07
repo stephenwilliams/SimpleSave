@@ -35,6 +35,13 @@ public class H2Util {
 		} else if (clazz.equals(byte.class) || clazz.equals(Byte.class)) {
 			return "TINYINT";
 		}
+		Class<?> checkclazz = clazz;
+		while (checkclazz!=null){
+			for (Class<?> i : checkclazz.getInterfaces())
+				if (i.getName().equals("java.io.Serializable"))
+					return "BLOB";
+			checkclazz = checkclazz.getSuperclass();
+		}
 		return null;
 	}
 }
