@@ -21,7 +21,7 @@ public class H2Util {
 		if (clazz.equals(int.class) || clazz.equals(Integer.class)) {
 			return "INT";
 		} else if (clazz.equals(long.class) || clazz.equals(Long.class)) {
-			return "LONG";
+			return "BIGINT";
 		} else if (clazz.equals(double.class) || clazz.equals(Double.class)) {
 			return "DOUBLE";
 		} else if (clazz.equals(String.class)) {

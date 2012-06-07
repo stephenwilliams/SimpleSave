@@ -50,7 +50,7 @@ public class ResultSetUtils {
 		return result;
 	}
 
-	private static <E> void setField(FieldRegistration fieldRegistration, E object, ResultSet set) {
+	public static <E> void setField(FieldRegistration fieldRegistration, E object, ResultSet set) {
 		try {
 			Field field = object.getClass().getDeclaredField(fieldRegistration.getName());
 			field.setAccessible(true);

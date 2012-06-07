@@ -21,6 +21,7 @@ import com.alta189.simplesave.exceptions.ConnectionException;
 import com.alta189.simplesave.exceptions.TableRegistrationException;
 import com.alta189.simplesave.exceptions.UnknownTableException;
 import com.alta189.simplesave.internal.FieldRegistration;
+import com.alta189.simplesave.internal.IdRegistration;
 import com.alta189.simplesave.internal.PreparedStatementUtils;
 import com.alta189.simplesave.internal.ResultSetUtils;
 import com.alta189.simplesave.internal.TableFactory;
@@ -199,7 +200,7 @@ public class H2Database extends Database {
 		}
 
 		StringBuilder query = new StringBuilder();
-		int id = TableUtils.getIdValue(table, o);
+		long id = TableUtils.getIdValue(table, o);
 		if (id == 0) {
 			query.append("INSERT INTO ")
 					.append(table.getName())
@@ -235,8 +236,7 @@ public class H2Database extends Database {
 			}
 			query.append(" WHERE ")
 					.append(table.getId().getName())
-					.append("=")
-					.append(id);
+					.append("=?");
 		}
 
 		try {
@@ -276,6 +276,16 @@ public class H2Database extends Database {
 				}
 			}
 
+			if (id != 0) {
+				i++;
+				IdRegistration idRegistration = table.getId();
+				if (idRegistration.getType().equals(Integer.class) || idRegistration.getType().equals(int.class)) {
+					PreparedStatementUtils.setObject(statement, i, TableUtils.getValueAsInteger(idRegistration, o));
+				} else if (idRegistration.getType().equals(Long.class) || idRegistration.getType().equals(long.class)) {
+					PreparedStatementUtils.setObject(statement, i, TableUtils.getValueAsLong(idRegistration, o));
+				}
+			}
+
 			statement.executeUpdate();
 			if (id == 0) {
 				ResultSet resultSet = statement.getGeneratedKeys();
@@ -283,7 +293,15 @@ public class H2Database extends Database {
 					try {
 						Field field = tableClass.getDeclaredField(table.getId().getName());
 						field.setAccessible(true);
-						field.setInt(o, resultSet.getInt(1));
+						if (table.getId().getType().equals(int.class)) {
+							field.setInt(o, resultSet.getInt(1));
+						} else if (table.getId().getType().equals(Integer.class)) {
+							field.set(o, resultSet.getObject(1));
+						} else if (table.getId().getType().equals(long.class)) {
+							field.setLong(o, resultSet.getLong(1));
+						} else if (table.getId().getType().equals(Long.class)) {
+							field.set(o, resultSet.getObject(1));
+						}
 					} catch (NoSuchFieldException e) {
 						e.printStackTrace();
 					} catch (IllegalAccessException e) {

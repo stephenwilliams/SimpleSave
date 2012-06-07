@@ -35,7 +35,7 @@ public class IdFactory {
 			}
 
 			Class<?> type = field.getType();
-			if (!type.equals(int.class)) {
+			if (!(type.equals(Integer.class) || type.equals(int.class) || type.equals(Long.class) || type.equals(long.class))) {
 				throw new TableRegistrationException("The id is not of type 'int' its class is '" + type.getCanonicalName() + "'");
 			}
 
@@ -43,7 +43,7 @@ public class IdFactory {
 			try {
 				Object o = new EmptyInjector().newInstance(clazz);
 				field.setAccessible(true);
-				int id = ((Number) field.get(o)).intValue();
+				Long id = getValue(field, type, o);
 				if (id != 0) {
 					throw new TableRegistrationException("The id does not default to 0");
 				}
@@ -54,5 +54,13 @@ public class IdFactory {
 			return new IdRegistration(field.getName(), type);
 		}
 		throw new TableRegistrationException("No field with the @Id annotation");
+	}
+	
+	private static Long getValue(Field field, Class clazz, Object o) throws IllegalAccessException {
+		if (clazz.equals(Integer.class) || clazz.equals(int.class)) {
+			return new Long((Integer) field.get(o));
+		} else {
+			return (Long) field.get(o);
+		}
 	}
 }

@@ -20,12 +20,17 @@ import java.lang.reflect.Field;
 
 public class TableUtils {
 
-	public static int getIdValue(TableRegistration table, Object o) {
+	public static Long getIdValue(TableRegistration table, Object o) {
 		IdRegistration idRegistration = table.getId();
 		try {
 			Field field = o.getClass().getDeclaredField(idRegistration.getName());
 			field.setAccessible(true);
-			return ((Number) field.get(o)).intValue();
+
+			if (idRegistration.getType().equals(Integer.class) || idRegistration.getType().equals(int.class)) {
+				return new Long((Integer) field.get(o));
+			} else {
+				return (Long) field.get(o);
+			}
 		} catch (NoSuchFieldException e) {
 			throw new IllegalArgumentException(e);
 		} catch (IllegalAccessException e) {
