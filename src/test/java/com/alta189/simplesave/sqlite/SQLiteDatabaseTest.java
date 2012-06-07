@@ -23,6 +23,9 @@ import com.alta189.simplesave.Table;
 import com.alta189.simplesave.exceptions.ConnectionException;
 
 import org.junit.Test;
+
+import java.io.File;
+
 import static org.junit.Assert.fail;
 
 public class SQLiteDatabaseTest {
@@ -37,6 +40,7 @@ public class SQLiteDatabaseTest {
 		} catch (ConnectionException e) {
 			fail(e.getMessage());
 		}
+		new File(config.getPath()).deleteOnExit();
 	}
 	
 	@Table("test")
