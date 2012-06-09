@@ -34,7 +34,8 @@ public class SQLiteConfiguration extends Configuration {
 		return properties.get(SQLiteConstants.Path);
 	}
 
-	public void setPath(String path) {
+	public SQLiteConfiguration setPath(String path) {
 		properties.put(SQLiteConstants.Path, path);
+		return this;
 	}
 }
