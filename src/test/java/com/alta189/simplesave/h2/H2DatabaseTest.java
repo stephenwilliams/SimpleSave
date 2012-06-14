@@ -29,6 +29,7 @@ public class H2DatabaseTest {
 		}
 		assertNotNull(tmpfile);
 		h2.setDatabase(tmpfile.getAbsolutePath().substring(0, tmpfile.getAbsolutePath().indexOf(".db")));
+		tmpfile.deleteOnExit();
 		H2Database db = (H2Database) DatabaseFactory.createNewDatabase(h2);
 		try {
 			db.registerTable(TestClass.class);
