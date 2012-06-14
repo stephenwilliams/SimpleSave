@@ -27,11 +27,18 @@ import java.util.List;
 public class FieldFactory {
 	public static List<FieldRegistration> getFields(Class<?> clazz) throws FieldRegistrationException {
 		final List<FieldRegistration> fields = new ArrayList<FieldRegistration>();
-		for (Field field : clazz.getDeclaredFields()) {
-			FieldRegistration fieldRegistration = getField(field);
-			if (fieldRegistration != null) {
-				fields.add(fieldRegistration);
+		while (clazz!=null){
+			for (Field field : clazz.getDeclaredFields()) {
+				FieldRegistration fieldRegistration = getField(field);
+				if (fieldRegistration != null) {
+					for (FieldRegistration f : fields){
+						if (f.getName().equals(fieldRegistration.getName()))
+							throw new FieldRegistrationException("Duplicate fields!");
+					}
+					fields.add(fieldRegistration);
+				}
 			}
+			clazz = clazz.getSuperclass();
 		}
 		return fields;
 	}

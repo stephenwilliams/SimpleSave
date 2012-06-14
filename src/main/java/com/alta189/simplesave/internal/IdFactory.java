@@ -55,7 +55,7 @@ public class IdFactory {
 		}
 		throw new TableRegistrationException("No field with the @Id annotation");
 	}
-	
+
 	private static Long getValue(Field field, Class clazz, Object o) throws IllegalAccessException {
 		if (clazz.equals(Integer.class) || clazz.equals(int.class)) {
 			return new Long((Integer) field.get(o));
