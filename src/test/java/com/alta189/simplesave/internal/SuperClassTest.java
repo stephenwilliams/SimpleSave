@@ -50,6 +50,8 @@ public class SuperClassTest {
 		if (!caught)
 			fail("Failed to catch duplicate field registration!");
 		
+		db.save(ChildClass.class, new ChildClass());
+		
 		try {
 			db.close();
 		} catch (ConnectionException e) {

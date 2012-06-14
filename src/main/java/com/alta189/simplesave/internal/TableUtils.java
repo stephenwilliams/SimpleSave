@@ -38,94 +38,21 @@ public class TableUtils {
 		}
 	}
 
-	public static Integer getValueAsInteger(FieldRegistration fieldRegistration, Object o) {
-		try {
-			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
-			field.setAccessible(true);
-			return (Integer) field.get(o);
-		} catch (Exception e) {
-			throw new IllegalArgumentException(e);
+	@SuppressWarnings("unchecked")
+	public static <T> T getValue(FieldRegistration fieldRegistration, Object o) {
+		Class<?> clazz = o.getClass();
+		while (clazz!=null){
+			try {
+				Field field = clazz.getDeclaredField(fieldRegistration.getName());
+				field.setAccessible(true);
+				return (T) field.get(o);
+			} catch (NoSuchFieldException e){
+				clazz = clazz.getSuperclass();
+			} catch (Exception e){
+				throw new IllegalArgumentException(e);
+			}
 		}
-	}
-
-	public static Long getValueAsLong(FieldRegistration fieldRegistration, Object o) {
-		try {
-			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
-			field.setAccessible(true);
-			return (Long) field.get(o);
-		} catch (Exception e) {
-			throw new IllegalArgumentException(e);
-		}
-	}
-
-	public static Double getValueAsDouble(FieldRegistration fieldRegistration, Object o) {
-		try {
-			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
-			field.setAccessible(true);
-			return (Double) field.get(o);
-		} catch (Exception e) {
-			throw new IllegalArgumentException(e);
-		}
-	}
-
-	public static String getValueAsString(FieldRegistration fieldRegistration, Object o) {
-		try {
-			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
-			field.setAccessible(true);
-			return (String) field.get(o);
-		} catch (Exception e) {
-			throw new IllegalArgumentException(e);
-		}
-	}
-
-	public static Boolean getValueAsBoolean(FieldRegistration fieldRegistration, Object o) {
-		try {
-			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
-			field.setAccessible(true);
-			return (Boolean) field.get(o);
-		} catch (Exception e) {
-			throw new IllegalArgumentException(e);
-		}
-	}
-
-	public static Short getValueAsShort(FieldRegistration fieldRegistration, Object o) {
-		try {
-			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
-			field.setAccessible(true);
-			return (Short) field.get(o);
-		} catch (Exception e) {
-			throw new IllegalArgumentException(e);
-		}
-	}
-
-	public static Float getValueAsFloat(FieldRegistration fieldRegistration, Object o) {
-		try {
-			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
-			field.setAccessible(true);
-			return (Float) field.get(o);
-		} catch (Exception e) {
-			throw new IllegalArgumentException(e);
-		}
-	}
-
-	public static Byte getValueAsByte(FieldRegistration fieldRegistration, Object o) {
-		try {
-			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
-			field.setAccessible(true);
-			return (Byte) field.get(o);
-		} catch (Exception e) {
-			throw new IllegalArgumentException(e);
-		}
-	}
-	
-	public static Object getValueAsBlob(FieldRegistration fieldRegistration, Object o){
-		try {
-			Field field = o.getClass().getDeclaredField(fieldRegistration.getName());
-			field.setAccessible(true);
-			return (Object)field.get(o);
-		} catch (Exception e) {
-			throw new IllegalArgumentException(e);
-		}
+		throw new IllegalArgumentException(new NoSuchFieldException(fieldRegistration.getName()));
 	}
 
 	public static String serializeField(FieldRegistration fieldRegistration, Object tableObject) {
