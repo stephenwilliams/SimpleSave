@@ -16,27 +16,33 @@
  */
 package com.alta189.simplesave.internal;
 
+import java.lang.reflect.Field;
+
 public class FieldRegistration {
-	private final String name;
+	private final Field field;
 	private final Class<?> type;
 	private final boolean serializable;
 
-	public FieldRegistration(String name, Class<?> type) {
-		this(name, type, false);
+	public FieldRegistration(Field field, Class<?> type) {
+		this(field, type, false);
 	}
 
-	public FieldRegistration(String name, Class<?> type, boolean serializable) {
-		this.name = name;
+	public FieldRegistration(Field field, Class<?> type, boolean serializable) {
+		this.field = field;
 		this.type = type;
 		this.serializable = serializable;
 	}
 
 	public String getName() {
-		return name;
+		return field.getName();
 	}
 
 	public Class<?> getType() {
 		return type;
+	}
+
+	public Field getField() {
+		return field;
 	}
 
 	public boolean isSerializable() {

@@ -23,7 +23,7 @@ public class TableUtils {
 	public static Long getIdValue(TableRegistration table, Object o) {
 		IdRegistration idRegistration = table.getId();
 		try {
-			Field field = o.getClass().getDeclaredField(idRegistration.getName());
+			Field field = idRegistration.getField();
 			field.setAccessible(true);
 
 			if (idRegistration.getType().equals(Integer.class) || idRegistration.getType().equals(int.class)) {
@@ -31,50 +31,35 @@ public class TableUtils {
 			} else {
 				return (Long) field.get(o);
 			}
-		} catch (NoSuchFieldException e) {
-			throw new IllegalArgumentException(e);
 		} catch (IllegalAccessException e) {
 			throw new IllegalArgumentException(e);
 		}
 	}
 
 	public static boolean isValueNull(FieldRegistration fieldRegistration, Object o) {
-		Class<?> clazz = o.getClass();
-		while (clazz != null) {
-			try {
-				Field field = clazz.getDeclaredField(fieldRegistration.getName());
-				field.setAccessible(true);
-				return field.get(o) == null;
-			} catch (NoSuchFieldException e) {
-				clazz = clazz.getSuperclass();
-			} catch (Exception e) {
-				throw new IllegalArgumentException(e);
-			}
+		try {
+			Field field = fieldRegistration.getField();
+			field.setAccessible(true);
+			return field.get(o) == null;
+		} catch (Exception e) {
+			throw new IllegalArgumentException(e);
 		}
-		throw new IllegalArgumentException(new NoSuchFieldException(fieldRegistration.getName()));
-
 	}
 
 	@SuppressWarnings("unchecked")
 	public static <T> T getValue(FieldRegistration fieldRegistration, Object o) {
-		Class<?> clazz = o.getClass();
-		while (clazz != null) {
-			try {
-				Field field = clazz.getDeclaredField(fieldRegistration.getName());
-				field.setAccessible(true);
-				return (T) field.get(o);
-			} catch (NoSuchFieldException e) {
-				clazz = clazz.getSuperclass();
-			} catch (Exception e) {
-				throw new IllegalArgumentException(e);
-			}
+		try {
+			Field field = fieldRegistration.getField();
+			field.setAccessible(true);
+			return (T) field.get(o);
+		} catch (Exception e) {
+			throw new IllegalArgumentException(e);
 		}
-		throw new IllegalArgumentException(new NoSuchFieldException(fieldRegistration.getName()));
 	}
 
 	public static String serializeField(FieldRegistration fieldRegistration, Object tableObject) {
 		try {
-			Field field = tableObject.getClass().getDeclaredField(fieldRegistration.getName());
+			Field field = fieldRegistration.getField();
 			field.setAccessible(true);
 			Object o = field.get(tableObject);
 			return SerializedClassBuilder.serialize(fieldRegistration.getClass(), o);

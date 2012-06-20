@@ -54,80 +54,73 @@ public class ResultSetUtils {
 	}
 
 	public static <E> void setField(FieldRegistration fieldRegistration, E object, ResultSet set) {
-		Class<?> clazz = object.getClass();
-		while (clazz!=null){
-			try {
-				Field field = clazz.getDeclaredField(fieldRegistration.getName());
-				field.setAccessible(true);
-				if (fieldRegistration.isSerializable()) {
-					String result = set.getString(fieldRegistration.getName());
-					field.set(object, TableUtils.deserializeField(fieldRegistration, result));
-				} else {
-					if (fieldRegistration.getType().equals(int.class)) {
-						field.setInt(object, set.getInt(fieldRegistration.getName()));
-					} else if (fieldRegistration.getType().equals(Integer.class)) {
-						field.set(object, set.getObject(fieldRegistration.getName()));
-					} else if (fieldRegistration.getType().equals(long.class)) {
-						field.setLong(object, set.getLong(fieldRegistration.getName()));
-					} else if (fieldRegistration.getType().equals(Long.class)) {
-						field.set(object, set.getObject(fieldRegistration.getName()));
-					} else if (fieldRegistration.getType().equals(double.class)) {
-						field.setDouble(object, set.getDouble(fieldRegistration.getName()));
-					} else if (fieldRegistration.getType().equals(Double.class)) {
-						field.set(object, set.getObject(fieldRegistration.getName()));
-					} else if (fieldRegistration.getType().equals(String.class)) {
-						field.set(object, set.getString(fieldRegistration.getName()));
-					} else if (fieldRegistration.getType().equals(boolean.class)) {
-						int i = set.getInt(fieldRegistration.getName());
-						if (i == 1) {
-							field.setBoolean(object, true);
-						} else {
-							field.setBoolean(object, false);
-						}
-					} else if (fieldRegistration.getType().equals(Boolean.class)) {
-						int i = set.getInt(fieldRegistration.getName());
-						if (i == 1) {
-							field.set(object, Boolean.TRUE);
-						} else {
-							field.set(object, Boolean.FALSE);
-						}
-					} else if (fieldRegistration.getType().equals(short.class)) {
-						field.setShort(object, set.getShort(fieldRegistration.getName()));
-					} else if (fieldRegistration.getType().equals(Short.class)) {
-						field.set(object, set.getObject(fieldRegistration.getName()));
-					} else if (fieldRegistration.getType().equals(float.class)) {
-						field.setFloat(object, set.getFloat(fieldRegistration.getName()));
-					} else if (fieldRegistration.getType().equals(Float.class)) {
-						field.set(object, set.getObject(fieldRegistration.getName()));
-					} else if (fieldRegistration.getType().equals(byte.class)) {
-						field.setByte(object, set.getByte(fieldRegistration.getName()));
-					} else if (fieldRegistration.getType().equals(Byte.class)) {
-						field.set(object, set.getObject(fieldRegistration.getName()));
+		try {
+			Field field = fieldRegistration.getField();
+			field.setAccessible(true);
+			if (fieldRegistration.isSerializable()) {
+				String result = set.getString(fieldRegistration.getName());
+				field.set(object, TableUtils.deserializeField(fieldRegistration, result));
+			} else {
+				if (fieldRegistration.getType().equals(int.class)) {
+					field.setInt(object, set.getInt(fieldRegistration.getName()));
+				} else if (fieldRegistration.getType().equals(Integer.class)) {
+					field.set(object, set.getObject(fieldRegistration.getName()));
+				} else if (fieldRegistration.getType().equals(long.class)) {
+					field.setLong(object, set.getLong(fieldRegistration.getName()));
+				} else if (fieldRegistration.getType().equals(Long.class)) {
+					field.set(object, set.getObject(fieldRegistration.getName()));
+				} else if (fieldRegistration.getType().equals(double.class)) {
+					field.setDouble(object, set.getDouble(fieldRegistration.getName()));
+				} else if (fieldRegistration.getType().equals(Double.class)) {
+					field.set(object, set.getObject(fieldRegistration.getName()));
+				} else if (fieldRegistration.getType().equals(String.class)) {
+					field.set(object, set.getString(fieldRegistration.getName()));
+				} else if (fieldRegistration.getType().equals(boolean.class)) {
+					int i = set.getInt(fieldRegistration.getName());
+					if (i == 1) {
+						field.setBoolean(object, true);
 					} else {
-						Blob b = set.getBlob(fieldRegistration.getName());
-						ObjectInputStream is = new ObjectInputStream(b.getBinaryStream());
-						Object o = null;
-						try {
-							o = is.readObject();
-						} catch (ClassNotFoundException e) {
-							e.printStackTrace();
-						} finally {
-							is.close();
-						}
-						field.set(object, o);
+						field.setBoolean(object, false);
 					}
+				} else if (fieldRegistration.getType().equals(Boolean.class)) {
+					int i = set.getInt(fieldRegistration.getName());
+					if (i == 1) {
+						field.set(object, Boolean.TRUE);
+					} else {
+						field.set(object, Boolean.FALSE);
+					}
+				} else if (fieldRegistration.getType().equals(short.class)) {
+					field.setShort(object, set.getShort(fieldRegistration.getName()));
+				} else if (fieldRegistration.getType().equals(Short.class)) {
+					field.set(object, set.getObject(fieldRegistration.getName()));
+				} else if (fieldRegistration.getType().equals(float.class)) {
+					field.setFloat(object, set.getFloat(fieldRegistration.getName()));
+				} else if (fieldRegistration.getType().equals(Float.class)) {
+					field.set(object, set.getObject(fieldRegistration.getName()));
+				} else if (fieldRegistration.getType().equals(byte.class)) {
+					field.setByte(object, set.getByte(fieldRegistration.getName()));
+				} else if (fieldRegistration.getType().equals(Byte.class)) {
+					field.set(object, set.getObject(fieldRegistration.getName()));
+				} else {
+					Blob b = set.getBlob(fieldRegistration.getName());
+					ObjectInputStream is = new ObjectInputStream(b.getBinaryStream());
+					Object o = null;
+					try {
+						o = is.readObject();
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+					} finally {
+						is.close();
+					}
+					field.set(object, o);
 				}
-				return;
-			} catch (NoSuchFieldException e) {
-				clazz = clazz.getSuperclass();
-			} catch (SQLException e) {
-				throw new RuntimeException(e);
-			} catch (IllegalAccessException e) {
-				throw new RuntimeException(e);
-			} catch (IOException e) {
-				throw new RuntimeException(e);
 			}
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
-		throw new RuntimeException(new NoSuchFieldException(fieldRegistration.getName()));
 	}
 }

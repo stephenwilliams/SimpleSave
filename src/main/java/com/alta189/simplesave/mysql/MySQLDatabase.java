@@ -346,7 +346,7 @@ public class MySQLDatabase extends Database {
 				ResultSet resultSet = statement.getGeneratedKeys();
 				if (resultSet != null && resultSet.next()) {
 					try {
-						Field field = tableClass.getDeclaredField(table.getId().getName());
+						Field field = table.getId().getField();
 						field.setAccessible(true);
 						if (table.getId().getType().equals(int.class)) {
 							field.setInt(o, resultSet.getInt(1));
@@ -357,8 +357,6 @@ public class MySQLDatabase extends Database {
 						} else if (table.getId().getType().equals(Long.class)) {
 							field.set(o, resultSet.getObject(1));
 						}
-					} catch (NoSuchFieldException e) {
-						e.printStackTrace();
 					} catch (IllegalAccessException e) {
 						e.printStackTrace();
 					}

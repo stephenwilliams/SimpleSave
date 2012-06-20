@@ -16,8 +16,10 @@
  */
 package com.alta189.simplesave.internal;
 
+import java.lang.reflect.Field;
+
 public class IdRegistration extends FieldRegistration {
-	public IdRegistration(String name, Class<?> type) {
-		super(name, type);
+	public IdRegistration(Field field, Class<?> type) {
+		super(field, type);
 	}
 }

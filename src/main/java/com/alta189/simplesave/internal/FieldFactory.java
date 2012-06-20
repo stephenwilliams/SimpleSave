@@ -58,9 +58,9 @@ public class FieldFactory {
 
 		// Check if the field has a valid type
 		if (validType(type)) {
-			return new FieldRegistration(field.getName(), type);
+			return new FieldRegistration(field, type);
 		} else if (SerializedClassBuilder.validClass(type)) {
-			return new FieldRegistration(field.getName(), type, true);
+			return new FieldRegistration(field, type, true);
 		} else {
 			throw new FieldRegistrationException("The type '" + type.getCanonicalName() + "' is not a valid type");
 		}

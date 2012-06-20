@@ -51,7 +51,7 @@ public class IdFactory {
 				throw new TableRegistrationException(e);
 			}
 
-			return new IdRegistration(field.getName(), type);
+			return new IdRegistration(field, type);
 		}
 		throw new TableRegistrationException("No field with the @Id annotation");
 	}
