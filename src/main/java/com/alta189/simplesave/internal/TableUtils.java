@@ -38,17 +38,34 @@ public class TableUtils {
 		}
 	}
 
+	public static boolean isValueNull(FieldRegistration fieldRegistration, Object o) {
+		Class<?> clazz = o.getClass();
+		while (clazz != null) {
+			try {
+				Field field = clazz.getDeclaredField(fieldRegistration.getName());
+				field.setAccessible(true);
+				return field.get(o) == null;
+			} catch (NoSuchFieldException e) {
+				clazz = clazz.getSuperclass();
+			} catch (Exception e) {
+				throw new IllegalArgumentException(e);
+			}
+		}
+		throw new IllegalArgumentException(new NoSuchFieldException(fieldRegistration.getName()));
+
+	}
+
 	@SuppressWarnings("unchecked")
 	public static <T> T getValue(FieldRegistration fieldRegistration, Object o) {
 		Class<?> clazz = o.getClass();
-		while (clazz!=null){
+		while (clazz != null) {
 			try {
 				Field field = clazz.getDeclaredField(fieldRegistration.getName());
 				field.setAccessible(true);
 				return (T) field.get(o);
-			} catch (NoSuchFieldException e){
+			} catch (NoSuchFieldException e) {
 				clazz = clazz.getSuperclass();
-			} catch (Exception e){
+			} catch (Exception e) {
 				throw new IllegalArgumentException(e);
 			}
 		}

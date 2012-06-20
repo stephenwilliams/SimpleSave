@@ -304,7 +304,9 @@ public class MySQLDatabase extends Database {
 				if (fieldRegistration.isSerializable()) {
 					PreparedStatementUtils.setObject(statement, i, o);
 				} else {
-					if (fieldRegistration.getType().equals(int.class) || fieldRegistration.getType().equals(Integer.class)) {
+					if (TableUtils.isValueNull(fieldRegistration, o)) {
+						PreparedStatementUtils.setObject(statement, i, null);
+					} else if (fieldRegistration.getType().equals(int.class) || fieldRegistration.getType().equals(Integer.class)) {
 						PreparedStatementUtils.setObject(statement, i, (Integer)TableUtils.getValue(fieldRegistration, o));
 					} else if (fieldRegistration.getType().equals(long.class) || fieldRegistration.getType().equals(Long.class)) {
 						PreparedStatementUtils.setObject(statement, i, (Long)TableUtils.getValue(fieldRegistration, o));
