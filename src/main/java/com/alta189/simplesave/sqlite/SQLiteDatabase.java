@@ -32,8 +32,8 @@ import com.alta189.simplesave.query.Query;
 import com.alta189.simplesave.query.QueryResult;
 import com.alta189.simplesave.query.SelectQuery;
 import com.alta189.simplesave.query.WhereEntry;
-import java.lang.reflect.Field;
 
+import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -82,10 +82,10 @@ public class SQLiteDatabase extends Database {
 			}
 		}
 	}
-	
+
 	@Override
 	public boolean isConnected() {
-		try { 
+		try {
 			return connection != null && !connection.isClosed() && connection.isValid(5000);
 		} catch (SQLException e) {
 			return false;
@@ -101,17 +101,16 @@ public class SQLiteDatabase extends Database {
 				throw new RuntimeException(e);
 			}
 		}
-		
+
 		try {
-			
+
 			// Prepare the query
 			switch (query.getType()) {
 				case SELECT:
 					SelectQuery select = (SelectQuery) query;
 					TableRegistration table = getTableRegistration(select.getTableClass());
 					PreparedStatement statement = null;
-					StringBuilder buffer = new StringBuilder(
-						"SELECT * FROM " + table.getName() + " ");
+					StringBuilder buffer = new StringBuilder("SELECT * FROM ").append(table.getName()).append(" ");
 					if (!select.where().getEntries().isEmpty()) {
 						buffer.append("WHERE ");
 						int iter = 0;
@@ -120,7 +119,7 @@ public class SQLiteDatabase extends Database {
 							if (!(o instanceof WhereEntry)) {
 								continue;
 							}
-							
+
 							WhereEntry entry = (WhereEntry) o;
 							buffer.append(entry.getField());
 							switch (entry.getComparator()) {
@@ -145,13 +144,13 @@ public class SQLiteDatabase extends Database {
 								case CONTAINS:
 									buffer.append("LIKE ");
 									break;
-							}					
+							}
 							if (iter != select.where().getEntries().size()) {
 								buffer.append(entry.getOperator().name())
 										.append(" ");
 							}
 						}
-						
+
 						statement = connection.prepareStatement(buffer.toString());
 						iter = 0;
 						for (Object o : select.where().getEntries()) {
@@ -159,7 +158,7 @@ public class SQLiteDatabase extends Database {
 							if (!(o instanceof WhereEntry)) {
 								continue;
 							}
-							
+
 							WhereEntry entry = (WhereEntry) o;
 							if (entry.getComparator() == Comparator.CONTAINS) {
 								statement.setString(iter, "%" + entry.getComparison().getValue().toString() + "%");
@@ -168,15 +167,13 @@ public class SQLiteDatabase extends Database {
 							}
 						}
 					}
-					
+
 					// Execute and return
 					if (statement == null) {
 						statement = connection.prepareStatement(buffer.toString());
 					}
 					ResultSet results = statement.executeQuery();
-					QueryResult<T> result = new QueryResult<T>(
-						ResultSetUtils.buildResultList(
-						table, (Class<T>) table.getTableClass(), results));
+					QueryResult<T> result = new QueryResult<T>(ResultSetUtils.buildResultList(table, (Class<T>) table.getTableClass(), results));
 					return result;
 			}
 		} catch (SQLException e) {
@@ -258,26 +255,26 @@ public class SQLiteDatabase extends Database {
 					PreparedStatementUtils.setObject(statement, i, o);
 				} else {
 					if (fieldRegistration.getType().equals(int.class) || fieldRegistration.getType().equals(Integer.class)) {
-						PreparedStatementUtils.setObject(statement, i, (Integer)TableUtils.getValue(fieldRegistration, o));
+						PreparedStatementUtils.setObject(statement, i, (Integer) TableUtils.getValue(fieldRegistration, o));
 					} else if (fieldRegistration.getType().equals(long.class) || fieldRegistration.getType().equals(Long.class)) {
-						PreparedStatementUtils.setObject(statement, i, (Long)TableUtils.getValue(fieldRegistration, o));
+						PreparedStatementUtils.setObject(statement, i, (Long) TableUtils.getValue(fieldRegistration, o));
 					} else if (fieldRegistration.getType().equals(double.class) || fieldRegistration.getType().equals(Double.class)) {
-						PreparedStatementUtils.setObject(statement, i, (Double)TableUtils.getValue(fieldRegistration, o));
+						PreparedStatementUtils.setObject(statement, i, (Double) TableUtils.getValue(fieldRegistration, o));
 					} else if (fieldRegistration.getType().equals(String.class)) {
-						PreparedStatementUtils.setObject(statement, i, (String)TableUtils.getValue(fieldRegistration, o));
+						PreparedStatementUtils.setObject(statement, i, (String) TableUtils.getValue(fieldRegistration, o));
 					} else if (fieldRegistration.getType().equals(boolean.class) || fieldRegistration.getType().equals(Boolean.class)) {
-						boolean value = (Boolean)TableUtils.getValue(fieldRegistration, o);
+						boolean value = (Boolean) TableUtils.getValue(fieldRegistration, o);
 						if (value) {
 							PreparedStatementUtils.setObject(statement, i, 1);
 						} else {
 							PreparedStatementUtils.setObject(statement, i, 0);
 						}
 					} else if (fieldRegistration.getType().equals(short.class) || fieldRegistration.getType().equals(Short.class)) {
-						PreparedStatementUtils.setObject(statement, i, (Short)TableUtils.getValue(fieldRegistration, o));
+						PreparedStatementUtils.setObject(statement, i, (Short) TableUtils.getValue(fieldRegistration, o));
 					} else if (fieldRegistration.getType().equals(float.class) || fieldRegistration.getType().equals(Float.class)) {
-						PreparedStatementUtils.setObject(statement, i, (Float)TableUtils.getValue(fieldRegistration, o));
+						PreparedStatementUtils.setObject(statement, i, (Float) TableUtils.getValue(fieldRegistration, o));
 					} else if (fieldRegistration.getType().equals(byte.class) || fieldRegistration.getType().equals(Byte.class)) {
-						PreparedStatementUtils.setObject(statement, i, (Byte)TableUtils.getValue(fieldRegistration, o));
+						PreparedStatementUtils.setObject(statement, i, (Byte) TableUtils.getValue(fieldRegistration, o));
 					}
 				}
 			}
@@ -286,9 +283,9 @@ public class SQLiteDatabase extends Database {
 				i++;
 				IdRegistration idRegistration = table.getId();
 				if (idRegistration.getType().equals(Integer.class) || idRegistration.getType().equals(int.class)) {
-					PreparedStatementUtils.setObject(statement, i, (Integer)TableUtils.getValue(idRegistration, o));
+					PreparedStatementUtils.setObject(statement, i, (Integer) TableUtils.getValue(idRegistration, o));
 				} else if (idRegistration.getType().equals(Long.class) || idRegistration.getType().equals(long.class)) {
-					PreparedStatementUtils.setObject(statement, i, (Long)TableUtils.getValue(idRegistration, o));
+					PreparedStatementUtils.setObject(statement, i, (Long) TableUtils.getValue(idRegistration, o));
 				}
 			}
 
@@ -330,7 +327,7 @@ public class SQLiteDatabase extends Database {
 			}
 		}
 	}
-	
+
 	private void createTables() {
 		// Query - "CREATE TABLE IF NOT EXISTS <table> (<field> <type>...)"
 		for (TableRegistration table : getTables().values()) {
@@ -340,12 +337,11 @@ public class SQLiteDatabase extends Database {
 			for (FieldRegistration field : fields) {
 				iter++;
 				buffer.append(" ( ").append(field.getName())
-					.append(" ").append(field.getType());
+						.append(" ").append(field.getType());
 				if (iter > fields.size()) {
 					buffer.append(",");
 				} else {
 					buffer.append(")");
-						
 				}
 			}
 		}
