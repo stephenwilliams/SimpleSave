@@ -307,26 +307,26 @@ public class MySQLDatabase extends Database {
 					if (TableUtils.isValueNull(fieldRegistration, o)) {
 						PreparedStatementUtils.setObject(statement, i, null);
 					} else if (fieldRegistration.getType().equals(int.class) || fieldRegistration.getType().equals(Integer.class)) {
-						PreparedStatementUtils.setObject(statement, i, (Integer)TableUtils.getValue(fieldRegistration, o));
+						PreparedStatementUtils.setObject(statement, i, (Integer) TableUtils.getValue(fieldRegistration, o));
 					} else if (fieldRegistration.getType().equals(long.class) || fieldRegistration.getType().equals(Long.class)) {
-						PreparedStatementUtils.setObject(statement, i, (Long)TableUtils.getValue(fieldRegistration, o));
+						PreparedStatementUtils.setObject(statement, i, (Long) TableUtils.getValue(fieldRegistration, o));
 					} else if (fieldRegistration.getType().equals(double.class) || fieldRegistration.getType().equals(Double.class)) {
-						PreparedStatementUtils.setObject(statement, i, (Double)TableUtils.getValue(fieldRegistration, o));
+						PreparedStatementUtils.setObject(statement, i, (Double) TableUtils.getValue(fieldRegistration, o));
 					} else if (fieldRegistration.getType().equals(String.class)) {
-						PreparedStatementUtils.setObject(statement, i, (String)TableUtils.getValue(fieldRegistration, o));
+						PreparedStatementUtils.setObject(statement, i, (String) TableUtils.getValue(fieldRegistration, o));
 					} else if (fieldRegistration.getType().equals(boolean.class) || fieldRegistration.getType().equals(Boolean.class)) {
-						boolean value = (Boolean)TableUtils.getValue(fieldRegistration, o);
+						boolean value = (Boolean) TableUtils.getValue(fieldRegistration, o);
 						if (value) {
 							PreparedStatementUtils.setObject(statement, i, 1);
 						} else {
 							PreparedStatementUtils.setObject(statement, i, 0);
 						}
 					} else if (fieldRegistration.getType().equals(short.class) || fieldRegistration.getType().equals(Short.class)) {
-						PreparedStatementUtils.setObject(statement, i, (Short)TableUtils.getValue(fieldRegistration, o));
+						PreparedStatementUtils.setObject(statement, i, (Short) TableUtils.getValue(fieldRegistration, o));
 					} else if (fieldRegistration.getType().equals(float.class) || fieldRegistration.getType().equals(Float.class)) {
-						PreparedStatementUtils.setObject(statement, i, (Float)TableUtils.getValue(fieldRegistration, o));
+						PreparedStatementUtils.setObject(statement, i, (Float) TableUtils.getValue(fieldRegistration, o));
 					} else if (fieldRegistration.getType().equals(byte.class) || fieldRegistration.getType().equals(Byte.class)) {
-						PreparedStatementUtils.setObject(statement, i, (Byte)TableUtils.getValue(fieldRegistration, o));
+						PreparedStatementUtils.setObject(statement, i, (Byte) TableUtils.getValue(fieldRegistration, o));
 					}
 				}
 			}
@@ -335,9 +335,9 @@ public class MySQLDatabase extends Database {
 				i++;
 				IdRegistration idRegistration = table.getId();
 				if (idRegistration.getType().equals(Integer.class) || idRegistration.getType().equals(int.class)) {
-					PreparedStatementUtils.setObject(statement, i, (Integer)TableUtils.getValue(idRegistration, o));
+					PreparedStatementUtils.setObject(statement, i, (Integer) TableUtils.getValue(idRegistration, o));
 				} else if (idRegistration.getType().equals(Long.class) || idRegistration.getType().equals(long.class)) {
-					PreparedStatementUtils.setObject(statement, i, (Long)TableUtils.getValue(idRegistration, o));
+					PreparedStatementUtils.setObject(statement, i, (Long) TableUtils.getValue(idRegistration, o));
 				}
 			}
 
