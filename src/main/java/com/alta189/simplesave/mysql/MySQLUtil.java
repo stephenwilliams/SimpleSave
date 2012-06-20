@@ -16,6 +16,8 @@
  */
 package com.alta189.simplesave.mysql;
 
+import java.io.Serializable;
+
 public class MySQLUtil {
 	public static String getMySQLTypeFromClass(Class<?> clazz) {
 		if (clazz.equals(int.class) || clazz.equals(Integer.class)) {
@@ -34,6 +36,13 @@ public class MySQLUtil {
 			return "FLOAT";
 		} else if (clazz.equals(byte.class) || clazz.equals(Byte.class)) {
 			return "TINYINT";
+		}
+		Class<?> checkclazz = clazz;
+		while (checkclazz!=null){
+			for (Class<?> i : checkclazz.getInterfaces())
+				if (i.equals(Serializable.class))
+					return "BLOB";
+			checkclazz = checkclazz.getSuperclass();
 		}
 		return null;
 	}

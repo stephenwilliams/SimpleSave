@@ -16,6 +16,12 @@
  */
 package com.alta189.simplesave.internal;
 
+import javax.sql.rowset.serial.SerialBlob;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -43,7 +49,30 @@ public class PreparedStatementUtils {
 		} else if (clazz.equals(byte.class) || clazz.equals(Byte.class)) {
 			statement.setByte(index, ((Number) o).byteValue());
 		} else {
-			statement.setObject(index, o, java.sql.Types.BLOB);
+			ByteArrayOutputStream bos = null;
+			ObjectOutput out = null;
+			try {
+				bos = new ByteArrayOutputStream();
+				out = new ObjectOutputStream(bos);
+				out.writeObject(o);
+				byte[] bytes = bos.toByteArray();
+				statement.setBlob(index, new SerialBlob(bytes));
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			} finally {
+				if (out != null) {
+					try {
+						out.close();
+					} catch (IOException ignored) {
+					}
+				}
+				if (bos != null) {
+					try {
+						bos.close();
+					} catch (IOException ignored) {
+					}
+				}
+			}
 		}
 	}
 }
