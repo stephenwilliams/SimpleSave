@@ -20,41 +20,41 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Configuration {
-	protected final Map<String, String> properties;
-	protected final Driver driver;
+	private final Map<String, String> properties;
+	private final String driver;
 
-	public Configuration(Map<String, String> properties, Driver driver) {
-		this.properties = properties;
-		this.driver = driver;
-	}
-
-	public Configuration(Driver driver) {
+	public Configuration(String driver) {
 		this(new HashMap<String, String>(), driver);
 	}
 
-	public Driver getDriver() {
+	public Configuration(Map<String, String> properties, String driver) {
+		this.properties = properties;
+		this.driver = driver.toLowerCase();
+	}
+
+	public final String getDriver() {
 		return driver;
 	}
 
-	public Map<String, String> getProperties() {
+	public final Map<String, String> getProperties() {
 		return properties;
 	}
 
-	public String getProperty(String property) {
+	public final String getProperty(String property) {
 		return properties.get(property);
 	}
 
-	public Configuration setProperty(String property, String value) {
+	public final Configuration setProperty(String property, String value) {
 		properties.put(property, value);
 		return this;
 	}
 
-	public Configuration removeProperty(String property) {
+	public final Configuration removeProperty(String property) {
 		properties.remove(property);
 		return this;
 	}
 
-	public boolean containsProperty(String property) {
+	public final boolean containsProperty(String property) {
 		return properties.containsKey(property);
 	}
 }

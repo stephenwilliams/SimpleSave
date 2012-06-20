@@ -17,14 +17,13 @@
 package com.alta189.simplesave.h2;
 
 import com.alta189.simplesave.Configuration;
-import com.alta189.simplesave.Driver;
 
 public class H2Configuration extends Configuration {
 
 	public static final String H2_DATABASE = "h2.database";
 
 	public H2Configuration() {
-		super(Driver.H2);
+		super("h2");
 	}
 
 	public String getDatabase() {

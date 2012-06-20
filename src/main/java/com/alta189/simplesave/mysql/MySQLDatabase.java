@@ -16,7 +16,9 @@
  */
 package com.alta189.simplesave.mysql;
 
+import com.alta189.simplesave.Configuration;
 import com.alta189.simplesave.Database;
+import com.alta189.simplesave.DatabaseFactory;
 import com.alta189.simplesave.exceptions.ConnectionException;
 import com.alta189.simplesave.exceptions.UnknownTableException;
 import com.alta189.simplesave.internal.FieldRegistration;
@@ -41,15 +43,64 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class MySQLDatabase extends Database {
+	private static final String driver = "mysql";
 	private final String connUrl;
 	private final String user;
 	private final String pass;
 	private Connection conn;
 
+	static {
+		DatabaseFactory.registerDatabase(MySQLDatabase.class);
+	}
+
+	public MySQLDatabase(Configuration config) {
+		String user = config.getProperty(MySQLConstants.User);
+		if (user == null || user.isEmpty()) {
+			throw new IllegalArgumentException("Username is null or empty!");
+		}
+
+		String pass = config.getProperty(MySQLConstants.Password);
+		if (pass == null) { // Password can be empty
+			throw new IllegalArgumentException("Password is null!");
+		}
+
+		String host = config.getProperty(MySQLConstants.Host);
+		if (host == null || host.isEmpty()) {
+			throw new IllegalArgumentException("Host is null or empty!");
+		}
+
+		String port = config.getProperty(MySQLConstants.Port);
+		if (port == null || port.isEmpty()) {
+			throw new IllegalArgumentException("Port is null or empty!");
+		}
+
+		String database = config.getProperty(MySQLConstants.Database);
+		if (database == null || database.isEmpty()) {
+			throw new IllegalArgumentException("Database is null or empty!");
+		}
+
+		StringBuilder connUrl = new StringBuilder();
+		connUrl.append("jdbc:mysql://");
+		connUrl.append(host);
+		connUrl.append(":");
+		connUrl.append(port);
+		connUrl.append("/");
+		connUrl.append(database);
+		connUrl.append("?useUnicode=true&characterEncoding=utf8");
+
+		this.connUrl = connUrl.toString();
+		this.user = user;
+		this.pass = pass;
+	}
+
 	public MySQLDatabase(String connUrl, String user, String pass) {
 		this.connUrl = connUrl;
 		this.user = user;
 		this.pass = pass;
+	}
+
+	public static String getDriver() {
+		return driver;
 	}
 
 	@Override

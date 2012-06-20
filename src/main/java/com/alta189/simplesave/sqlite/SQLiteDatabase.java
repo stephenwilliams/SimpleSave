@@ -16,7 +16,9 @@
  */
 package com.alta189.simplesave.sqlite;
 
+import com.alta189.simplesave.Configuration;
 import com.alta189.simplesave.Database;
+import com.alta189.simplesave.DatabaseFactory;
 import com.alta189.simplesave.exceptions.ConnectionException;
 import com.alta189.simplesave.exceptions.UnknownTableException;
 import com.alta189.simplesave.internal.FieldRegistration;
@@ -41,11 +43,28 @@ import java.sql.Statement;
 import java.util.Collection;
 
 public class SQLiteDatabase extends Database {
+	private static final String driver = "sqlite";
 	private final String uri;
 	private Connection connection;
 
+	static {
+		DatabaseFactory.registerDatabase(SQLiteDatabase.class);
+	}
+
+	public SQLiteDatabase(Configuration config) {
+		String path = config.getProperty(SQLiteConstants.Path);
+		if (path == null || path.isEmpty()) {
+			throw new IllegalArgumentException("Path is null or empty!");
+		}
+		this.uri = "jdbc:sqlite:" + path;
+	}
+
 	public SQLiteDatabase(String uri) {
 		this.uri = uri;
+	}
+
+	public static String getDriver() {
+		return driver;
 	}
 
 	@Override

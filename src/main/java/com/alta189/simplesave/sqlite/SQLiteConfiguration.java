@@ -17,25 +17,24 @@
 package com.alta189.simplesave.sqlite;
 
 import com.alta189.simplesave.Configuration;
-import com.alta189.simplesave.Driver;
 
 public class SQLiteConfiguration extends Configuration {
 	public SQLiteConfiguration() {
-		super(Driver.SQLITE);
+		super("sqlite");
 		setPath(SQLiteConstants.DefaultPath);
 	}
 
 	public SQLiteConfiguration(String path) {
-		super(Driver.SQLITE);
-		properties.put(SQLiteConstants.Path, path);
+		super("sqlite");
+		this.setProperty(SQLiteConstants.Path, path);
 	}
 
 	public String getPath() {
-		return properties.get(SQLiteConstants.Path);
+		return getProperty(SQLiteConstants.Path);
 	}
 
 	public SQLiteConfiguration setPath(String path) {
-		properties.put(SQLiteConstants.Path, path);
+		this.setProperty(SQLiteConstants.Path, path);
 		return this;
 	}
 }

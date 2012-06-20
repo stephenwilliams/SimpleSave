@@ -17,70 +17,87 @@
 package com.alta189.simplesave;
 
 import com.alta189.simplesave.exceptions.UnknownDriverException;
-import com.alta189.simplesave.h2.H2Configuration;
 import com.alta189.simplesave.h2.H2Database;
-import com.alta189.simplesave.mysql.MySQLConstants;
+import com.alta189.simplesave.internal.reflection.DatabaseInjector;
 import com.alta189.simplesave.mysql.MySQLDatabase;
-import com.alta189.simplesave.sqlite.SQLiteConstants;
 import com.alta189.simplesave.sqlite.SQLiteDatabase;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 public class DatabaseFactory {
+	private static final Map<String, Class<? extends Database>> registeredDatabases = new HashMap<String, Class<? extends Database>>();
+	private static final Object key = new Object();
+
+	static {
+		try {
+			Class.forName(MySQLDatabase.class.getCanonicalName());
+			Class.forName(H2Database.class.getCanonicalName());
+			Class.forName(SQLiteDatabase.class.getCanonicalName());
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void registerDatabase(Class<? extends Database> clazz) {
+		synchronized (key) {
+			String type = getDatabaseType(clazz).toLowerCase();
+			registeredDatabases.put(type, clazz);
+		}
+	}
+
+	public static void unregisterDatabase(Class<? extends Database> clazz) {
+		unregisterDatabase(getDatabaseType(clazz));
+	}
+
+	public static void unregisterDatabase(String type) {
+		synchronized (key) {
+			registeredDatabases.remove(type.toLowerCase());
+		}
+	}
+
+	public static Class<? extends Database> getRegisteredDatabase(String type) {
+		synchronized (key) {
+			return registeredDatabases.get(type.toLowerCase());
+		}
+	}
+
+	public static Map<String, Class<? extends Database>> getRegisteredDatabases() {
+		return Collections.unmodifiableMap(registeredDatabases);
+	}
+
 	public static Database createNewDatabase(Configuration config) {
-		switch (config.getDriver()) {
-			case MYSQL:
-				String mySQLUser = config.getProperty(MySQLConstants.User);
-				if (mySQLUser == null || mySQLUser.isEmpty()) {
-					throw new IllegalArgumentException("Username is null or empty!");
-				}
+		Class<? extends Database> clazz = getRegisteredDatabase(config.getDriver());
+		if (clazz == null) {
+			throw new UnknownDriverException("A Database could not be found for driver '" + config.getDriver() + "'");
+		}
 
-				String mySQLPass = config.getProperty(MySQLConstants.Password);
-				if (mySQLPass == null) { // Password can be empty
-					throw new IllegalArgumentException("Password is null!");
-				}
+		return DatabaseInjector.newInstance(clazz, config);
+	}
 
-				String mySQLHost = config.getProperty(MySQLConstants.Host);
-				if (mySQLHost == null || mySQLHost.isEmpty()) {
-					throw new IllegalArgumentException("Host is null or empty!");
-				}
+	private static String getDatabaseType(Class<? extends Database> clazz) {
+		try {
+			Method method = clazz.getDeclaredMethod("getDriver");
 
-				String mySQLPort = config.getProperty(MySQLConstants.Port);
-				if (mySQLPort == null || mySQLPort.isEmpty()) {
-					throw new IllegalArgumentException("Port is null or empty!");
-				}
+			if (!Modifier.isStatic(method.getModifiers())) {
+				throw new IllegalArgumentException(clazz.getCanonicalName() + " does not have a static getDriver()");
+			}
 
-				String mySQLDatabase = config.getProperty(MySQLConstants.Database);
-				if (mySQLDatabase == null || mySQLDatabase.isEmpty()) {
-					throw new IllegalArgumentException("Database is null or empty!");
-				}
+			if (!method.getReturnType().equals(String.class)) {
+				throw new IllegalArgumentException(clazz.getCanonicalName() + "'s getDriver() does not return a String");
+			}
 
-				StringBuilder mySQLConnUrl = new StringBuilder();
-				mySQLConnUrl.append("jdbc:mysql://");
-				mySQLConnUrl.append(mySQLHost);
-				mySQLConnUrl.append(":");
-				mySQLConnUrl.append(mySQLPort);
-				mySQLConnUrl.append("/");
-				mySQLConnUrl.append(mySQLDatabase);
-				mySQLConnUrl.append("?useUnicode=true&characterEncoding=utf8");
-				return new MySQLDatabase(mySQLConnUrl.toString(), mySQLUser, mySQLPass);
-
-			case SQLITE:
-				String path = config.getProperty(SQLiteConstants.Path);
-				if (path == null || path.isEmpty()) {
-					throw new IllegalArgumentException("Path is null or empty!");
-				}
-
-				String uri = "jdbc:sqlite:" + path;
-				return new SQLiteDatabase(uri);
-
-			case H2:
-				String h2db = config.getProperty(H2Configuration.H2_DATABASE);
-				if (h2db == null || h2db.isEmpty())
-					throw new IllegalArgumentException("Database is null or empty!");
-				String h2url = "jdbc:h2:file:" + h2db + ";MODE=MYSQL;IGNORECASE=TRUE;AUTO_SERVER=TRUE";
-				return new H2Database(h2url);
-
-			default:
-				throw new UnknownDriverException("The driver '" + config.getDriver() + "' is unknown");
+			return (String) method.invoke(null);
+		} catch (NoSuchMethodException e) {
+			throw new IllegalArgumentException(clazz.getCanonicalName() + " does not have getDriver()", e);
+		} catch (InvocationTargetException e) {
+			throw new IllegalArgumentException("There was an exception when registering '" + clazz.getCanonicalName() + "' with the DatabaseFactory", e);
+		} catch (IllegalAccessException e) {
+			throw new IllegalArgumentException("There was an exception when registering '" + clazz.getCanonicalName() + "' with the DatabaseFactory", e);
 		}
 	}
 }

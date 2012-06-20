@@ -16,7 +16,9 @@
  */
 package com.alta189.simplesave.h2;
 
+import com.alta189.simplesave.Configuration;
 import com.alta189.simplesave.Database;
+import com.alta189.simplesave.DatabaseFactory;
 import com.alta189.simplesave.exceptions.ConnectionException;
 import com.alta189.simplesave.exceptions.TableRegistrationException;
 import com.alta189.simplesave.exceptions.UnknownTableException;
@@ -43,12 +45,28 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class H2Database extends Database {
-
+	private static final String driver = "h2";
 	private String connectionURL;
 	private Connection connection;
 
+	static {
+		DatabaseFactory.registerDatabase(H2Database.class);
+	}
+
+	public H2Database(Configuration config) {
+		String h2db = config.getProperty(H2Configuration.H2_DATABASE);
+		if (h2db == null || h2db.isEmpty()) {
+			throw new IllegalArgumentException("Database is null or empty!");
+		}
+		this.connectionURL = "jdbc:h2:file:" + h2db + ";MODE=MYSQL;IGNORECASE=TRUE;AUTO_SERVER=TRUE";
+	}
+
 	public H2Database(String connectionURL) {
 		this.connectionURL = connectionURL;
+	}
+
+	public static String getDriver() {
+		return driver;
 	}
 
 	@Override
