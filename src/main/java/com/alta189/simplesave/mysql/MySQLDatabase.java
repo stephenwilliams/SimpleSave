@@ -378,6 +378,39 @@ public class MySQLDatabase extends Database {
 				throw new RuntimeException(e);
 			}
 		}
+		if (!tableClass.isAssignableFrom(o.getClass())) {
+			throw new IllegalArgumentException("The provided table class and save objects classes were not compatible.");
+		}
+
+		TableRegistration table = getTableRegistration(tableClass);
+
+		if (table == null) {
+			throw new UnknownTableException("The table class '" + tableClass.getCanonicalName() + "' is not registered!");
+		}
+
+		StringBuilder query = new StringBuilder();
+		long id = TableUtils.getIdValue(table, o);
+		if (id == 0)
+			throw new IllegalArgumentException("Object was never inserted into database!");
+		query.append("DELETE FROM ")
+				.append(table.getName())
+				.append(" WHERE ")
+				.append(table.getId().getName())
+				.append("=?");
+
+		try {
+			PreparedStatement statement = conn.prepareStatement(query.toString());
+
+			IdRegistration idRegistration = table.getId();
+			if (idRegistration.getType().equals(Integer.class) || idRegistration.getType().equals(int.class)) {
+				PreparedStatementUtils.setObject(statement, 1, (Integer) TableUtils.getValue(idRegistration, o));
+			} else if (idRegistration.getType().equals(Long.class) || idRegistration.getType().equals(long.class)) {
+				PreparedStatementUtils.setObject(statement, 1, (Long) TableUtils.getValue(idRegistration, o));
+			}
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private void createTables() {
