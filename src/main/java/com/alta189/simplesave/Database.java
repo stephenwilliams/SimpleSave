@@ -25,6 +25,8 @@ import com.alta189.simplesave.query.Query;
 import com.alta189.simplesave.query.QueryResult;
 import com.alta189.simplesave.query.SelectQuery;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -67,8 +69,8 @@ public abstract class Database {
 		return tables.get(tableClass);
 	}
 	
-	public TableRegistration[] getTableRegistrations() {
-		return tables.values().toArray(new TableRegistration[tables.values().size()]);
+	public Collection<TableRegistration> getTableRegistrations() {
+		return Collections.unmodifiableCollection(tables.values());
 	}
 
 	public void connect() throws ConnectionException {
