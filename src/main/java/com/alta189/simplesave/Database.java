@@ -66,6 +66,10 @@ public abstract class Database {
 	public TableRegistration getTableRegistration(Class<?> tableClass) {
 		return tables.get(tableClass);
 	}
+	
+	public TableRegistration[] getTableRegistrations() {
+		return tables.values().toArray(new TableRegistration[tables.values().size()]);
+	}
 
 	public void connect() throws ConnectionException {
 		lock = true;
