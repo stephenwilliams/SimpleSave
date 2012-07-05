@@ -329,18 +329,24 @@ public class SQLiteDatabase extends Database {
 	private void createTables() {
 		// Query - "CREATE TABLE IF NOT EXISTS <table> (<field> <type>...)"
 		for (TableRegistration table : getTables().values()) {
-			StringBuilder buffer = new StringBuilder("CREATE TABLE IF NOT EXISTS " + table.getName());
+			StringBuilder builder = new StringBuilder("CREATE TABLE IF NOT EXISTS " + table.getName());
 			int iter = 0;
 			Collection<FieldRegistration> fields = table.getFields();
 			for (FieldRegistration field : fields) {
 				iter++;
-				buffer.append(" ( ").append(field.getName())
+				builder.append(" ( ").append(field.getName())
 						.append(" ").append(field.getType());
 				if (iter > fields.size()) {
-					buffer.append(",");
+					builder.append(",");
 				} else {
-					buffer.append(")");
+					builder.append(")");
 				}
+			}
+			try {
+				PreparedStatement statement = connection.prepareStatement(builder.toString());
+				statement.executeUpdate();
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
 			}
 		}
 	}
