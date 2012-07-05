@@ -86,7 +86,7 @@ public class SQLiteDatabase extends Database {
 	@Override
 	public boolean isConnected() {
 		try {
-			return connection != null && !connection.isClosed() && connection.isValid(5000);
+			return connection != null && !connection.isClosed();
 		} catch (SQLException e) {
 			return false;
 		}
