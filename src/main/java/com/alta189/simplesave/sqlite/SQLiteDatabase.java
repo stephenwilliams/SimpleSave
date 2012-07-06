@@ -110,7 +110,7 @@ public class SQLiteDatabase extends Database {
 					SelectQuery select = (SelectQuery) query;
 					TableRegistration table = getTableRegistration(select.getTableClass());
 					PreparedStatement statement = null;
-					StringBuilder buffer = new StringBuilder("SELECT * FROM ").append(table.getName()).append(" ");
+					StringBuilder buffer = new StringBuilder("SELECT ALL FROM ").append(table.getName()).append(" ");
 					if (!select.where().getEntries().isEmpty()) {
 						buffer.append("WHERE ");
 						int iter = 0;
