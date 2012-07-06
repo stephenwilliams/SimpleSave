@@ -110,7 +110,7 @@ public class SQLiteDatabase extends Database {
 					SelectQuery select = (SelectQuery) query;
 					TableRegistration table = getTableRegistration(select.getTableClass());
 					PreparedStatement statement = null;
-					StringBuilder buffer = new StringBuilder("SELECT ALL FROM ").append(table.getName()).append(" ");
+					StringBuilder buffer = new StringBuilder("SELECT * FROM ").append(table.getName()).append(" ");
 					if (!select.where().getEntries().isEmpty()) {
 						buffer.append("WHERE ");
 						int iter = 0;
@@ -124,25 +124,25 @@ public class SQLiteDatabase extends Database {
 							buffer.append(entry.getField());
 							switch (entry.getComparator()) {
 								case EQUAL:
-									buffer.append("== ");
+									buffer.append("==? ");
 									break;
 								case NOT_EQUAL:
-									buffer.append("!= ");
+									buffer.append("!=? ");
 									break;
 								case GREATER_THAN:
-									buffer.append("> ");
+									buffer.append(">? ");
 									break;
 								case LESS_THAN:
-									buffer.append("< ");
+									buffer.append("<? ");
 									break;
 								case GREATER_THAN_OR_EQUAL:
-									buffer.append(">= ");
+									buffer.append(">=? ");
 									break;
 								case LESS_THAN_OR_EQUAL:
-									buffer.append("<=");
+									buffer.append("<=?");
 									break;
 								case CONTAINS:
-									buffer.append("LIKE ");
+									buffer.append("LIKE ?");
 									break;
 							}
 							if (iter != select.where().getEntries().size()) {

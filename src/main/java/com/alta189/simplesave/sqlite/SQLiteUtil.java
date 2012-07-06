@@ -7,7 +7,7 @@ public class SQLiteUtil {
 		if (clazz.equals(int.class) || clazz.equals(Integer.class)) {
 			return "INTEGER";
 		} else if (clazz.equals(long.class) || clazz.equals(Long.class)) {
-			return "BIGINT";
+			return "INTEGER";
 		} else if (clazz.equals(double.class) || clazz.equals(Double.class)) {
 			return "DOUBLE";
 		} else if (clazz.equals(String.class)) {
