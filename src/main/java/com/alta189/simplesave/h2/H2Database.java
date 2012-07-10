@@ -455,8 +455,6 @@ public class H2Database extends Database {
 				for (int i = 1; i <= meta.getColumnCount(); i++){
 					if (f.getName().equalsIgnoreCase(meta.getColumnName(i))){
 						String type = meta.getColumnTypeName(i);
-						System.out.println(deftype);
-						System.out.println(type);
 						if (!deftype.equals(type)){
 							redo.put(f.getName(),true + ";" + deftype);
 						}

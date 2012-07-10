@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -64,6 +65,32 @@ public class H2DatabaseTest {
 		} catch (ConnectionException e) {
 			fail("Failed to close database! " + e.toString());
 		}
+		H2Database db2 = (H2Database) DatabaseFactory.createNewDatabase(h2);
+		try {
+			db2.registerTable(TestClass2.class);
+		} catch (TableRegistrationException e) {
+			throw new RuntimeException(e);
+		}
+		try {
+			db2.connect();
+		} catch (ConnectionException e) {
+			throw new RuntimeException(e);
+		}
+		try {
+			db2.close();
+		} catch (ConnectionException e) {
+			throw new RuntimeException(e);
+		}
+		try {
+			db2.connect();
+		} catch (ConnectionException e) {
+			throw new RuntimeException(e);
+		}
+		try {
+			db2.close();
+		} catch (ConnectionException e) {
+			throw new RuntimeException(e);
+		}
 		tmpfile.delete();
 	}
 
@@ -98,6 +125,9 @@ public class H2DatabaseTest {
 		private long id;
 
 		@Field
-		private String name;
+		private ArrayList<?> name;
+		
+		@Field
+		private int hello;
 	}
 }
