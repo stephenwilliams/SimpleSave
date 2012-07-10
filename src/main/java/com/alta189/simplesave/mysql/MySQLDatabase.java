@@ -21,6 +21,7 @@ import com.alta189.simplesave.Database;
 import com.alta189.simplesave.DatabaseFactory;
 import com.alta189.simplesave.exceptions.ConnectionException;
 import com.alta189.simplesave.exceptions.UnknownTableException;
+import com.alta189.simplesave.h2.H2Util;
 import com.alta189.simplesave.internal.FieldRegistration;
 import com.alta189.simplesave.internal.IdRegistration;
 import com.alta189.simplesave.internal.PreparedStatementUtils;
@@ -41,6 +42,9 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class MySQLDatabase extends Database {
 	private static final String driver = "mysql";
@@ -453,12 +457,40 @@ public class MySQLDatabase extends Database {
 		// TODO Update table structure
 		StringBuilder query = new StringBuilder();
 		query.append("SELECT * FROM ")
-				.append(table.getName())
-				.append(" LIMIT 1");
+		.append(table.getName())
+		.append(" LIMIT 1");
 		try {
 			ResultSetMetaData meta = conn.prepareStatement(query.toString()).executeQuery().getMetaData();
-			for (int i = 1; i <= meta.getColumnCount(); i++) {
-
+			Collection<FieldRegistration> fields = table.getFields();
+			// <field,alreadyexisting?>
+			Map<String,String> redo = new LinkedHashMap<String,String>();
+			for (FieldRegistration f : fields){
+				boolean found = false;
+				String deftype = MySQLUtil.getMySQLTypeFromClass(f.getType());
+				for (int i = 1; i <= meta.getColumnCount(); i++){
+					if (f.getName().equalsIgnoreCase(meta.getColumnName(i))){
+						String type = meta.getColumnTypeName(i);
+						if (!deftype.equals(type)){
+							redo.put(f.getName(),true + ";" + deftype);
+						}
+						found = true;
+						break;
+					}
+				}
+				if (!found){
+					redo.put(f.getName(),false + ";" + deftype);
+				}
+			}
+			for (String s : redo.keySet()){
+				StringBuilder q = new StringBuilder();
+				q.append("ALTER TABLE ").append(table.getName()).append(" ");
+				String[] results = redo.get(s).split(";");
+				if (results[0].equalsIgnoreCase("true")){
+					q.append("ALTER COLUMN ").append(s).append(" ").append(results[1]);
+				} else {
+					q.append("ADD COLUMN ").append(s).append(" ").append(results[1]);
+				}
+				conn.prepareStatement(q.toString()).executeUpdate();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
