@@ -180,6 +180,9 @@ public class MySQLDatabase extends Database {
 							}
 
 							WhereEntry entry = (WhereEntry) o;
+							if (entry.getPrefix() != null && !entry.getPrefix().isEmpty()) {
+								queryBuilder.append(entry.getPrefix());
+							}
 							queryBuilder.append(entry.getField());
 							switch (entry.getComparator()) {
 								case EQUAL:
@@ -203,6 +206,9 @@ public class MySQLDatabase extends Database {
 								case CONTAINS:
 									queryBuilder.append(" LIKE ? ");
 									break;
+							}
+							if (entry.getSuffix() != null && !entry.getSuffix().isEmpty()) {
+								queryBuilder.append(entry.getSuffix());
 							}
 							if (count != selectQuery.where().getEntries().size()) {
 								queryBuilder.append(entry.getOperator().name())

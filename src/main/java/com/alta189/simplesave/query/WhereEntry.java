@@ -22,6 +22,8 @@ public class WhereEntry<T> {
 	private final Comparison comparison;
 	private final WhereQuery<T> parent;
 	private Operator operator;
+	private String prefix;
+	private String suffix;
 
 	public WhereEntry(Comparator comparator, String field, Comparison comparison, WhereQuery<T> parent) {
 		this.comparator = comparator;
@@ -61,5 +63,32 @@ public class WhereEntry<T> {
 
 	public QueryResult<T> execute() {
 		return parent.execute();
+	}
+
+	public String getPrefix() {
+		return prefix;
+	}
+
+	public WhereEntry<T> closeParathesis() {
+		if (suffix != null) {
+			suffix += ")";
+		} else {
+			suffix = ")";
+		}
+		return this;
+	}
+
+	public WhereEntry<T> setPrefix(String prefix) {
+		this.prefix = prefix;
+		return this;
+	}
+
+	public String getSuffix() {
+		return suffix;
+	}
+
+	public WhereEntry<T> setSuffix(String suffix) {
+		this.suffix = suffix;
+		return this;
 	}
 }

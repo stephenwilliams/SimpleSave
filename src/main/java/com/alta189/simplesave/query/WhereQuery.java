@@ -22,6 +22,7 @@ import java.util.List;
 public class WhereQuery<T> extends Query<T> {
 	private final List<WhereEntry<T>> entries;
 	private final Query<T> parent;
+	private StringBuilder nextPrefix = new StringBuilder();
 
 	public WhereQuery(Query<T> parent) {
 		super(QueryType.WHERE);
@@ -31,44 +32,60 @@ public class WhereQuery<T> extends Query<T> {
 
 	public <E> WhereEntry<T> equal(String field, E comparison) {
 		WhereEntry<T> entry = new WhereEntry<T>(Comparator.EQUAL, field, new Comparison<E>(comparison), this);
-		entries.add(entry);
+		addEntry(entry);
 		return entry;
 	}
 
 	public <E> WhereEntry<T> notEqual(String field, E comparison) {
 		WhereEntry<T> entry = new WhereEntry<T>(Comparator.NOT_EQUAL, field, new Comparison<E>(comparison), this);
-		entries.add(entry);
+		addEntry(entry);
 		return entry;
 	}
 
 	public <E> WhereEntry<T> greaterThan(String field, E comparison) {
 		WhereEntry<T> entry = new WhereEntry<T>(Comparator.GREATER_THAN, field, new Comparison<E>(comparison), this);
-		entries.add(entry);
+		addEntry(entry);
 		return entry;
 	}
 
 	public <E> WhereEntry<T> lessThan(String field, E comparison) {
 		WhereEntry<T> entry = new WhereEntry<T>(Comparator.LESS_THAN, field, new Comparison<E>(comparison), this);
-		entries.add(entry);
+		addEntry(entry);
 		return entry;
 	}
 
 	public <E> WhereEntry<T> greaterThanOrEqual(String field, E comparison) {
 		WhereEntry<T> entry = new WhereEntry<T>(Comparator.GREATER_THAN_OR_EQUAL, field, new Comparison<E>(comparison), this);
-		entries.add(entry);
+		addEntry(entry);
 		return entry;
 	}
 
 	public <E> WhereEntry<T> lessThanOrEqual(String field, E comparison) {
 		WhereEntry<T> entry = new WhereEntry<T>(Comparator.LESS_THAN_OR_EQUAL, field, new Comparison<E>(comparison), this);
-		entries.add(entry);
+		addEntry(entry);
 		return entry;
 	}
 
 	public <E> WhereEntry<T> contains(String field, E comparison) {
 		WhereEntry<T> entry = new WhereEntry<T>(Comparator.CONTAINS, field, new Comparison<E>(comparison), this);
-		entries.add(entry);
+		addEntry(entry);
 		return entry;
+	}
+
+	private void addEntry(WhereEntry<T> entry) {
+		entry.setPrefix(getNextPrefix());
+		entries.add(entry);
+	}
+
+	public WhereQuery<T> openParenthesis() {
+		nextPrefix.append("(");
+		return this;
+	}
+
+	private String getNextPrefix() {
+		String result = nextPrefix.toString();
+		nextPrefix = new StringBuilder();
+		return result;
 	}
 
 	public List<WhereEntry<T>> getEntries() {

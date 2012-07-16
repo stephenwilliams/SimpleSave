@@ -110,9 +110,9 @@ public class SQLiteDatabase extends Database {
 					SelectQuery select = (SelectQuery) query;
 					TableRegistration table = getTableRegistration(select.getTableClass());
 					PreparedStatement statement = null;
-					StringBuilder buffer = new StringBuilder("SELECT * FROM ").append(table.getName()).append(" ");
+					StringBuilder queryBuilder = new StringBuilder("SELECT * FROM ").append(table.getName()).append(" ");
 					if (!select.where().getEntries().isEmpty()) {
-						buffer.append("WHERE ");
+						queryBuilder.append("WHERE ");
 						int iter = 0;
 						for (Object o : select.where().getEntries()) {
 							iter++;
@@ -121,37 +121,43 @@ public class SQLiteDatabase extends Database {
 							}
 
 							WhereEntry entry = (WhereEntry) o;
-							buffer.append(entry.getField());
+							if (entry.getPrefix() != null && !entry.getPrefix().isEmpty()) {
+								queryBuilder.append(entry.getPrefix());
+							}
+							queryBuilder.append(entry.getField());
 							switch (entry.getComparator()) {
 								case EQUAL:
-									buffer.append("==? ");
+									queryBuilder.append("==? ");
 									break;
 								case NOT_EQUAL:
-									buffer.append("!=? ");
+									queryBuilder.append("!=? ");
 									break;
 								case GREATER_THAN:
-									buffer.append(">? ");
+									queryBuilder.append(">? ");
 									break;
 								case LESS_THAN:
-									buffer.append("<? ");
+									queryBuilder.append("<? ");
 									break;
 								case GREATER_THAN_OR_EQUAL:
-									buffer.append(">=? ");
+									queryBuilder.append(">=? ");
 									break;
 								case LESS_THAN_OR_EQUAL:
-									buffer.append("<=?");
+									queryBuilder.append("<=?");
 									break;
 								case CONTAINS:
-									buffer.append("LIKE ?");
+									queryBuilder.append("LIKE ?");
 									break;
 							}
+							if (entry.getSuffix() != null && !entry.getSuffix().isEmpty()) {
+								queryBuilder.append(entry.getSuffix());
+							}
 							if (iter != select.where().getEntries().size()) {
-								buffer.append(entry.getOperator().name())
+								queryBuilder.append(entry.getOperator().name())
 										.append(" ");
 							}
 						}
 
-						statement = connection.prepareStatement(buffer.toString());
+						statement = connection.prepareStatement(queryBuilder.toString());
 						iter = 0;
 						for (Object o : select.where().getEntries()) {
 							iter++;
@@ -170,7 +176,7 @@ public class SQLiteDatabase extends Database {
 
 					// Execute and return
 					if (statement == null) {
-						statement = connection.prepareStatement(buffer.toString());
+						statement = connection.prepareStatement(queryBuilder.toString());
 					}
 					ResultSet results = statement.executeQuery();
 					QueryResult<T> result = new QueryResult<T>(ResultSetUtils.buildResultList(table, (Class<T>) table.getTableClass(), results));
