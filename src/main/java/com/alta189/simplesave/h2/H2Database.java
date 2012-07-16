@@ -43,10 +43,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 public class H2Database extends Database {
@@ -88,7 +86,7 @@ public class H2Database extends Database {
 			try {
 				connection = DriverManager.getConnection(connectionURL);
 				createTables();
-				for (TableRegistration t : getTableRegistrations()){
+				for (TableRegistration t : getTableRegistrations()) {
 					checkTableStructure(t);
 				}
 			} catch (SQLException e) {
@@ -129,78 +127,78 @@ public class H2Database extends Database {
 		}
 		try {
 			switch (query.getType()) {
-			case SELECT:
-				SelectQuery selectQuery = (SelectQuery) query;
-				TableRegistration table = getTableRegistration(selectQuery.getTableClass());
-				PreparedStatement statement = null;
-				StringBuilder queryBuilder = new StringBuilder();
-				queryBuilder.append("SELECT * from ")
-				.append(table.getName())
-				.append(" ");
-				if (!selectQuery.where().getEntries().isEmpty()) {
-					queryBuilder.append("WHERE ");
-					int count = 0;
-					for (Object o : selectQuery.where().getEntries()) {
-						count++;
-						if (!(o instanceof WhereEntry)) {
-							throw new InternalError("Something has gone very wrong!");
-						}
-
-						WhereEntry entry = (WhereEntry) o;
-						queryBuilder.append(entry.getField());
-						switch (entry.getComparator()) {
-						case EQUAL:
-							queryBuilder.append("=? ");
-							break;
-						case NOT_EQUAL:
-							queryBuilder.append("<>? ");
-							break;
-						case GREATER_THAN:
-							queryBuilder.append(">? ");
-							break;
-						case LESS_THAN:
-							queryBuilder.append("<? ");
-							break;
-						case GREATER_THAN_OR_EQUAL:
-							queryBuilder.append(">=? ");
-							break;
-						case LESS_THAN_OR_EQUAL:
-							queryBuilder.append("<=? ");
-							break;
-						case CONTAINS:
-							queryBuilder.append(" LIKE ? ");
-							break;
-						}
-						if (count != selectQuery.where().getEntries().size()) {
-							queryBuilder.append(entry.getOperator().name())
+				case SELECT:
+					SelectQuery selectQuery = (SelectQuery) query;
+					TableRegistration table = getTableRegistration(selectQuery.getTableClass());
+					PreparedStatement statement = null;
+					StringBuilder queryBuilder = new StringBuilder();
+					queryBuilder.append("SELECT * from ")
+							.append(table.getName())
 							.append(" ");
-						}
-					}
-					statement = connection.prepareStatement(queryBuilder.toString());
-					count = 0;
-					for (Object o : selectQuery.where().getEntries()) {
-						count++;
-						if (!(o instanceof WhereEntry)) {
-							throw new InternalError("Something has gone very wrong!");
-						}
+					if (!selectQuery.where().getEntries().isEmpty()) {
+						queryBuilder.append("WHERE ");
+						int count = 0;
+						for (Object o : selectQuery.where().getEntries()) {
+							count++;
+							if (!(o instanceof WhereEntry)) {
+								throw new InternalError("Something has gone very wrong!");
+							}
 
-						WhereEntry entry = (WhereEntry) o;
-						if (entry.getComparator() == Comparator.CONTAINS) {
-							statement.setString(count, "%" + entry.getComparison().getValue().toString() + "%");
-						} else {
-							PreparedStatementUtils.setObject(statement, count, entry.getComparison().getValue());
+							WhereEntry entry = (WhereEntry) o;
+							queryBuilder.append(entry.getField());
+							switch (entry.getComparator()) {
+								case EQUAL:
+									queryBuilder.append("=? ");
+									break;
+								case NOT_EQUAL:
+									queryBuilder.append("<>? ");
+									break;
+								case GREATER_THAN:
+									queryBuilder.append(">? ");
+									break;
+								case LESS_THAN:
+									queryBuilder.append("<? ");
+									break;
+								case GREATER_THAN_OR_EQUAL:
+									queryBuilder.append(">=? ");
+									break;
+								case LESS_THAN_OR_EQUAL:
+									queryBuilder.append("<=? ");
+									break;
+								case CONTAINS:
+									queryBuilder.append(" LIKE ? ");
+									break;
+							}
+							if (count != selectQuery.where().getEntries().size()) {
+								queryBuilder.append(entry.getOperator().name())
+										.append(" ");
+							}
+						}
+						statement = connection.prepareStatement(queryBuilder.toString());
+						count = 0;
+						for (Object o : selectQuery.where().getEntries()) {
+							count++;
+							if (!(o instanceof WhereEntry)) {
+								throw new InternalError("Something has gone very wrong!");
+							}
+
+							WhereEntry entry = (WhereEntry) o;
+							if (entry.getComparator() == Comparator.CONTAINS) {
+								statement.setString(count, "%" + entry.getComparison().getValue().toString() + "%");
+							} else {
+								PreparedStatementUtils.setObject(statement, count, entry.getComparison().getValue());
+							}
 						}
 					}
-				}
-				if (statement == null) {
-					statement = connection.prepareStatement(queryBuilder.toString());
-				}
-				ResultSet set = statement.executeQuery();
-				QueryResult<T> result = new QueryResult<T>(ResultSetUtils.buildResultList(table, (Class<T>) table.getTableClass(), set));
-				set.close();
-				return result;
-			default:
-				break;
+					if (statement == null) {
+						statement = connection.prepareStatement(queryBuilder.toString());
+					}
+					ResultSet set = statement.executeQuery();
+					QueryResult<T> result = new QueryResult<T>(ResultSetUtils.buildResultList(table, (Class<T>) table.getTableClass(), set));
+					set.close();
+					return result;
+				default:
+					break;
 			}
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -231,8 +229,8 @@ public class H2Database extends Database {
 		long id = TableUtils.getIdValue(table, o);
 		if (id == 0) {
 			query.append("INSERT INTO ")
-			.append(table.getName())
-			.append(" (");
+					.append(table.getName())
+					.append(" (");
 			StringBuilder valuesBuilder = new StringBuilder();
 			valuesBuilder.append("VALUES ( ");
 			int count = 0;
@@ -251,20 +249,20 @@ public class H2Database extends Database {
 			query.append(valuesBuilder.toString());
 		} else {
 			query.append("UPDATE ")
-			.append(table.getName())
-			.append(" SET ");
+					.append(table.getName())
+					.append(" SET ");
 			int count = 0;
 			for (FieldRegistration fieldRegistration : table.getFields()) {
 				count++;
 				query.append(fieldRegistration.getName())
-				.append("=?");
+						.append("=?");
 				if (count != table.getFields().size()) {
 					query.append(", ");
 				}
 			}
 			query.append(" WHERE ")
-			.append(table.getId().getName())
-			.append("=?");
+					.append(table.getId().getName())
+					.append("=?");
 		}
 
 		try {
@@ -382,10 +380,10 @@ public class H2Database extends Database {
 		if (id == 0)
 			throw new IllegalArgumentException("Object was never inserted into database!");
 		query.append("DELETE FROM ")
-		.append(table.getName())
-		.append(" WHERE ")
-		.append(table.getId().getName())
-		.append("=?");
+				.append(table.getName())
+				.append(" WHERE ")
+				.append(table.getId().getName())
+				.append("=?");
 
 		try {
 			PreparedStatement statement = connection.prepareStatement(query.toString());
@@ -406,12 +404,12 @@ public class H2Database extends Database {
 		for (TableRegistration table : getTables().values()) {
 			StringBuilder query = new StringBuilder();
 			query.append("CREATE TABLE IF NOT EXISTS ")
-			.append(table.getName())
-			.append(" (")
-			.append(table.getId().getName())
-			.append(" ")
-			.append(H2Util.getTypeFromClass(table.getId().getType()))
-			.append(" NOT NULL AUTO_INCREMENT PRIMARY KEY, ");
+					.append(table.getName())
+					.append(" (")
+					.append(table.getId().getName())
+					.append(" ")
+					.append(H2Util.getTypeFromClass(table.getId().getType()))
+					.append(" NOT NULL AUTO_INCREMENT PRIMARY KEY, ");
 			int count = 0;
 			for (FieldRegistration field : table.getFields()) {
 				count++;
@@ -422,8 +420,8 @@ public class H2Database extends Database {
 					type = H2Util.getTypeFromClass(field.getType());
 				}
 				query.append(field.getName())
-				.append(" ")
-				.append(type);
+						.append(" ")
+						.append(type);
 				if (count != table.getFields().size()) {
 					query.append(", ");
 				}
@@ -442,35 +440,35 @@ public class H2Database extends Database {
 		// TODO Update table structure
 		StringBuilder query = new StringBuilder();
 		query.append("SELECT * FROM ")
-		.append(table.getName())
-		.append(" LIMIT 1");
+				.append(table.getName())
+				.append(" LIMIT 1");
 		try {
 			ResultSetMetaData meta = connection.prepareStatement(query.toString()).executeQuery().getMetaData();
 			Collection<FieldRegistration> fields = table.getFields();
 			// <field,alreadyexisting?>
-			Map<String,String> redo = new LinkedHashMap<String,String>();
-			for (FieldRegistration f : fields){
+			Map<String, String> redo = new LinkedHashMap<String, String>();
+			for (FieldRegistration f : fields) {
 				boolean found = false;
 				String deftype = H2Util.getTypeFromClass(f.getType());
-				for (int i = 1; i <= meta.getColumnCount(); i++){
-					if (f.getName().equalsIgnoreCase(meta.getColumnName(i))){
+				for (int i = 1; i <= meta.getColumnCount(); i++) {
+					if (f.getName().equalsIgnoreCase(meta.getColumnName(i))) {
 						String type = meta.getColumnTypeName(i);
-						if (!deftype.equals(type)){
-							redo.put(f.getName(),true + ";" + deftype);
+						if (!deftype.equals(type)) {
+							redo.put(f.getName(), true + ";" + deftype);
 						}
 						found = true;
 						break;
 					}
 				}
-				if (!found){
-					redo.put(f.getName(),false + ";" + deftype);
+				if (!found) {
+					redo.put(f.getName(), false + ";" + deftype);
 				}
 			}
-			for (String s : redo.keySet()){
+			for (String s : redo.keySet()) {
 				StringBuilder q = new StringBuilder();
 				q.append("ALTER TABLE ").append(table.getName()).append(" ");
 				String[] results = redo.get(s).split(";");
-				if (results[0].equalsIgnoreCase("true")){
+				if (results[0].equalsIgnoreCase("true")) {
 					q.append("ALTER COLUMN ").append(s).append(" ").append(results[1]);
 				} else {
 					q.append("ADD COLUMN ").append(s).append(" ").append(results[1]);
