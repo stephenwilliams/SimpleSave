@@ -103,6 +103,9 @@ public class ResultSetUtils {
 					field.set(object, set.getObject(fieldRegistration.getName()));
 				} else {
 					Blob b = set.getBlob(fieldRegistration.getName());
+					if (b == null || b.length() <= 0) {
+						field.set(object, null);
+					}
 					ObjectInputStream is = new ObjectInputStream(b.getBinaryStream());
 					Object o = null;
 					try {
