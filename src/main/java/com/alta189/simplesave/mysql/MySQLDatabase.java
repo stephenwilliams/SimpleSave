@@ -495,7 +495,7 @@ public class MySQLDatabase extends Database {
 				q.append("ALTER TABLE ").append(table.getName()).append(" ");
 				String[] results = redo.get(s).split(";");
 				if (results[0].equalsIgnoreCase("true")){
-					q.append("ALTER COLUMN ").append(s).append(" ").append(results[1]);
+					q.append("MODIFY COLUMN ").append(s).append(" ").append(results[1]);
 				} else {
 					q.append("ADD COLUMN ").append(s).append(" ").append(results[1]);
 				}
