@@ -26,7 +26,7 @@ public class H2DatabaseTest {
 			tmpfile = File.createTempFile("h2test_", ".db");
 		} catch (IOException e) {
 			e.printStackTrace();
-			fail("IOException occured: " + e.toString());
+			fail("IOException occurred: " + e.toString());
 		}
 		assertNotNull(tmpfile);
 		h2.setDatabase(tmpfile.getAbsolutePath().substring(0, tmpfile.getAbsolutePath().indexOf(".db")));
@@ -36,7 +36,7 @@ public class H2DatabaseTest {
 			db.registerTable(TestClass.class);
 		} catch (TableRegistrationException e) {
 			e.printStackTrace();
-			fail("Exception occured too early! " + e.toString());
+			fail("Exception occurred too early! " + e.toString());
 		}
 		boolean caught = false;
 		try {
