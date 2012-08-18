@@ -23,6 +23,7 @@ public class SelectQuery<T> extends Query<T> {
 	private final Class<T> tableClass;
 	private final WhereQuery<T> where = new WhereQuery<T>(this);
 	private final LimitQuery<T> limit = new LimitQuery<T>(this);
+	private final OrderQuery<T> order = new OrderQuery<T>(this);
 
 	public SelectQuery(Database db, Class<T> tableClass) {
 		super(QueryType.SELECT);
@@ -36,6 +37,10 @@ public class SelectQuery<T> extends Query<T> {
 	
 	public LimitQuery<T> limit() {
 		return limit;
+	}
+	
+	public OrderQuery<T> order() {
+		return order;
 	}
 
 	public Class<T> getTableClass() {

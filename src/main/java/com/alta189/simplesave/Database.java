@@ -92,6 +92,8 @@ public abstract class Database {
 	public abstract boolean isConnected();
 
 	public abstract <T> QueryResult<T> execute(Query<T> query);
+	
+	public abstract void clear(Class<?> tableClass);
 
 	public abstract void save(Class<?> tableClass, Object o);
 

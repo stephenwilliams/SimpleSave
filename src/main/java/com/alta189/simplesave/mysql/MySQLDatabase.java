@@ -33,6 +33,7 @@ import com.alta189.simplesave.query.Query;
 import com.alta189.simplesave.query.QueryResult;
 import com.alta189.simplesave.query.SelectQuery;
 import com.alta189.simplesave.query.WhereEntry;
+import com.alta189.simplesave.query.OrderQuery.Order;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
@@ -216,7 +217,16 @@ public class MySQLDatabase extends Database {
 							}
 						}
 						if (selectQuery.limit().getLimit()!=null)
-								queryBuilder.append("LIMIT ").append(selectQuery.limit().getLimit());
+							queryBuilder.append("LIMIT ").append(selectQuery.limit().getLimit()).append(" ");
+						if (!selectQuery.order().getColumnNames().isEmpty()){
+							queryBuilder.append("ORDER BY ");
+							for (Object column : selectQuery.order().getColumnNames()){
+								if (!(column instanceof String))
+									throw new InternalError("Internal Error: Uncastable Object to String!");
+								queryBuilder.append((String)column).append(" ");
+							}
+							queryBuilder.append(selectQuery.order().getOrder().name()).append(" ");
+						}
 						statement = conn.prepareStatement(queryBuilder.toString());
 						count = 0;
 						for (Object o : selectQuery.where().getEntries()) {
@@ -235,8 +245,16 @@ public class MySQLDatabase extends Database {
 					}
 					if (statement == null) {
 						if (selectQuery.limit().getLimit()!=null)
-							queryBuilder.append("LIMIT ").append(selectQuery.limit().getLimit());
-						statement = conn.prepareStatement(queryBuilder.toString());
+							queryBuilder.append("LIMIT ").append(selectQuery.limit().getLimit()).append(" ");
+						if (!selectQuery.order().getColumnNames().isEmpty()){
+							queryBuilder.append("ORDER BY ");
+							for (Object column : selectQuery.order().getColumnNames()){
+								if (!(column instanceof String))
+									throw new InternalError("Internal Error: Uncastable Object to String!");
+								queryBuilder.append((String)column).append(" ");
+							}
+							queryBuilder.append(selectQuery.order().getOrder().name()).append(" ");
+						}						statement = conn.prepareStatement(queryBuilder.toString());
 					}
 					ResultSet set = statement.executeQuery();
 					QueryResult<T> result = new QueryResult<T>(ResultSetUtils.buildResultList(table, (Class<T>) table.getTableClass(), set));
@@ -424,6 +442,31 @@ public class MySQLDatabase extends Database {
 			} else if (idRegistration.getType().equals(Long.class) || idRegistration.getType().equals(long.class)) {
 				PreparedStatementUtils.setObject(statement, 1, (Long) TableUtils.getValue(idRegistration, o));
 			}
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	@Override
+	public void clear(Class<?> tableClass) {
+		if (!isConnected()) {
+			try {
+				connect();
+			} catch (ConnectionException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		TableRegistration table = getTableRegistration(tableClass);
+
+		if (table == null) {
+			throw new UnknownTableException("The table class '" + tableClass.getCanonicalName() + "' is not registered!");
+		}
+		StringBuilder query = new StringBuilder();
+		query.append("DELETE FROM ").append(table.getName());
+		
+		try {
+			PreparedStatement statement = conn.prepareStatement(query.toString());
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);

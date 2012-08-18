@@ -181,8 +181,16 @@ public class H2Database extends Database {
 							}
 						}
 						if (selectQuery.limit().getLimit()!=null)
-							queryBuilder.append("LIMIT ").append(selectQuery.limit().getLimit());
-						statement = connection.prepareStatement(queryBuilder.toString());
+							queryBuilder.append("LIMIT ").append(selectQuery.limit().getLimit()).append(" ");
+						if (!selectQuery.order().getColumnNames().isEmpty()){
+							queryBuilder.append("ORDER BY ");
+							for (Object column : selectQuery.order().getColumnNames()){
+								if (!(column instanceof String))
+									throw new InternalError("Internal Error: Uncastable Object to String!");
+								queryBuilder.append((String)column).append(" ");
+							}
+							queryBuilder.append(selectQuery.order().getOrder().name()).append(" ");
+						}						statement = connection.prepareStatement(queryBuilder.toString());
 						count = 0;
 						for (Object o : selectQuery.where().getEntries()) {
 							count++;
@@ -200,8 +208,16 @@ public class H2Database extends Database {
 					}
 					if (statement == null) {
 						if (selectQuery.limit().getLimit()!=null)
-							queryBuilder.append("LIMIT ").append(selectQuery.limit().getLimit());
-						statement = connection.prepareStatement(queryBuilder.toString());
+							queryBuilder.append("LIMIT ").append(selectQuery.limit().getLimit()).append(" ");
+						if (!selectQuery.order().getColumnNames().isEmpty()){
+							queryBuilder.append("ORDER BY ");
+							for (Object column : selectQuery.order().getColumnNames()){
+								if (!(column instanceof String))
+									throw new InternalError("Internal Error: Uncastable Object to String!");
+								queryBuilder.append((String)column).append(" ");
+							}
+							queryBuilder.append(selectQuery.order().getOrder().name()).append(" ");
+						}						statement = connection.prepareStatement(queryBuilder.toString());
 					}
 					ResultSet set = statement.executeQuery();
 					QueryResult<T> result = new QueryResult<T>(ResultSetUtils.buildResultList(table, (Class<T>) table.getTableClass(), set));
@@ -404,6 +420,31 @@ public class H2Database extends Database {
 			} else if (idRegistration.getType().equals(Long.class) || idRegistration.getType().equals(long.class)) {
 				PreparedStatementUtils.setObject(statement, 1, (Long) TableUtils.getValue(idRegistration, o));
 			}
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	@Override
+	public void clear(Class<?> tableClass) {
+		if (!isConnected()) {
+			try {
+				connect();
+			} catch (ConnectionException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		TableRegistration table = getTableRegistration(tableClass);
+
+		if (table == null) {
+			throw new UnknownTableException("The table class '" + tableClass.getCanonicalName() + "' is not registered!");
+		}
+		StringBuilder query = new StringBuilder();
+		query.append("DELETE FROM ").append(table.getName());
+		
+		try {
+			PreparedStatement statement = connection.prepareStatement(query.toString());
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
