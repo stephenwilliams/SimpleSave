@@ -22,6 +22,7 @@ public enum QueryType {
 	WHERE,
 	UPDATE,
 	DELETE,
-	INSERT
+	INSERT,
+	LIMIT
 
 }

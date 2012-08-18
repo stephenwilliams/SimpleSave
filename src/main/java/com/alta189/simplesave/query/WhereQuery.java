@@ -91,7 +91,7 @@ public class WhereQuery<T> extends Query<T> {
 	public List<WhereEntry<T>> getEntries() {
 		return entries;
 	}
-
+	
 	public QueryResult<T> execute() {
 		return parent.execute();
 	}

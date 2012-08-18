@@ -22,6 +22,7 @@ public class SelectQuery<T> extends Query<T> {
 	private final Database db;
 	private final Class<T> tableClass;
 	private final WhereQuery<T> where = new WhereQuery<T>(this);
+	private final LimitQuery<T> limit = new LimitQuery<T>(this);
 
 	public SelectQuery(Database db, Class<T> tableClass) {
 		super(QueryType.SELECT);
@@ -32,6 +33,10 @@ public class SelectQuery<T> extends Query<T> {
 	public WhereQuery<T> where() {
 		return where;
 	}
+	
+	public LimitQuery<T> limit() {
+		return limit;
+	}
 
 	public Class<T> getTableClass() {
 		return tableClass;
@@ -41,4 +46,5 @@ public class SelectQuery<T> extends Query<T> {
 	public QueryResult<T> execute() {
 		return db.execute(this);
 	}
+
 }

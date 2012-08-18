@@ -180,6 +180,8 @@ public class H2Database extends Database {
 										.append(" ");
 							}
 						}
+						if (selectQuery.limit().getLimit()!=null)
+							queryBuilder.append("LIMIT ").append(selectQuery.limit().getLimit());
 						statement = connection.prepareStatement(queryBuilder.toString());
 						count = 0;
 						for (Object o : selectQuery.where().getEntries()) {
@@ -197,6 +199,8 @@ public class H2Database extends Database {
 						}
 					}
 					if (statement == null) {
+						if (selectQuery.limit().getLimit()!=null)
+							queryBuilder.append("LIMIT ").append(selectQuery.limit().getLimit());
 						statement = connection.prepareStatement(queryBuilder.toString());
 					}
 					ResultSet set = statement.executeQuery();

@@ -156,6 +156,8 @@ public class SQLiteDatabase extends Database {
 										.append(" ");
 							}
 						}
+						if (select.limit().getLimit()!=null)
+							queryBuilder.append("LIMIT ").append(select.limit().getLimit());
 
 						statement = connection.prepareStatement(queryBuilder.toString());
 						iter = 0;
@@ -176,6 +178,9 @@ public class SQLiteDatabase extends Database {
 
 					// Execute and return
 					if (statement == null) {
+						if (select.limit().getLimit()!=null)
+							queryBuilder.append("LIMIT ").append(select.limit().getLimit());
+
 						statement = connection.prepareStatement(queryBuilder.toString());
 					}
 					ResultSet results = statement.executeQuery();
