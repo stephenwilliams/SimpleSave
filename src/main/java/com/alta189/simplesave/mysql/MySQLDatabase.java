@@ -217,8 +217,12 @@ public class MySQLDatabase extends Database {
 										.append(" ");
 						}
 					}
-					if (selectQuery.limit().getLimit()!=null)
-						queryBuilder.append("LIMIT ").append(selectQuery.limit().getLimit()).append(" ");
+					if (selectQuery.limit().getLimit()!=null){
+						queryBuilder.append("LIMIT ");
+						if (selectQuery.limit().getStartFrom()!=null)
+							queryBuilder.append(selectQuery.limit().getStartFrom()).append(", ");
+						queryBuilder.append(selectQuery.limit().getLimit()).append(" ");
+					}
 					if (!selectQuery.order().getPairs().isEmpty()){
 						queryBuilder.append("ORDER BY ");
 						int track = 0;
@@ -251,8 +255,12 @@ public class MySQLDatabase extends Database {
 					}
 				}
 				if (statement == null) {
-					if (selectQuery.limit().getLimit()!=null)
-						queryBuilder.append("LIMIT ").append(selectQuery.limit().getLimit()).append(" ");
+					if (selectQuery.limit().getLimit()!=null){
+						queryBuilder.append("LIMIT ");
+						if (selectQuery.limit().getStartFrom()!=null)
+							queryBuilder.append(selectQuery.limit().getStartFrom()).append(", ");
+						queryBuilder.append(selectQuery.limit().getLimit()).append(" ");
+					}
 					if (!selectQuery.order().getPairs().isEmpty()){
 						queryBuilder.append("ORDER BY ");
 						int track = 0;
