@@ -34,6 +34,7 @@ import com.alta189.simplesave.query.QueryResult;
 import com.alta189.simplesave.query.SelectQuery;
 import com.alta189.simplesave.query.WhereEntry;
 import com.alta189.simplesave.query.OrderQuery.Order;
+import com.alta189.simplesave.query.OrderQuery.OrderPair;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
@@ -218,14 +219,20 @@ public class MySQLDatabase extends Database {
 					}
 					if (selectQuery.limit().getLimit()!=null)
 						queryBuilder.append("LIMIT ").append(selectQuery.limit().getLimit()).append(" ");
-					if (!selectQuery.order().getColumnNames().isEmpty()){
+					if (!selectQuery.order().getPairs().isEmpty()){
 						queryBuilder.append("ORDER BY ");
-						for (Object column : selectQuery.order().getColumnNames()){
-							if (!(column instanceof String))
-								throw new InternalError("Internal Error: Uncastable Object to String!");
-							queryBuilder.append((String)column).append(" ");
+						int track = 0;
+						for (Object pair : selectQuery.order().getPairs()){
+							track++;
+							if (!(pair instanceof OrderPair))
+								throw new InternalError("Internal Error: Uncastable Object to OrderPair!");
+							OrderPair order = (OrderPair)pair;
+							queryBuilder.append(order.column).append(" ").append(order.order.name());
+							if (track == selectQuery.order().getPairs().size())
+								queryBuilder.append(" ");
+							else
+								queryBuilder.append(", ");
 						}
-						queryBuilder.append(selectQuery.order().getOrder().name()).append(" ");
 					}
 					statement = conn.prepareStatement(queryBuilder.toString());
 					count = 0;
@@ -246,14 +253,20 @@ public class MySQLDatabase extends Database {
 				if (statement == null) {
 					if (selectQuery.limit().getLimit()!=null)
 						queryBuilder.append("LIMIT ").append(selectQuery.limit().getLimit()).append(" ");
-					if (!selectQuery.order().getColumnNames().isEmpty()){
+					if (!selectQuery.order().getPairs().isEmpty()){
 						queryBuilder.append("ORDER BY ");
-						for (Object column : selectQuery.order().getColumnNames()){
-							if (!(column instanceof String))
-								throw new InternalError("Internal Error: Uncastable Object to String!");
-							queryBuilder.append((String)column).append(" ");
+						int track = 0;
+						for (Object pair : selectQuery.order().getPairs()){
+							track++;
+							if (!(pair instanceof OrderPair))
+								throw new InternalError("Internal Error: Uncastable Object to OrderPair!");
+							OrderPair order = (OrderPair)pair;
+							queryBuilder.append(order.column).append(" ").append(order.order.name());
+							if (track == selectQuery.order().getPairs().size())
+								queryBuilder.append(" ");
+							else
+								queryBuilder.append(", ");
 						}
-						queryBuilder.append(selectQuery.order().getOrder().name()).append(" ");
 					}
 					statement = conn.prepareStatement(queryBuilder.toString());
 				}
