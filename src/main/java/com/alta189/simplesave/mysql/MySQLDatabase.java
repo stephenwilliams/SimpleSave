@@ -170,8 +170,8 @@ public class MySQLDatabase extends Database {
 				PreparedStatement statement = null;
 				StringBuilder queryBuilder = new StringBuilder();
 				queryBuilder.append("SELECT * from ")
-				.append(table.getName())
-				.append(" ");
+							.append(table.getName())
+							.append(" ");
 				if (!selectQuery.where().getEntries().isEmpty()) {
 					queryBuilder.append("WHERE ");
 					int count = 0;
@@ -187,34 +187,34 @@ public class MySQLDatabase extends Database {
 						}
 						queryBuilder.append(entry.getField());
 						switch (entry.getComparator()) {
-						case EQUAL:
-							queryBuilder.append("=? ");
-							break;
-						case NOT_EQUAL:
-							queryBuilder.append("<>? ");
-							break;
-						case GREATER_THAN:
-							queryBuilder.append(">? ");
-							break;
-						case LESS_THAN:
-							queryBuilder.append("<? ");
-							break;
-						case GREATER_THAN_OR_EQUAL:
-							queryBuilder.append(">=? ");
-							break;
-						case LESS_THAN_OR_EQUAL:
-							queryBuilder.append("<=? ");
-							break;
-						case CONTAINS:
-							queryBuilder.append(" LIKE ? ");
-							break;
+							case EQUAL:
+								queryBuilder.append("=? ");
+								break;
+							case NOT_EQUAL:
+								queryBuilder.append("<>? ");
+								break;
+							case GREATER_THAN:
+								queryBuilder.append(">? ");
+								break;
+							case LESS_THAN:
+								queryBuilder.append("<? ");
+								break;
+							case GREATER_THAN_OR_EQUAL:
+								queryBuilder.append(">=? ");
+								break;
+							case LESS_THAN_OR_EQUAL:
+								queryBuilder.append("<=? ");
+								break;
+							case CONTAINS:
+								queryBuilder.append(" LIKE ? ");
+								break;
 						}
 						if (entry.getSuffix() != null && !entry.getSuffix().isEmpty()) {
 							queryBuilder.append(entry.getSuffix());
 						}
 						if (count != selectQuery.where().getEntries().size()) {
 							queryBuilder.append(entry.getOperator().name())
-							.append(" ");
+										.append(" ");
 						}
 					}
 					if (selectQuery.limit().getLimit()!=null)
@@ -304,8 +304,8 @@ public class MySQLDatabase extends Database {
 		long id = TableUtils.getIdValue(table, o);
 		if (id == 0) {
 			query.append("INSERT INTO ")
-			.append(table.getName())
-			.append(" (");
+				 .append(table.getName())
+				 .append(" (");
 			StringBuilder valuesBuilder = new StringBuilder();
 			valuesBuilder.append("VALUES ( ");
 			int count = 0;
@@ -324,20 +324,20 @@ public class MySQLDatabase extends Database {
 			query.append(valuesBuilder.toString());
 		} else {
 			query.append("UPDATE ")
-			.append(table.getName())
-			.append(" SET ");
+				 .append(table.getName())
+				 .append(" SET ");
 			int count = 0;
 			for (FieldRegistration fieldRegistration : table.getFields()) {
 				count++;
 				query.append(fieldRegistration.getName())
-				.append("=?");
+					 .append("=?");
 				if (count != table.getFields().size()) {
 					query.append(", ");
 				}
 			}
 			query.append(" WHERE ")
-			.append(table.getId().getName())
-			.append("=?");
+				 .append(table.getId().getName())
+				 .append("=?");
 		}
 
 		try {
@@ -442,10 +442,10 @@ public class MySQLDatabase extends Database {
 		if (id == 0)
 			throw new IllegalArgumentException("Object was never inserted into database!");
 		query.append("DELETE FROM ")
-		.append(table.getName())
-		.append(" WHERE ")
-		.append(table.getId().getName())
-		.append("=?");
+			 .append(table.getName())
+			 .append(" WHERE ")
+			 .append(table.getId().getName())
+			 .append("=?");
 
 		try {
 			PreparedStatement statement = conn.prepareStatement(query.toString());
@@ -491,12 +491,12 @@ public class MySQLDatabase extends Database {
 		for (TableRegistration table : getTables().values()) {
 			StringBuilder query = new StringBuilder();
 			query.append("CREATE TABLE IF NOT EXISTS ")
-			.append(table.getName())
-			.append(" (")
-			.append(table.getId().getName())
-			.append(" ")
-			.append(MySQLUtil.getMySQLTypeFromClass(table.getId().getType()))
-			.append(" NOT NULL AUTO_INCREMENT PRIMARY KEY, ");
+				 .append(table.getName())
+				 .append(" (")
+				 .append(table.getId().getName())
+				 .append(" ")
+				 .append(MySQLUtil.getMySQLTypeFromClass(table.getId().getType()))
+				 .append(" NOT NULL AUTO_INCREMENT PRIMARY KEY, ");
 			int count = 0;
 			for (FieldRegistration field : table.getFields()) {
 				count++;
@@ -507,8 +507,8 @@ public class MySQLDatabase extends Database {
 					type = MySQLUtil.getMySQLTypeFromClass(field.getType());
 				}
 				query.append(field.getName())
-				.append(" ")
-				.append(type);
+					 .append(" ")
+					 .append(type);
 				if (count != table.getFields().size()) {
 					query.append(", ");
 				}
@@ -527,8 +527,8 @@ public class MySQLDatabase extends Database {
 		// TODO Update table structure
 		StringBuilder query = new StringBuilder();
 		query.append("SELECT * FROM ")
-		.append(table.getName())
-		.append(" LIMIT 1");
+			 .append(table.getName())
+			 .append(" LIMIT 1");
 		try {
 			ResultSetMetaData meta = conn.prepareStatement(query.toString()).executeQuery().getMetaData();
 			Collection<FieldRegistration> fields = table.getFields();

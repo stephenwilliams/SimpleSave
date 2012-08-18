@@ -127,34 +127,34 @@ public class SQLiteDatabase extends Database {
 						}
 						queryBuilder.append(entry.getField());
 						switch (entry.getComparator()) {
-						case EQUAL:
-							queryBuilder.append("==? ");
-							break;
-						case NOT_EQUAL:
-							queryBuilder.append("!=? ");
-							break;
-						case GREATER_THAN:
-							queryBuilder.append(">? ");
-							break;
-						case LESS_THAN:
-							queryBuilder.append("<? ");
-							break;
-						case GREATER_THAN_OR_EQUAL:
-							queryBuilder.append(">=? ");
-							break;
-						case LESS_THAN_OR_EQUAL:
-							queryBuilder.append("<=?");
-							break;
-						case CONTAINS:
-							queryBuilder.append("LIKE ?");
-							break;
+							case EQUAL:
+								queryBuilder.append("==? ");
+								break;
+							case NOT_EQUAL:
+								queryBuilder.append("!=? ");
+								break;
+							case GREATER_THAN:
+								queryBuilder.append(">? ");
+								break;
+							case LESS_THAN:
+								queryBuilder.append("<? ");
+								break;
+							case GREATER_THAN_OR_EQUAL:
+								queryBuilder.append(">=? ");
+								break;
+							case LESS_THAN_OR_EQUAL:
+								queryBuilder.append("<=?");
+								break;
+							case CONTAINS:
+								queryBuilder.append("LIKE ?");
+								break;
 						}
 						if (entry.getSuffix() != null && !entry.getSuffix().isEmpty()) {
 							queryBuilder.append(entry.getSuffix());
 						}
 						if (iter != select.where().getEntries().size()) {
 							queryBuilder.append(entry.getOperator().name())
-							.append(" ");
+										.append(" ");
 						}
 					}
 					if (select.limit().getLimit()!=null)
@@ -245,8 +245,8 @@ public class SQLiteDatabase extends Database {
 		long id = TableUtils.getIdValue(table, o);
 		if (id == 0) {
 			buffer.append("INSERT INTO ")
-			.append(table.getName())
-			.append(" (");
+				 .append(table.getName())
+				 .append(" (");
 			StringBuilder values = new StringBuilder();
 			values.append("VALUES ( ");
 			int iter = 0;
@@ -265,8 +265,8 @@ public class SQLiteDatabase extends Database {
 			buffer.append(values.toString());
 		} else {
 			buffer.append("UPDATE ")
-			.append(table.getName())
-			.append(" SET ");
+				 .append(table.getName())
+				 .append(" SET ");
 			int iter = 0;
 			for (FieldRegistration fieldRegistration : table.getFields()) {
 				iter++;
@@ -277,8 +277,8 @@ public class SQLiteDatabase extends Database {
 				}
 			}
 			buffer.append(" WHERE ")
-			.append(table.getId().getName())
-			.append(" = ?");
+				 .append(table.getId().getName())
+				 .append(" = ?");
 		}
 
 		try {
@@ -379,10 +379,10 @@ public class SQLiteDatabase extends Database {
 		if (id == 0)
 			throw new IllegalArgumentException("Object was never inserted into database!");
 		query.append("DELETE FROM ")
-		.append(table.getName())
-		.append(" WHERE ")
-		.append(table.getId().getName())
-		.append("=?");
+			 .append(table.getName())
+			 .append(" WHERE ")
+			 .append(table.getId().getName())
+			 .append("=?");
 
 		try {
 			PreparedStatement statement = connection.prepareStatement(query.toString());
@@ -431,12 +431,12 @@ public class SQLiteDatabase extends Database {
 			int iter = 0;
 			Collection<FieldRegistration> fields = table.getFields();
 			builder.append("'").append(table.getId().getName()).append("'")
-			.append(" ").append(SQLiteUtil.getSQLiteTypeFromClass(table.getId().getType()))
-			.append(" NOT NULL PRIMARY KEY AUTOINCREMENT").append(",");
+				   .append(" ").append(SQLiteUtil.getSQLiteTypeFromClass(table.getId().getType()))
+				   .append(" NOT NULL PRIMARY KEY AUTOINCREMENT").append(",");
 			for (FieldRegistration field : fields) {
 				iter++;
 				builder.append("'").append(field.getName()).append("'")
-				.append(" ").append(SQLiteUtil.getSQLiteTypeFromClass(field.getType()));
+					   .append(" ").append(SQLiteUtil.getSQLiteTypeFromClass(field.getType()));
 				if (iter < fields.size()) {
 					builder.append(",");
 				} else {
