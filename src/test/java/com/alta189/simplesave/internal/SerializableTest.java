@@ -16,13 +16,9 @@
  */
 package com.alta189.simplesave.internal;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-
-import org.junit.Test;
 
 import com.alta189.simplesave.DatabaseFactory;
 import com.alta189.simplesave.Field;
@@ -32,6 +28,11 @@ import com.alta189.simplesave.exceptions.ConnectionException;
 import com.alta189.simplesave.exceptions.TableRegistrationException;
 import com.alta189.simplesave.h2.H2Configuration;
 import com.alta189.simplesave.h2.H2Database;
+import org.junit.Test;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class SerializableTest {
 
@@ -57,17 +58,23 @@ public class SerializableTest {
 
 		TestClass testone = new TestClass();
 		db.save(testone);
-		TestClass testtwo = new TestClass(null);
+		TestClass testtwo = new TestClass(new NObject());
 		db.save(testtwo);
-		
+		TestClass testThree = new TestClass(new ParentTest());
+		db.save(testThree);
+
 		Parent p = db.select(TestClass.class).where().contains("test", "moo").execute().findOne().test2;
 		assertNotNull(p);
 		assertTrue(p instanceof NObject);
-		
+
 		Parent d = db.select(TestClass.class).where().contains("test", "test").execute().findOne().test2;
 		assertNotNull(d);
 		assertTrue(d instanceof SObject);
-		
+
+		TestClass testClass = db.select(TestClass.class).where().equal("test2", testThree.test2).execute().findOne();
+		assertNotNull(testClass);
+		assertTrue(testClass.test2 instanceof ParentTest);
+
 		try {
 			db.close();
 		} catch (ConnectionException e) {
@@ -75,56 +82,43 @@ public class SerializableTest {
 		}
 		tmpfile.delete();
 	}
-	
+
 	@Table("test")
 	public static class TestClass {
-		
+
 		@Id
 		public long id;
-		
+
 		@Field
 		public String test;
-		
+
 		@Field
 		public Parent test2;
-		
-		public TestClass(){
+
+		public TestClass() {
 			test = "test";
 			test2 = new SObject();
 		}
-		
-		public TestClass(Object herp){
+
+		public TestClass(Parent p) {
 			test = "moo";
-			test2 = new NObject();
+			test2 = p;
 		}
-		
 	}
-	
+
 	public static class Parent implements Serializable {
-
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 6227625777872585932L;
-		
 	}
-	
+
 	public static class SObject extends Parent {
-
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 7265250405512469151L;
-		
 	}
-	
+
 	public static class NObject extends Parent {
-
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 3577022339213440085L;
-		
 	}
 
+	public static class ParentTest extends Parent {
+		private static final long serialVersionUID = -1764047115505284887L;
+	}
 }
