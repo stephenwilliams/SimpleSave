@@ -17,7 +17,10 @@
 package com.alta189.simplesave.internal;
 
 import com.alta189.simplesave.internal.reflection.EmptyInjector;
+import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
+import org.h2.util.IOUtils;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Field;
@@ -102,21 +105,41 @@ public class ResultSetUtils {
 				} else if (fieldRegistration.getType().equals(Byte.class)) {
 					field.set(object, set.getObject(fieldRegistration.getName()));
 				} else {
-					Blob b = set.getBlob(fieldRegistration.getName());
-					if (b == null || b.length() <= 0) {
-						field.set(object, null);
-						return;
-					}
-					ObjectInputStream is = new ObjectInputStream(b.getBinaryStream());
-					Object o = null;
 					try {
-						o = is.readObject();
-					} catch (ClassNotFoundException e) {
-						e.printStackTrace();
-					} finally {
-						is.close();
+						Blob b = set.getBlob(fieldRegistration.getName());
+						if (b == null || b.length() <= 0) {
+							field.set(object, null);
+							return;
+						}
+						ObjectInputStream is = new ObjectInputStream(b.getBinaryStream());
+						Object o = null;
+						try {
+							o = is.readObject();
+						} catch (ClassNotFoundException e) {
+							e.printStackTrace();
+						} finally {
+							IOUtils.closeSilently(is);
+						}
+						field.set(object, o);
+					} catch (SQLException e) {
+						byte[] data = set.getBytes(fieldRegistration.getName());
+						if (data == null || data.length <= 0) {
+							field.set(object, null);
+							return;
+						}
+						ByteArrayInputStream bais = new ByteArrayInputStream(data);
+						ObjectInputStream is = new ObjectInputStream(bais);
+						Object o = null;
+						try {
+							o = is.readObject();
+						} catch (ClassNotFoundException ex) {
+							ex.printStackTrace();
+						} finally {
+							IOUtils.closeSilently(is);
+							IOUtils.closeSilently(bais);
+						}
+						field.set(object, o);
 					}
-					field.set(object, o);
 				}
 			}
 		} catch (SQLException e) {

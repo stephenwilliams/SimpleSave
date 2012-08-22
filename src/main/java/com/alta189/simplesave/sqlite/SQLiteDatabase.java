@@ -16,6 +16,15 @@
  */
 package com.alta189.simplesave.sqlite;
 
+import java.lang.reflect.Field;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Collection;
+
 import com.alta189.simplesave.Configuration;
 import com.alta189.simplesave.Database;
 import com.alta189.simplesave.DatabaseFactory;
@@ -28,20 +37,11 @@ import com.alta189.simplesave.internal.ResultSetUtils;
 import com.alta189.simplesave.internal.TableRegistration;
 import com.alta189.simplesave.internal.TableUtils;
 import com.alta189.simplesave.query.Comparator;
+import com.alta189.simplesave.query.OrderQuery.OrderPair;
 import com.alta189.simplesave.query.Query;
 import com.alta189.simplesave.query.QueryResult;
 import com.alta189.simplesave.query.SelectQuery;
 import com.alta189.simplesave.query.WhereEntry;
-import com.alta189.simplesave.query.OrderQuery.OrderPair;
-
-import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Collection;
 
 public class SQLiteDatabase extends Database {
 	private static final String driver = "sqlite";
@@ -107,122 +107,124 @@ public class SQLiteDatabase extends Database {
 
 			// Prepare the query
 			switch (query.getType()) {
-			case SELECT:
-				SelectQuery select = (SelectQuery) query;
-				TableRegistration table = getTableRegistration(select.getTableClass());
-				PreparedStatement statement = null;
-				StringBuilder queryBuilder = new StringBuilder("SELECT * FROM ").append(table.getName()).append(" ");
-				if (!select.where().getEntries().isEmpty()) {
-					queryBuilder.append("WHERE ");
-					int iter = 0;
-					for (Object o : select.where().getEntries()) {
-						iter++;
-						if (!(o instanceof WhereEntry)) {
-							continue;
-						}
+				case SELECT:
+					SelectQuery select = (SelectQuery) query;
+					TableRegistration table = getTableRegistration(select.getTableClass());
+					PreparedStatement statement = null;
+					StringBuilder queryBuilder = new StringBuilder("SELECT * FROM ").append(table.getName()).append(" ");
+					if (!select.where().getEntries().isEmpty()) {
+						queryBuilder.append("WHERE ");
+						int iter = 0;
+						for (Object o : select.where().getEntries()) {
+							iter++;
+							if (!(o instanceof WhereEntry)) {
+								continue;
+							}
 
-						WhereEntry entry = (WhereEntry) o;
-						if (entry.getPrefix() != null && !entry.getPrefix().isEmpty()) {
-							queryBuilder.append(entry.getPrefix());
-						}
-						queryBuilder.append(entry.getField());
-						switch (entry.getComparator()) {
-							case EQUAL:
-								queryBuilder.append("==? ");
-								break;
-							case NOT_EQUAL:
-								queryBuilder.append("!=? ");
-								break;
-							case GREATER_THAN:
-								queryBuilder.append(">? ");
-								break;
-							case LESS_THAN:
-								queryBuilder.append("<? ");
-								break;
-							case GREATER_THAN_OR_EQUAL:
-								queryBuilder.append(">=? ");
-								break;
-							case LESS_THAN_OR_EQUAL:
-								queryBuilder.append("<=?");
-								break;
-							case CONTAINS:
-								queryBuilder.append("LIKE ?");
-								break;
-						}
-						if (entry.getSuffix() != null && !entry.getSuffix().isEmpty()) {
-							queryBuilder.append(entry.getSuffix());
-						}
-						if (iter != select.where().getEntries().size()) {
-							queryBuilder.append(entry.getOperator().name())
+							WhereEntry entry = (WhereEntry) o;
+							if (entry.getPrefix() != null && !entry.getPrefix().isEmpty()) {
+								queryBuilder.append(entry.getPrefix());
+							}
+							queryBuilder.append(entry.getField());
+							switch (entry.getComparator()) {
+								case EQUAL:
+									queryBuilder.append("==? ");
+									break;
+								case NOT_EQUAL:
+									queryBuilder.append("!=? ");
+									break;
+								case GREATER_THAN:
+									queryBuilder.append(">? ");
+									break;
+								case LESS_THAN:
+									queryBuilder.append("<? ");
+									break;
+								case GREATER_THAN_OR_EQUAL:
+									queryBuilder.append(">=? ");
+									break;
+								case LESS_THAN_OR_EQUAL:
+									queryBuilder.append("<=?");
+									break;
+								case CONTAINS:
+									queryBuilder.append(" LIKE ?");
+									break;
+							}
+							if (entry.getSuffix() != null && !entry.getSuffix().isEmpty()) {
+								queryBuilder.append(entry.getSuffix());
+							}
+							if (iter != select.where().getEntries().size()) {
+								queryBuilder.append(entry.getOperator().name())
 										.append(" ");
+							}
 						}
-					}
-					if (select.limit().getLimit()!=null){
-						queryBuilder.append("LIMIT ");
-						if (select.limit().getStartFrom()!=null)
-							queryBuilder.append(select.limit().getStartFrom()).append(", ");
-						queryBuilder.append(select.limit().getLimit()).append(" ");
-					}
-					if (!select.order().getPairs().isEmpty()){
-						queryBuilder.append("ORDER BY ");
-						int track = 0;
-						for (Object pair : select.order().getPairs()){
-							track++;
-							if (!(pair instanceof OrderPair))
-								throw new InternalError("Internal Error: Uncastable Object to OrderPair!");
-							OrderPair order = (OrderPair)pair;
-							queryBuilder.append(order.column).append(" ").append(order.order.name());
-							if (track == select.order().getPairs().size())
-								queryBuilder.append(" ");
-							else
-								queryBuilder.append(", ");
+						if (select.limit().getLimit() != null) {
+							queryBuilder.append("LIMIT ");
+							if (select.limit().getStartFrom() != null) {
+								queryBuilder.append(select.limit().getStartFrom()).append(", ");
+							}
+							queryBuilder.append(select.limit().getLimit()).append(" ");
 						}
-					}
-					statement = connection.prepareStatement(queryBuilder.toString());
-					iter = 0;
-					for (Object o : select.where().getEntries()) {
-						iter++;
-						if (!(o instanceof WhereEntry)) {
-							continue;
+						if (!select.order().getPairs().isEmpty()) {
+							queryBuilder.append("ORDER BY ");
+							int track = 0;
+							for (Object pair : select.order().getPairs()) {
+								track++;
+								if (!(pair instanceof OrderPair)) {
+									throw new InternalError("Internal Error: Uncastable Object to OrderPair!");
+								}
+								OrderPair order = (OrderPair) pair;
+								queryBuilder.append(order.column).append(" ").append(order.order.name());
+								if (track == select.order().getPairs().size()) {
+									queryBuilder.append(" ");
+								} else { queryBuilder.append(", "); }
+							}
 						}
+						statement = connection.prepareStatement(queryBuilder.toString());
+						iter = 0;
+						for (Object o : select.where().getEntries()) {
+							iter++;
+							if (!(o instanceof WhereEntry)) {
+								continue;
+							}
 
-						WhereEntry entry = (WhereEntry) o;
-						if (entry.getComparator() == Comparator.CONTAINS) {
-							statement.setString(iter, "%" + entry.getComparison().getValue().toString() + "%");
-						} else {
-							PreparedStatementUtils.setObject(statement, iter, entry.getComparison().getValue());
+							WhereEntry entry = (WhereEntry) o;
+							if (entry.getComparator() == Comparator.CONTAINS) {
+								statement.setString(iter, "%" + entry.getComparison().getValue().toString() + "%");
+							} else {
+								PreparedStatementUtils.setObject(statement, iter, entry.getComparison().getValue());
+							}
 						}
 					}
-				}
 
-				// Execute and return
-				if (statement == null) {
-					if (select.limit().getLimit()!=null){
-						queryBuilder.append("LIMIT ");
-						if (select.limit().getStartFrom()!=null)
-							queryBuilder.append(select.limit().getStartFrom()).append(", ");
-						queryBuilder.append(select.limit().getLimit()).append(" ");
-					}
-					if (!select.order().getPairs().isEmpty()){
-						queryBuilder.append("ORDER BY ");
-						int track = 0;
-						for (Object pair : select.order().getPairs()){
-							track++;
-							if (!(pair instanceof OrderPair))
-								throw new InternalError("Internal Error: Uncastable Object to OrderPair!");
-							OrderPair order = (OrderPair)pair;
-							queryBuilder.append(order.column).append(" ").append(order.order.name());
-							if (track == select.order().getPairs().size())
-								queryBuilder.append(" ");
-							else
-								queryBuilder.append(", ");
+					// Execute and return
+					if (statement == null) {
+						if (select.limit().getLimit() != null) {
+							queryBuilder.append("LIMIT ");
+							if (select.limit().getStartFrom() != null) {
+								queryBuilder.append(select.limit().getStartFrom()).append(", ");
+							}
+							queryBuilder.append(select.limit().getLimit()).append(" ");
 						}
+						if (!select.order().getPairs().isEmpty()) {
+							queryBuilder.append("ORDER BY ");
+							int track = 0;
+							for (Object pair : select.order().getPairs()) {
+								track++;
+								if (!(pair instanceof OrderPair)) {
+									throw new InternalError("Internal Error: Uncastable Object to OrderPair!");
+								}
+								OrderPair order = (OrderPair) pair;
+								queryBuilder.append(order.column).append(" ").append(order.order.name());
+								if (track == select.order().getPairs().size()) {
+									queryBuilder.append(" ");
+								} else { queryBuilder.append(", "); }
+							}
+						}
+						statement = connection.prepareStatement(queryBuilder.toString());
 					}
-					statement = connection.prepareStatement(queryBuilder.toString());
-				}
-				ResultSet results = statement.executeQuery();
-				QueryResult<T> result = new QueryResult<T>(ResultSetUtils.buildResultList(table, (Class<T>) table.getTableClass(), results));
-				return result;
+					ResultSet results = statement.executeQuery();
+					QueryResult<T> result = new QueryResult<T>(ResultSetUtils.buildResultList(table, (Class<T>) table.getTableClass(), results));
+					return result;
 			}
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -253,8 +255,8 @@ public class SQLiteDatabase extends Database {
 		long id = TableUtils.getIdValue(table, o);
 		if (id == 0) {
 			buffer.append("INSERT INTO ")
-				 .append(table.getName())
-				 .append(" (");
+					.append(table.getName())
+					.append(" (");
 			StringBuilder values = new StringBuilder();
 			values.append("VALUES ( ");
 			int iter = 0;
@@ -273,20 +275,20 @@ public class SQLiteDatabase extends Database {
 			buffer.append(values.toString());
 		} else {
 			buffer.append("UPDATE ")
-				 .append(table.getName())
-				 .append(" SET ");
+					.append(table.getName())
+					.append(" SET ");
 			int iter = 0;
 			for (FieldRegistration fieldRegistration : table.getFields()) {
 				iter++;
 				buffer.append(fieldRegistration.getName())
-				.append("=?");
+						.append("=?");
 				if (iter != table.getFields().size()) {
 					buffer.append(", ");
 				}
 			}
 			buffer.append(" WHERE ")
-				 .append(table.getId().getName())
-				 .append(" = ?");
+					.append(table.getId().getName())
+					.append(" = ?");
 		}
 
 		try {
@@ -323,6 +325,8 @@ public class SQLiteDatabase extends Database {
 						PreparedStatementUtils.setObject(statement, i, (Float) TableUtils.getValue(fieldRegistration, o));
 					} else if (fieldRegistration.getType().equals(byte.class) || fieldRegistration.getType().equals(Byte.class)) {
 						PreparedStatementUtils.setObject(statement, i, (Byte) TableUtils.getValue(fieldRegistration, o));
+					} else {
+						PreparedStatementUtils.setObject(statement, i, (Object) TableUtils.getValue(fieldRegistration, o));
 					}
 				}
 			}
@@ -384,13 +388,14 @@ public class SQLiteDatabase extends Database {
 
 		StringBuilder query = new StringBuilder();
 		long id = TableUtils.getIdValue(table, o);
-		if (id == 0)
+		if (id == 0) {
 			throw new IllegalArgumentException("Object was never inserted into database!");
+		}
 		query.append("DELETE FROM ")
-			 .append(table.getName())
-			 .append(" WHERE ")
-			 .append(table.getId().getName())
-			 .append("=?");
+				.append(table.getName())
+				.append(" WHERE ")
+				.append(table.getId().getName())
+				.append("=?");
 
 		try {
 			PreparedStatement statement = connection.prepareStatement(query.toString());
@@ -404,7 +409,7 @@ public class SQLiteDatabase extends Database {
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
-		}		
+		}
 	}
 
 	@Override
@@ -439,12 +444,12 @@ public class SQLiteDatabase extends Database {
 			int iter = 0;
 			Collection<FieldRegistration> fields = table.getFields();
 			builder.append("'").append(table.getId().getName()).append("'")
-				   .append(" ").append(SQLiteUtil.getSQLiteTypeFromClass(table.getId().getType()))
-				   .append(" NOT NULL PRIMARY KEY AUTOINCREMENT").append(",");
+					.append(" ").append(SQLiteUtil.getSQLiteTypeFromClass(table.getId().getType()))
+					.append(" NOT NULL PRIMARY KEY AUTOINCREMENT").append(",");
 			for (FieldRegistration field : fields) {
 				iter++;
 				builder.append("'").append(field.getName()).append("'")
-					   .append(" ").append(SQLiteUtil.getSQLiteTypeFromClass(field.getType()));
+						.append(" ").append(SQLiteUtil.getSQLiteTypeFromClass(field.getType()));
 				if (iter < fields.size()) {
 					builder.append(",");
 				} else {

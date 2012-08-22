@@ -56,7 +56,11 @@ public class PreparedStatementUtils {
 				out = new ObjectOutputStream(bos);
 				out.writeObject(o);
 				byte[] bytes = bos.toByteArray();
-				statement.setBlob(index, new SerialBlob(bytes));
+				try {
+					statement.setBlob(index, new SerialBlob(bytes));
+				} catch (SQLException e) {
+					statement.setBytes(index, bytes);
+				}
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			} finally {
