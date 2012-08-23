@@ -17,7 +17,6 @@
 package com.alta189.simplesave.internal;
 
 import com.alta189.simplesave.internal.reflection.EmptyInjector;
-import org.h2.util.IOUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -117,7 +116,12 @@ public class ResultSetUtils {
 						} catch (ClassNotFoundException e) {
 							e.printStackTrace();
 						} finally {
-							IOUtils.closeSilently(is);
+							if (is != null) {
+								try {
+									is.close();
+								} catch (Exception ignored) {
+								}
+							}
 						}
 						field.set(object, o);
 					} catch (SQLException e) {
@@ -134,8 +138,18 @@ public class ResultSetUtils {
 						} catch (ClassNotFoundException ex) {
 							ex.printStackTrace();
 						} finally {
-							IOUtils.closeSilently(is);
-							IOUtils.closeSilently(bais);
+							if (is != null) {
+								try {
+									is.close();
+								} catch (Exception ignored) {
+								}
+							}
+							if (bais != null) {
+								try {
+									bais.close();
+								} catch (Exception ignored) {
+								}
+							}
 						}
 						field.set(object, o);
 					}
