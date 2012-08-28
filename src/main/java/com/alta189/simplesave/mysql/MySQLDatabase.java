@@ -123,9 +123,12 @@ public class MySQLDatabase extends Database {
 			try {
 				conn = DriverManager.getConnection(connUrl, user, pass);
 				createTables();
-				for (TableRegistration t : getTableRegistrations()){
-					checkTableStructure(t);
+				if (checkTableOnRegistration()) {
+					for (TableRegistration t : getTableRegistrations()){
+						checkTableStructure(t);
+					}
 				}
+				
 			} catch (SQLException e) {
 				throw new ConnectionException(e);
 			}

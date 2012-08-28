@@ -87,8 +87,10 @@ public class H2Database extends Database {
 			try {
 				connection = DriverManager.getConnection(connectionURL);
 				createTables();
-				for (TableRegistration t : getTableRegistrations()) {
-					checkTableStructure(t);
+				if (checkTableOnRegistration()) {
+					for (TableRegistration t : getTableRegistrations()){
+						checkTableStructure(t);
+					}
 				}
 			} catch (SQLException e) {
 				throw new ConnectionException(e);
