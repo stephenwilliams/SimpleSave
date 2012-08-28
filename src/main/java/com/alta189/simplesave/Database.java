@@ -35,6 +35,7 @@ public abstract class Database {
 	private final Map<Class<?>, TableRegistration> tables = new HashMap<Class<?>, TableRegistration>();
 	private Logger logger = Logger.getLogger(getClass().getCanonicalName());
 	private boolean lock = false;
+	private boolean checkTableOnRegistration = true;
 
 	protected Database() {
 
@@ -107,4 +108,11 @@ public abstract class Database {
 		remove(o.getClass(), o);
 	}
 
+	public boolean checkTableOnRegistration() {
+		return checkTableOnRegistration;
+	}
+	
+	public void setCheckTableOnRegistration(boolean status) {
+		checkTableOnRegistration = status;
+	}
 }
