@@ -183,12 +183,6 @@ public class H2Database extends Database {
 										.append(" ");
 						}
 					}
-					if (selectQuery.limit().getLimit()!=null){
-						queryBuilder.append("LIMIT ");
-						if (selectQuery.limit().getStartFrom()!=null)
-							queryBuilder.append(selectQuery.limit().getStartFrom()).append(", ");
-						queryBuilder.append(selectQuery.limit().getLimit()).append(" ");
-					}
 					if (!selectQuery.order().getPairs().isEmpty()){
 						queryBuilder.append("ORDER BY ");
 						int track = 0;
@@ -203,6 +197,12 @@ public class H2Database extends Database {
 							else
 								queryBuilder.append(", ");
 						}
+					}
+					if (selectQuery.limit().getLimit()!=null){
+						queryBuilder.append("LIMIT ");
+						if (selectQuery.limit().getStartFrom()!=null)
+							queryBuilder.append(selectQuery.limit().getStartFrom()).append(", ");
+						queryBuilder.append(selectQuery.limit().getLimit()).append(" ");
 					}
 					statement = connection.prepareStatement(queryBuilder.toString());
 					count = 0;
@@ -221,12 +221,6 @@ public class H2Database extends Database {
 					}
 				}
 				if (statement == null) {
-					if (selectQuery.limit().getLimit()!=null){
-						queryBuilder.append("LIMIT ");
-						if (selectQuery.limit().getStartFrom()!=null)
-							queryBuilder.append(selectQuery.limit().getStartFrom()).append(", ");
-						queryBuilder.append(selectQuery.limit().getLimit()).append(" ");
-					}
 					if (!selectQuery.order().getPairs().isEmpty()){
 						queryBuilder.append("ORDER BY ");
 						int track = 0;
@@ -241,6 +235,12 @@ public class H2Database extends Database {
 							else
 								queryBuilder.append(", ");
 						}
+					}
+					if (selectQuery.limit().getLimit()!=null){
+						queryBuilder.append("LIMIT ");
+						if (selectQuery.limit().getStartFrom()!=null)
+							queryBuilder.append(selectQuery.limit().getStartFrom()).append(", ");
+						queryBuilder.append(selectQuery.limit().getLimit()).append(" ");
 					}
 					statement = connection.prepareStatement(queryBuilder.toString());
 				}
