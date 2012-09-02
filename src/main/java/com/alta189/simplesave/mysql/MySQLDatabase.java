@@ -473,7 +473,7 @@ public class MySQLDatabase extends Database {
 		}
 	}
 
-	@Override
+    @Override
 	public void clear(Class<?> tableClass) {
 		if (!isConnected()) {
 			try {
@@ -577,4 +577,22 @@ public class MySQLDatabase extends Database {
 			e.printStackTrace();
 		}
 	}
+
+    @Override
+    public PreparedStatement prepareStatement(String query) throws SQLException
+    {
+        return conn.prepareStatement(query);
+    }
+
+    @Override
+    public ResultSet executeQuery(String query) throws SQLException
+    {
+        return conn.createStatement().executeQuery(query);
+    }
+
+    @Override
+    public int executeUpdate(String query) throws SQLException
+    {
+        return conn.createStatement().executeUpdate(query);
+    }
 }

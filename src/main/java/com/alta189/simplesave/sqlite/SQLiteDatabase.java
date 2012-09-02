@@ -464,4 +464,22 @@ public class SQLiteDatabase extends Database {
 			}
 		}
 	}
+
+    @Override
+    public PreparedStatement prepareStatement(String query) throws SQLException
+    {
+        return connection.prepareStatement(query);
+    }
+
+    @Override
+    public ResultSet executeQuery(String query) throws SQLException
+    {
+        return connection.createStatement().executeQuery(query);
+    }
+
+    @Override
+    public int executeUpdate(String query) throws SQLException
+    {
+        return connection.createStatement().executeUpdate(query);
+    }
 }

@@ -451,7 +451,7 @@ public class H2Database extends Database {
 		}
 	}
 
-	@Override
+    @Override
 	public void clear(Class<?> tableClass) {
 		if (!isConnected()) {
 			try {
@@ -555,4 +555,22 @@ public class H2Database extends Database {
 			e.printStackTrace();
 		}
 	}
+
+    @Override
+    public PreparedStatement prepareStatement(String query) throws SQLException
+    {
+        return connection.prepareStatement(query);
+    }
+
+    @Override
+    public ResultSet executeQuery(String query) throws SQLException
+    {
+        return connection.createStatement().executeQuery(query);
+    }
+
+    @Override
+    public int executeUpdate(String query) throws SQLException
+    {
+        return connection.createStatement().executeUpdate(query);
+    }
 }
