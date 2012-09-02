@@ -25,6 +25,7 @@ import com.alta189.simplesave.query.Query;
 import com.alta189.simplesave.query.QueryResult;
 import com.alta189.simplesave.query.SelectQuery;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -119,9 +120,5 @@ public abstract class Database {
 		checkTableOnRegistration = status;
 	}
 
-    public abstract PreparedStatement prepareStatement(String query) throws SQLException;
-
-    public abstract ResultSet executeQuery(String query) throws SQLException;
-
-    public abstract int executeUpdate(String query) throws SQLException;
+    public abstract Connection getConnection();
 }

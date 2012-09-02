@@ -579,20 +579,7 @@ public class MySQLDatabase extends Database {
 	}
 
     @Override
-    public PreparedStatement prepareStatement(String query) throws SQLException
-    {
-        return conn.prepareStatement(query);
-    }
-
-    @Override
-    public ResultSet executeQuery(String query) throws SQLException
-    {
-        return conn.createStatement().executeQuery(query);
-    }
-
-    @Override
-    public int executeUpdate(String query) throws SQLException
-    {
-        return conn.createStatement().executeUpdate(query);
+    public Connection getConnection() {
+        return conn;
     }
 }
