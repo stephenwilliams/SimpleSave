@@ -120,5 +120,5 @@ public abstract class Database {
 		checkTableOnRegistration = status;
 	}
 
-    public abstract Connection getConnection();
+	public abstract Connection getConnection();
 }

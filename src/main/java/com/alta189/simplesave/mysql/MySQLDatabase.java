@@ -578,8 +578,8 @@ public class MySQLDatabase extends Database {
 		}
 	}
 
-    @Override
-    public Connection getConnection() {
-        return conn;
-    }
+	@Override
+	public Connection getConnection() {
+		return conn;
+	}
 }

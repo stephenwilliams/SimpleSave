@@ -465,8 +465,8 @@ public class SQLiteDatabase extends Database {
 		}
 	}
 
-    @Override
-    public Connection getConnection() {
-        return connection;
-    }
+	@Override
+	public Connection getConnection() {
+		return connection;
+	}
 }
