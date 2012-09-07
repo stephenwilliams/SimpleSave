@@ -157,13 +157,6 @@ public class SQLiteDatabase extends Database {
 										.append(" ");
 							}
 						}
-						if (select.limit().getLimit() != null) {
-							queryBuilder.append("LIMIT ");
-							if (select.limit().getStartFrom() != null) {
-								queryBuilder.append(select.limit().getStartFrom()).append(", ");
-							}
-							queryBuilder.append(select.limit().getLimit()).append(" ");
-						}
 						if (!select.order().getPairs().isEmpty()) {
 							queryBuilder.append("ORDER BY ");
 							int track = 0;
@@ -179,6 +172,14 @@ public class SQLiteDatabase extends Database {
 								} else { queryBuilder.append(", "); }
 							}
 						}
+						if (select.limit().getLimit() != null) {
+							queryBuilder.append("LIMIT ");
+							if (select.limit().getStartFrom() != null) {
+								queryBuilder.append(select.limit().getStartFrom()).append(", ");
+							}
+							queryBuilder.append(select.limit().getLimit()).append(" ");
+						}
+
 						statement = connection.prepareStatement(queryBuilder.toString());
 						iter = 0;
 						for (Object o : select.where().getEntries()) {
@@ -198,13 +199,6 @@ public class SQLiteDatabase extends Database {
 
 					// Execute and return
 					if (statement == null) {
-						if (select.limit().getLimit() != null) {
-							queryBuilder.append("LIMIT ");
-							if (select.limit().getStartFrom() != null) {
-								queryBuilder.append(select.limit().getStartFrom()).append(", ");
-							}
-							queryBuilder.append(select.limit().getLimit()).append(" ");
-						}
 						if (!select.order().getPairs().isEmpty()) {
 							queryBuilder.append("ORDER BY ");
 							int track = 0;
@@ -219,6 +213,13 @@ public class SQLiteDatabase extends Database {
 									queryBuilder.append(" ");
 								} else { queryBuilder.append(", "); }
 							}
+						}
+						if (select.limit().getLimit() != null) {
+							queryBuilder.append("LIMIT ");
+							if (select.limit().getStartFrom() != null) {
+								queryBuilder.append(select.limit().getStartFrom()).append(", ");
+							}
+							queryBuilder.append(select.limit().getLimit()).append(" ");
 						}
 						statement = connection.prepareStatement(queryBuilder.toString());
 					}
