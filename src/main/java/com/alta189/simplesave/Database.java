@@ -25,6 +25,10 @@ import com.alta189.simplesave.query.Query;
 import com.alta189.simplesave.query.QueryResult;
 import com.alta189.simplesave.query.SelectQuery;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -115,4 +119,6 @@ public abstract class Database {
 	public void setCheckTableOnRegistration(boolean status) {
 		checkTableOnRegistration = status;
 	}
+
+	public abstract Connection getConnection();
 }
