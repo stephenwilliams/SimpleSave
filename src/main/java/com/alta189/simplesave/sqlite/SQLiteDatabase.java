@@ -21,9 +21,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import com.alta189.simplesave.Configuration;
 import com.alta189.simplesave.Database;
@@ -76,6 +79,11 @@ public class SQLiteDatabase extends Database {
 				Class.forName("org.sqlite.JDBC");
 				connection = DriverManager.getConnection(uri);
 				createTables();
+				if (checkTableOnRegistration()) {
+					for (TableRegistration t : getTableRegistrations()){
+						checkTableStructure(t);
+					}
+				}
 			} catch (ClassNotFoundException e) {
 				throw new ConnectionException("Could not find the SQLite JDBC driver!", e);
 			} catch (SQLException sql) {
@@ -463,6 +471,41 @@ public class SQLiteDatabase extends Database {
 			} catch (SQLException e) {
 				throw new RuntimeException(e);
 			}
+		}
+	}
+	public void checkTableStructure(TableRegistration table) {
+		// TODO Update table structure
+		StringBuilder query = new StringBuilder();
+		query.append("SELECT * FROM ")
+			 .append(table.getName())
+			 .append(" LIMIT 1");
+		try {
+			ResultSetMetaData meta = connection.prepareStatement(query.toString()).executeQuery().getMetaData();
+			Collection<FieldRegistration> fields = table.getFields();
+			// <field,alreadyexisting?>
+			Map<String,String> redo = new LinkedHashMap<String,String>();
+			for (FieldRegistration f : fields){
+				boolean found = false;
+				String deftype = SQLiteUtil.getSQLiteTypeFromClass(f.getType());
+				for (int i = 1; i <= meta.getColumnCount(); i++){
+					if (f.getName().equalsIgnoreCase(meta.getColumnName(i))){
+						found = true;
+						break;
+					}
+				}
+				if (!found){
+					redo.put(f.getName(),false + ";" + deftype);
+				}
+			}
+			for (String s : redo.keySet()){
+				StringBuilder q = new StringBuilder();
+				String[] results = redo.get(s).split(";");
+				q.append("ALTER TABLE ").append(table.getName()).append(" ");
+				q.append("ADD COLUMN ").append(s).append(" ").append(results[1]);
+				connection.prepareStatement(q.toString()).executeUpdate();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 }
