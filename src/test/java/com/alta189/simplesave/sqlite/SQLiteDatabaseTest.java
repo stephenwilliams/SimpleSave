@@ -22,6 +22,9 @@ import com.alta189.simplesave.Id;
 import com.alta189.simplesave.Table;
 import com.alta189.simplesave.exceptions.ConnectionException;
 import com.alta189.simplesave.exceptions.TableRegistrationException;
+import com.alta189.simplesave.sqlite.SQLiteConfiguration;
+import com.alta189.simplesave.sqlite.SQLiteDatabase;
+
 import org.junit.Test;
 
 import java.io.File;
