@@ -30,11 +30,11 @@ import com.alta189.simplesave.internal.TableFactory;
 import com.alta189.simplesave.internal.TableRegistration;
 import com.alta189.simplesave.internal.TableUtils;
 import com.alta189.simplesave.query.Comparator;
-import com.alta189.simplesave.query.OrderQuery.OrderPair;
 import com.alta189.simplesave.query.Query;
 import com.alta189.simplesave.query.QueryResult;
 import com.alta189.simplesave.query.SelectQuery;
 import com.alta189.simplesave.query.WhereEntry;
+import com.alta189.simplesave.query.OrderQuery.OrderPair;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;

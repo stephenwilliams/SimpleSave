@@ -22,6 +22,9 @@ import com.alta189.simplesave.Id;
 import com.alta189.simplesave.Table;
 import com.alta189.simplesave.exceptions.ConnectionException;
 import com.alta189.simplesave.exceptions.TableRegistrationException;
+import com.alta189.simplesave.h2.H2Configuration;
+import com.alta189.simplesave.h2.H2Database;
+
 import org.junit.Test;
 
 import java.io.File;

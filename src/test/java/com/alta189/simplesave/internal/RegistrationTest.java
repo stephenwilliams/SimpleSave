@@ -17,7 +17,10 @@
 package com.alta189.simplesave.internal;
 
 import com.alta189.simplesave.exceptions.TableRegistrationException;
+import com.alta189.simplesave.internal.TableFactory;
+import com.alta189.simplesave.internal.TableRegistration;
 import com.alta189.simplesave.test.TestTable;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;

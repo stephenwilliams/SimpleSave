@@ -40,11 +40,11 @@ import com.alta189.simplesave.internal.ResultSetUtils;
 import com.alta189.simplesave.internal.TableRegistration;
 import com.alta189.simplesave.internal.TableUtils;
 import com.alta189.simplesave.query.Comparator;
-import com.alta189.simplesave.query.OrderQuery.OrderPair;
 import com.alta189.simplesave.query.Query;
 import com.alta189.simplesave.query.QueryResult;
 import com.alta189.simplesave.query.SelectQuery;
 import com.alta189.simplesave.query.WhereEntry;
+import com.alta189.simplesave.query.OrderQuery.OrderPair;
 
 public class SQLiteDatabase extends Database {
 	private static final String driver = "sqlite";
@@ -103,7 +103,7 @@ public class SQLiteDatabase extends Database {
 
 	@Override
 	public <T> QueryResult<T> execute(Query<T> query) {
-		if (isConnected()) {
+		if (!isConnected()) {
 			try {
 				connect();
 			} catch (ConnectionException e) {
