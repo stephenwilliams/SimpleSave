@@ -28,6 +28,7 @@ import com.alta189.simplesave.exceptions.ConnectionException;
 import com.alta189.simplesave.exceptions.TableRegistrationException;
 import com.alta189.simplesave.h2.H2Configuration;
 import com.alta189.simplesave.h2.H2Database;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
