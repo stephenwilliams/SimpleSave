@@ -28,18 +28,18 @@
 	</developers>
 
 	<distributionManagement>
-		<!-- Publish versioned releases here -->
-		<repository>
-			<id>spout-nexus</id>
-			<name>Nexus.Spout</name>
-			<url>http://nexus.spout.org/content/repositories/third-party-releases</url>
-		</repository>
+        <!-- Publish versioned releases here -->
+        <repository>
+            <id>bintray-robxu9-SimpleSave-simplesave</id>
+            <name>robxu9-SimpleSave-simplesave</name>
+            <url>https://api.bintray.com/maven/robxu9/SimpleSave/simplesave</url>
+        </repository>
 
 		<!-- Publish snapshots here -->
-		<snapshotRepository>
-			<id>spout-nexus</id>
-			<name>Nexus.Spout</name>
-			<url>http://nexus.spout.org/content/repositories/third-party-snapshots</url>
+        <snapshotRepository>
+            <id>bintray-robxu9-SimpleSave-simplesave</id>
+            <name>robxu9-SimpleSave-simplesave</name>
+            <url>https://api.bintray.com/maven/robxu9/SimpleSave/simplesave</url>
 		</snapshotRepository>
 	</distributionManagement>
 

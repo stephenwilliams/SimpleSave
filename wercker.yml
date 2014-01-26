@@ -1,0 +1,27 @@
+box: pjvds/java@0.1.3
+
+services:
+    - wercker/mysql
+
+build:
+    steps:
+        - script:
+            name: maven build
+            code: |
+                mvn -B
+
+deploy:
+    steps:
+        - script:
+            name: activate settings.xml
+            code: |
+                echo "<server>" > ~/.m2/settings.xml
+                echo "<id>bintray-robxu9-SimpleSave-simplesave</id>" >> ~/.m2/settings.xml
+                echo "<username>$BINTRAY_USER</username>" >> ~/.m2/settings.xml
+                echo "<password>$BINTRAY_PASS</password>" >> ~/.m2/settings.xml
+                echo "</server>" >> ~/.m2/settings.xml
+        
+        - script:
+            name: deploy to bintray
+            code: |
+                mvn deploy
