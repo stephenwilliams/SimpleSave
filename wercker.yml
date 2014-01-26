@@ -8,7 +8,7 @@ build:
         - script:
             name: maven build
             code: |
-                mvn -B
+                mvn clean install
 
 deploy:
     steps:
