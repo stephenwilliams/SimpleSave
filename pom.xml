@@ -30,16 +30,17 @@
 	<distributionManagement>
         <!-- Publish versioned releases here -->
         <repository>
-            <id>central</id>
-            <name>libs-release</name>
-            <url>http://oss.jfrog.org/artifactory/libs-release</url>
-        </repository>
+		    <id>oss-jfrog-artifactory-releases</id>
+		    <name>oss-jfrog-artifactory-releases</name>
+		    <url>http://oss.jfrog.org/artifactory/oss-release-local</url>
+		</repository>
+
 
 		<!-- Publish snapshots here -->
-        <snapshotRepository>
-            <id>snapshots</id>
-            <name>libs-snapshot</name>
-            <url>http://oss.jfrog.org/artifactory/libs-snapshot</url>
+		<snapshotRepository>
+		    <id>oss-jfrog-artifactory-snapshots</id>
+		    <name>oss-jfrog-artifactory-snapshots</name>
+		    <url>http://oss.jfrog.org/artifactory/oss-snapshot-local</url>
 		</snapshotRepository>
 	</distributionManagement>
 

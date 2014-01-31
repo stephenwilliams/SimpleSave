@@ -16,6 +16,16 @@ cat > ~/.m2/settings.xml << "EOF"
       <password>BINTRAY_PASS</password>
       <id>snapshots</id>
     </server>
+    <server>
+      <username>BINTRAY_USER</username>
+      <password>BINTRAY_PASS</password>
+      <id>oss-jfrog-artifactory-releases</id>
+    </server>
+    <server>
+      <username>BINTRAY_USER</username>
+      <password>BINTRAY_PASS</password>
+      <id>oss-jfrog-artifactory-snapshots</id>
+    </server>
   </servers>
   <profiles>
     <profile>
@@ -60,5 +70,5 @@ cat > ~/.m2/settings.xml << "EOF"
 </settings>
 EOF
 
-sed -i s/BINTRAY_USER/$BINTRAY_USER/ ~/.m2/settings.xml
-sed -i s/BINTRAY_PASS/$BINTRAY_PASS/ ~/.m2/settings.xml
+sed -i s/BINTRAY_USER/$BINTRAY_USER/g ~/.m2/settings.xml
+sed -i s/BINTRAY_PASS/$BINTRAY_PASS/g ~/.m2/settings.xml
