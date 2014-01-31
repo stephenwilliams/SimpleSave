@@ -7,7 +7,7 @@ build:
     steps:
         - script:
             name: maven build
-            code: "mvn clean package javadoc:jar install"
+            code: "mvn clean package javadoc:jar source:jar install"
 
 deploy:
     steps:
@@ -16,6 +16,6 @@ deploy:
             code: bash ./deploy.sh
         
         - script:
-            name: deploy to bintray
+            name: deploy to jfrog oss
             code: |
                 mvn deploy
