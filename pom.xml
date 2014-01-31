@@ -30,16 +30,16 @@
 	<distributionManagement>
         <!-- Publish versioned releases here -->
         <repository>
-            <id>bintray-robxu9-SimpleSave-simplesave</id>
-            <name>robxu9-SimpleSave-simplesave</name>
-            <url>https://api.bintray.com/maven/robxu9/SimpleSave/simplesave</url>
+            <id>central</id>
+            <name>libs-release</name>
+            <url>http://oss.jfrog.org/artifactory/libs-release</url>
         </repository>
 
 		<!-- Publish snapshots here -->
         <snapshotRepository>
-            <id>bintray-robxu9-SimpleSave-simplesave</id>
-            <name>robxu9-SimpleSave-simplesave</name>
-            <url>https://api.bintray.com/maven/robxu9/SimpleSave/simplesave</url>
+            <id>snapshots</id>
+            <name>libs-snapshot</name>
+            <url>http://oss.jfrog.org/artifactory/libs-snapshot</url>
 		</snapshotRepository>
 	</distributionManagement>
 
