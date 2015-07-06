@@ -16,6 +16,8 @@
  */
 package com.alta189.simplesave.internal;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +27,7 @@ public class TableRegistration {
 	private final Class<?> clazz;
 	private final Map<String, FieldRegistration> fields = new HashMap<String, FieldRegistration>();
 	private IdRegistration id;
+	private Method postInitialize;
 
 	public TableRegistration(String name, Class<?> clazz) {
 		this.name = name;
@@ -59,5 +62,27 @@ public class TableRegistration {
 
 	public void addField(String name, FieldRegistration field) {
 		fields.put(name.toLowerCase(), field);
+	}
+
+	public Method getPostInitialize() {
+		return postInitialize;
+	}
+
+	public void setPostInitialize(Method postInitialize) {
+		this.postInitialize = postInitialize;
+	}
+
+	public void executePostInitialize(Object instance) {
+		if (postInitialize == null) {
+			return;
+		}
+
+		try {
+			postInitialize.invoke(instance);
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
 	}
 }

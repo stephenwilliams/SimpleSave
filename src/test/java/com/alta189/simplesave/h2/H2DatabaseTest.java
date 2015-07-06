@@ -19,6 +19,7 @@ package com.alta189.simplesave.h2;
 import com.alta189.simplesave.DatabaseFactory;
 import com.alta189.simplesave.Field;
 import com.alta189.simplesave.Id;
+import com.alta189.simplesave.PostInitialize;
 import com.alta189.simplesave.Table;
 import com.alta189.simplesave.exceptions.ConnectionException;
 import com.alta189.simplesave.exceptions.TableRegistrationException;
@@ -32,6 +33,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
@@ -79,6 +81,7 @@ public class H2DatabaseTest {
 		assertEquals(db.getTableRegistration(TestClass.class).getTableClass(), TestClass.class);
 		assertEquals(db.select(TestClass.class).execute().find().size(), 2);
 		assertEquals(db.select(TestClass.class).where().equal("name", "Hello World").execute().findOne().name, "Hello World");
+		assertTrue(one.getPost());
 		try {
 			db.close();
 		} catch (ConnectionException e) {
@@ -121,6 +124,13 @@ public class H2DatabaseTest {
 		@Field
 		private String name;
 
+		private boolean post = false;
+
+		@PostInitialize
+		public void init() {
+			post = true;
+		}
+
 		protected long getId() {
 			return id;
 		}
@@ -135,6 +145,10 @@ public class H2DatabaseTest {
 
 		protected void setName(String name) {
 			this.name = name;
+		}
+
+		protected boolean getPost() {
+			return post;
 		}
 	}
 

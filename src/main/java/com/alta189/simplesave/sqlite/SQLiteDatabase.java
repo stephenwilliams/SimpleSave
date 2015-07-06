@@ -233,6 +233,9 @@ public class SQLiteDatabase extends Database {
 					}
 					ResultSet results = statement.executeQuery();
 					QueryResult<T> result = new QueryResult<T>(ResultSetUtils.buildResultList(table, (Class<T>) table.getTableClass(), results));
+					for (Object object : result.find()) {
+						table.executePostInitialize(object);
+					}
 					return result;
 			}
 		} catch (SQLException e) {
@@ -371,6 +374,7 @@ public class SQLiteDatabase extends Database {
 					}
 				}
 			}
+			table.executePostInitialize(o);
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}

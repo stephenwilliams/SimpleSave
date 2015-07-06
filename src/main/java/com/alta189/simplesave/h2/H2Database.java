@@ -246,6 +246,9 @@ public class H2Database extends Database {
 				}
 				ResultSet set = statement.executeQuery();
 				QueryResult<T> result = new QueryResult<T>(ResultSetUtils.buildResultList(table, (Class<T>) table.getTableClass(), set));
+				for (Object object : result.find()) {
+					table.executePostInitialize(object);
+				}
 				set.close();
 				return result;
 			default:
@@ -386,6 +389,7 @@ public class H2Database extends Database {
 					}
 				}
 			}
+			table.executePostInitialize(o);
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}

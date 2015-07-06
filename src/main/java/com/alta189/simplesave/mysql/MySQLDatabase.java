@@ -283,6 +283,9 @@ public class MySQLDatabase extends Database {
 				}
 				ResultSet set = statement.executeQuery();
 				QueryResult<T> result = new QueryResult<T>(ResultSetUtils.buildResultList(table, (Class<T>) table.getTableClass(), set));
+				for (Object object : result.find()) {
+					table.executePostInitialize(object);
+				}
 				set.close();
 				return result;
 			}
@@ -424,6 +427,7 @@ public class MySQLDatabase extends Database {
 					}
 				}
 			}
+			table.executePostInitialize(o);
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}

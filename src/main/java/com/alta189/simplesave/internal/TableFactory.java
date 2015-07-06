@@ -16,12 +16,15 @@
  */
 package com.alta189.simplesave.internal;
 
+import com.alta189.simplesave.PostInitialize;
 import com.alta189.simplesave.Table;
 import com.alta189.simplesave.exceptions.FieldRegistrationException;
 import com.alta189.simplesave.exceptions.TableRegistrationException;
 import com.alta189.simplesave.internal.reflection.EmptyInjector;
 import com.alta189.simplesave.internal.reflection.Injector;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.regex.Pattern;
 
 public class TableFactory {
@@ -63,6 +66,32 @@ public class TableFactory {
 			tableRegistration.addFields(FieldFactory.getFields(clazz));
 		} catch (FieldRegistrationException e) {
 			throw new TableRegistrationException(e);
+		}
+
+		for (Method method : clazz.getDeclaredMethods()) {
+			PostInitialize postInitialize = method.getAnnotation(PostInitialize.class);
+			if (postInitialize == null) {
+				continue;
+			}
+
+			if (!Modifier.isPublic(method.getModifiers())) {
+				throw new TableRegistrationException("Class '" + clazz.getCanonicalName() + "' @PostInitialize method has to be public");
+			}
+
+			if (Modifier.isStatic(method.getModifiers())) {
+				throw new TableRegistrationException("Class '" + clazz.getCanonicalName() + "' @PostInitialize method cannot be static");
+			}
+
+			if (!method.getReturnType().equals(Void.TYPE)) {
+				throw new TableRegistrationException("Class '" + clazz.getCanonicalName() + "' @PostInitialize method has to return void");
+			}
+
+			if (method.getParameterCount() != 0) {
+				throw new TableRegistrationException("Class '" + clazz.getCanonicalName() + "' @PostInitialize should have no parameters");
+			}
+
+			tableRegistration.setPostInitialize(method);
+			break;
 		}
 
 		return tableRegistration;
